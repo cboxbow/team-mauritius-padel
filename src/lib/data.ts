@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 29;
+export const SEED_VERSION = 30;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -68,6 +68,7 @@ export type NewsItem = {
   title: string;
   excerpt: string;
   image: string;
+  imageFocus?: string;
   featured?: boolean;
   author: string;
   tags: string[];
@@ -490,7 +491,8 @@ export const newsItems: NewsItem[] = [
     date: "06 September 2026",
     title: "Meet Team Mauritius",
     excerpt: "The selected squad comes together at Caña Club for team building, player assessment and the first pressure-point sequences.",
-    image: "/images/players/alice-danjoux-alt.jpg",
+    image: "/images/newsroom/meet-team-training.jpg",
+    imageFocus: "center 68%",
     featured: true,
     author: "Team Mauritius",
     tags: ["Team Mauritius", "Assess", "Caña Club"],
@@ -502,7 +504,8 @@ export const newsItems: NewsItem[] = [
     date: "13 September 2026",
     title: "Building the team",
     excerpt: "Pair chemistry, communication and tactical patterns turn individual quality into a shared competitive language.",
-    image: "/images/players/jake-lam-hau-ching-alt.jpg",
+    image: "/images/newsroom/building-pair-training.png",
+    imageFocus: "center 70%",
     author: "Team Mauritius",
     tags: ["Training Camp", "Build", "Caña Club"],
   },
@@ -513,7 +516,8 @@ export const newsItems: NewsItem[] = [
     date: "24 September 2026",
     title: "Competition mode",
     excerpt: "A Thursday competition block from 12:30–14:30: match simulation, competition intensity and pressure situations.",
-    image: "/images/players/kate-foo-kune-alt.jpg",
+    image: "/images/newsroom/coach-around-team.png",
+    imageFocus: "center center",
     author: "Team Mauritius",
     tags: ["Competition Mode", "Coach", "Caña Club"],
   },
@@ -524,7 +528,8 @@ export const newsItems: NewsItem[] = [
     date: "27 September 2026",
     title: "Ready for La Réunion",
     excerpt: "Final pairings, an Island Cup simulation and the closing team briefing before departure.",
-    image: "/images/event-cover.png",
+    image: "/images/newsroom/island-padel-cup-group.jpg",
+    imageFocus: "center 52%",
     author: "Team Mauritius",
     tags: ["Final Camp", "La Réunion", "Team Mauritius"],
   },

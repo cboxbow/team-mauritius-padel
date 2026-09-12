@@ -104,10 +104,18 @@ type DbNewsRow = {
   tags: string[] | null;
 };
 
+const newsVisualOverrides: Record<string, { image: string; imageFocus: string }> = {
+  "meet-team-mauritius": { image: "/images/newsroom/meet-team-training.jpg", imageFocus: "center 68%" },
+  "building-the-team": { image: "/images/newsroom/building-pair-training.png", imageFocus: "center 70%" },
+  "competition-mode": { image: "/images/newsroom/coach-around-team.png", imageFocus: "center center" },
+  "ready-for-la-reunion": { image: "/images/newsroom/island-padel-cup-group.jpg", imageFocus: "center 52%" },
+};
+
 export function mapNewsRow(row: DbNewsRow): NewsItem {
   const image = row.hero_media_storage_path
     ? mediaUrl({ id: "", storage_path: row.hero_media_storage_path, external_url: null, role: null })
     : row.hero_media_url;
+  const visualOverride = newsVisualOverrides[row.slug];
   return {
     id: row.id,
     slug: row.slug,
@@ -116,7 +124,8 @@ export function mapNewsRow(row: DbNewsRow): NewsItem {
     title: row.title,
     excerpt: row.excerpt ?? "",
     body: row.body ?? undefined,
-    image: image ?? "/images/event-cover.png",
+    image: visualOverride?.image ?? image ?? "/images/event-cover.png",
+    imageFocus: visualOverride?.imageFocus,
     author: "Team Mauritius",
     tags: row.tags ?? [],
   };
