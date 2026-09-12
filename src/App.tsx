@@ -18,6 +18,11 @@ const PLAYER_STORIES: Record<string, PlayerStoryConfig> = {
   [MARINE_GIRAUD_STORY.slug]: MARINE_GIRAUD_STORY,
 };
 
+const mergeSeedNews = (remoteNews: NewsItem[]) => {
+  const remoteSlugs = new Set(remoteNews.map(item => item.slug));
+  return [...remoteNews, ...seedNewsItems.filter(item => !remoteSlugs.has(item.slug))];
+};
+
 const STORAGE_KEY = "team-mauritius-local-state";
 type SiteMode = "pre_event" | "live_event" | "post_event";
 type LocalState = { mode: SiteMode; players: Player[]; matches: Match[]; liveUrl: string; trainingSessions: TrainingSession[]; newsItems: NewsItem[]; coach: CoachData | null };
@@ -80,7 +85,7 @@ function App() {
     fetch("/api/news").then(response => response.json()).then(payload => {
       const rows = payload?.data as Parameters<typeof mapNewsRow>[0][] | undefined;
       if (!rows?.length) return;
-      setState(current => ({ ...current, newsItems: rows.map(mapNewsRow) }));
+      setState(current => ({ ...current, newsItems: mergeSeedNews(rows.map(mapNewsRow)) }));
     }).catch(() => undefined);
 
     fetch("/api/coach").then(response => response.json()).then(payload => {

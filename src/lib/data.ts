@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 30;
+export const SEED_VERSION = 32;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -504,8 +504,8 @@ export const newsItems: NewsItem[] = [
     date: "13 September 2026",
     title: "Building the team",
     excerpt: "Pair chemistry, communication and tactical patterns turn individual quality into a shared competitive language.",
-    image: "/images/newsroom/building-pair-training.png",
-    imageFocus: "center 70%",
+    image: "/images/sessions/first-day-mathieu-nicolas.jpg",
+    imageFocus: "center 44%",
     author: "Team Mauritius",
     tags: ["Training Camp", "Build", "Caña Club"],
   },
@@ -532,6 +532,54 @@ export const newsItems: NewsItem[] = [
     imageFocus: "center 52%",
     author: "Team Mauritius",
     tags: ["Final Camp", "La Réunion", "Team Mauritius"],
+  },
+  {
+    id: "news-laura-koenig-focus",
+    slug: "laura-koenig-the-only-point",
+    category: "Player Focus",
+    date: "Road to La Réunion 2026",
+    title: "Laura Koenig: The Only Point",
+    excerpt: "From Madagascar 2025 to La Réunion 2026: one point, one jersey and one new challenge.",
+    image: "/images/players/laura-koenig-newsroom.jpg",
+    imageFocus: "center 28%",
+    author: "Team Mauritius",
+    tags: ["Player Focus", "Laura Koenig", "Team Mauritius"],
+  },
+  {
+    id: "news-magaly-schaffo-focus",
+    slug: "magaly-schaffo-tennispro-to-padel",
+    category: "Player Focus",
+    date: "Road to La Réunion 2026",
+    title: "Magaly Schaffo: Built for the Game",
+    excerpt: "From building a court to representing Mauritius: a competitor shaped by family, attack and team purpose.",
+    image: "/images/players/magaly-schaffo-newsroom.jpg",
+    imageFocus: "center 30%",
+    author: "Team Mauritius",
+    tags: ["Player Focus", "Magaly Schaffo", "Team Mauritius"],
+  },
+  {
+    id: "news-kate-foo-kune-focus",
+    slug: "kate-foo-kune-badminton-to-padel",
+    category: "Player Focus",
+    date: "Road to La Réunion 2026",
+    title: "Kate Foo Kune: The Fire Never Left",
+    excerpt: "A new court, the same competitive fire: from Olympic badminton to Team Mauritius padel.",
+    image: "/images/players/kate-foo-kune-newsroom.jpg",
+    imageFocus: "center 25%",
+    author: "Team Mauritius",
+    tags: ["Player Focus", "Kate Foo Kune", "Team Mauritius"],
+  },
+  {
+    id: "news-marine-giraud-focus",
+    slug: "marine-giraud-wta-to-padel",
+    category: "Player Focus",
+    date: "Road to La Réunion 2026",
+    title: "Marine Giraud: A Second Life",
+    excerpt: "From world No. 233 on the WTA tour to Team Mauritius: the competition chapter reopened in padel.",
+    image: "/images/players/marine-giraud-newsroom.jpg",
+    imageFocus: "center 24%",
+    author: "Team Mauritius",
+    tags: ["Player Focus", "Marine Giraud", "Team Mauritius"],
   },
 ];
 

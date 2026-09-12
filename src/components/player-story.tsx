@@ -16,7 +16,7 @@ import { Reveal } from "./platform-sections";
 
 export type PlayerStoryImageConfig = { src: string; alt: string; caption?: string; objectPosition?: string };
 export type PlayerStoryChapterConfig = { label: string; title: ReactNode; paragraphs: string[]; media?: PlayerStoryImageConfig; mediaSide?: "left" | "right" };
-export type PlayerKeyMomentConfig = { competition: string; result: string; partner?: string; context: string; image?: string; imageAlt?: string };
+export type PlayerKeyMomentConfig = { competition: string; result: string; partner?: string; context: string; image?: string; imageAlt?: string; imagePosition?: string };
 export type PlayerStoryQuickFireItem = { label: string; answer: string };
 
 export type PlayerStoryConfig = {
@@ -89,7 +89,7 @@ export function PlayerStoryChapter({ chapter }: { chapter: PlayerStoryChapterCon
 export function PlayerStoryImage({ image }: { image: PlayerStoryImageConfig }) {
   return (
     <Reveal><section className="player-story-image-break">
-      <img src={image.src} alt={image.alt} />
+      <img src={image.src} alt={image.alt} style={image.objectPosition ? { objectPosition: image.objectPosition } : undefined} />
       {image.caption && <span className="player-story-image-caption">{image.caption}</span>}
     </section></Reveal>
   );
@@ -118,7 +118,7 @@ export function PlayerKeyMoment({ moment }: { moment: PlayerKeyMomentConfig }) {
         </div>
         <p className="player-key-moment-context">{moment.context}</p>
       </div>
-      {moment.image && <div className="player-key-moment-media"><img src={moment.image} alt={moment.imageAlt ?? ""} /></div>}
+      {moment.image && <div className="player-key-moment-media"><img src={moment.image} alt={moment.imageAlt ?? ""} style={moment.imagePosition ? { objectPosition: moment.imagePosition } : undefined} /></div>}
     </section></Reveal>
   );
 }
@@ -154,7 +154,7 @@ export function NextPlayerStory({ next }: { next: NewsItem }) {
     <section className="section player-next-story">
       <p className="eyebrow">NEXT STORY</p>
       <Link className="player-next-story-card" to={`/news/${next.slug}`}>
-        <div className="player-next-story-media"><img src={next.image} alt={next.title} /></div>
+        <div className="player-next-story-media"><img src={next.image} alt={next.title} style={next.imageFocus ? { objectPosition: next.imageFocus } : undefined} /></div>
         <div className="player-next-story-copy">
           <h3>{next.title}</h3>
           <span className="player-next-story-cta">Discover story <ArrowUpRight size={16} /></span>
@@ -194,7 +194,7 @@ const lauraChapterOne: PlayerStoryChapterConfig = {
     "Laura Koenig discovered padel during lockdown, and what hooked her instantly was simple: with the glass walls, the ball never really stops being in play. That one detail was enough to pull her in.",
     "She came to the sport with a strong tennis background, and it gave her a real head start — the racket touch and the court reading transferred straight away, letting her progress faster than most. What she had to unlearn was almost everything around the shot itself: padel's shorter preparations and the constant movement around the glass are, in her words, \"totally different from tennis.\"",
   ],
-  media: { src: "/images/players/laura-koenig.jpg", alt: "Laura Koenig, Team Mauritius, playing a low volley at the glass" },
+  media: { src: "/images/players/laura-koenig.jpg", alt: "Laura Koenig, Team Mauritius, playing a low volley at the glass", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -205,7 +205,7 @@ const lauraChapterTwo: PlayerStoryChapterConfig = {
     "She's watched Mauritian padel change fast since 2023. There are far more tournaments now, far more young players coming through, and a level that's climbed noticeably — she's especially struck by how quickly the younger boys are improving, to the point where they're now challenging the men's draw itself.",
     "On court, she's an attacking player who plays her best padel next to a partner who can calm her down while staying aggressive and consistent — a system she says she's naturally comfortable in. Asked what's improved most in her own game, she points to her defence and her targeting at the net, especially on the volley. What she's still chasing: her smashes, her attacking game, her defence, and — she adds — her mental game too. Under real pressure — a tie-break, a deciding point, a third set — her routine is simple: remind herself she's done it hundreds of times before, breathe, focus, and go.",
   ],
-  media: { src: "/images/players/laura-koenig-action-3.jpg", alt: "Laura Koenig, Team Mauritius, jumping for an overhead smash", objectPosition: "50% 32%" },
+  media: { src: "/images/players/laura-koenig-action-3.jpg", alt: "Laura Koenig, Team Mauritius, jumping for an overhead smash", objectPosition: "50% 0%" },
   mediaSide: "left",
 };
 
@@ -215,7 +215,7 @@ const lauraChapterThree: PlayerStoryChapterConfig = {
   paragraphs: [
     "Heading into the preparation with Adam Auckland, what she wants most is tactical guidance and a real team spirit built together, across the men's and women's squads alike. She already knows who the toughest tests in La Réunion will be: Anna-Blue and Elisa, the two strongest players on the island — \"monstrous,\" in her words — with Madagascar's Prisca and her partner also expected to cause real problems. Her read on the tie is clear-eyed but confident: outside of those two Réunion stars, she rates the rest of the field as being roughly at Mauritius's level — which means belief, on both the women's and men's sides, is what will make the difference.",
   ],
-  media: { src: "/images/players/laura-koenig-action-2.jpg", alt: "Laura Koenig, Team Mauritius, following through on a forehand" },
+  media: { src: "/images/players/laura-koenig-action-2.jpg", alt: "Laura Koenig, Team Mauritius, following through on a forehand", objectPosition: "50% 16%" },
   mediaSide: "right",
 };
 
@@ -256,6 +256,7 @@ export const LAURA_KOENIG_STORY: PlayerStoryConfig = {
     context: "Her favourite memories are mostly about titles — her M1000 wins stand out — but one moment sits above the rest: earning Mauritius's only point against Madagascar at the 2025 Island Padel Cup, and sharing the court with Anna-Blue Houareau and Mathieu Vallet along the way. That win against Madagascar, alongside Alice Danjoux, produced the only tears of joy she's ever shed on a padel court.",
     image: "/images/players/laura-koenig-podium.jpg",
     imageAlt: "Laura Koenig celebrating an AfrAsia Bank Padel League title on the podium",
+    imagePosition: "50% 20%",
   },
   laterChapters: [lauraChapterThree, lauraChapterFour],
   reunionTarget: {
@@ -280,7 +281,7 @@ const magalyChapterOne: PlayerStoryChapterConfig = {
     "Padel runs in the whole family for Magaly Schaffo. Married with two sons, aged 12 and 14, she says all four of them are passionate about the sport, spending most weekends on court together — and lately they've even started entering tournaments as a family. She jokes that it probably won't be long before her boys are too good to want to play with their parents anymore.",
     "Her path into padel started somewhere unexpected: business. In 2014, she and her husband bought Tennispro.fr, an online tennis equipment store, which they gradually expanded into other racket sports, padel included. Following a period of growth in 2018, they built a much larger facility for the company — and installed a padel court inside it. That court is where she first picked up a padel racket.",
   ],
-  media: { src: "/images/players/magaly-schaffo-alt.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a forehand under the lights" },
+  media: { src: "/images/players/magaly-schaffo-alt.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a forehand under the lights", objectPosition: "50% 20%" },
   mediaSide: "right",
 };
 
@@ -291,7 +292,7 @@ const magalyChapterTwo: PlayerStoryChapterConfig = {
     "Tennis had been her sport since the age of five, and she reached a best ranking of 2/6 in France at 21. But she felt she'd reached a plateau there, with little room left to progress. Padel offered the opposite: a new project to sink her teeth into, almost starting from zero, with a steep learning curve ahead. For a lifelong competitor, that was exactly the kind of challenge she needed.",
     "On court, she describes her main quality as refusing to ever give up — a trait she has carried since childhood. She's also a naturally offensive player, having always been an attacking presence in her tennis days, and that instinct has carried straight over to padel: she's more comfortable attacking than defending. She's right-handed but prefers to play the left side of the court, occasionally switching to the right in mixed doubles.",
   ],
-  media: { src: "/images/players/magaly-schaffo.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a backhand" },
+  media: { src: "/images/players/magaly-schaffo.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a backhand", objectPosition: "50% 18%" },
   mediaSide: "left",
 };
 
@@ -302,7 +303,7 @@ const magalyChapterThree: PlayerStoryChapterConfig = {
     "Her ideal partner, she says, would be someone who can defend the right side and still finish points at the net. What she actually found is almost the opposite: her partner isn't especially fond of defending behind the glass and plays a highly aggressive game on the right, regularly catching opponents off guard. The contrast, she admits, works surprisingly well — their games complement each other. She's clear-eyed about what she still needs to work on: her defensive play off the back glass, and her footwork, to gain speed and efficiency on the ball.",
     "Magaly and her family moved to Mauritius in August 2025. Getting to compete at the Island Cup — and wear the Mauritius colours — is a source of real pride for her, and she's grateful to the team for the trust placed in her to wear the jersey.",
   ],
-  media: { src: "/images/players/magaly-schaffo-alt.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a forehand under the lights" },
+  media: { src: "/images/players/magaly-schaffo-alt.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a forehand under the lights", objectPosition: "50% 20%" },
   mediaSide: "right",
 };
 
@@ -339,7 +340,7 @@ const kateChapterOne: PlayerStoryChapterConfig = {
     "Before padel, Kate Foo Kune's sporting life was already full. Badminton took up a huge part of her life — she started very young and had the chance to represent Mauritius at the highest level, including at the Olympic Games, and won several African titles. It was a life of training, travel, competition and plenty of sacrifice, but also extraordinary moments. High-level sport shaped her enormously, both as an athlete and as a person.",
     "She discovered padel quite naturally after her badminton career. What appealed to her immediately was the social side of the sport — you can be competitive, but also take real pleasure in playing with the people around you. Very quickly, she rediscovered sensations she loved in badminton: reflexes, movement, anticipation, and above all the need to stay involved in every point.",
   ],
-  media: { src: "/images/players/kate-foo-kune-alt.jpg", alt: "Kate Foo Kune, Team Mauritius, close-up on court with her Olympic rings tattoo visible" },
+  media: { src: "/images/players/kate-foo-kune-alt.jpg", alt: "Kate Foo Kune, Team Mauritius, close-up on court with her Olympic rings tattoo visible", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -350,7 +351,7 @@ const kateChapterTwo: PlayerStoryChapterConfig = {
     "The shift from playing for pleasure to wanting competition again came gradually. At first she played purely for enjoyment, but after so many years in high-level sport, competition never really leaves you. At some point she started asking herself: what if I really tried to see how far I could go in padel? That desire only grew.",
     "She hadn't necessarily expected to feel that same adrenaline again in another sport — she thought that chapter of her life was behind her. But she's realised that the drive to compete never fully disappears; it just takes another form.",
   ],
-  media: { src: "/images/players/kate-foo-kune.jpg", alt: "Kate Foo Kune, Team Mauritius, playing a forehand volley" },
+  media: { src: "/images/players/kate-foo-kune.jpg", alt: "Kate Foo Kune, Team Mauritius, playing a forehand volley", objectPosition: "50% 12%" },
   mediaSide: "left",
 };
 
@@ -362,7 +363,7 @@ const kateChapterThree: PlayerStoryChapterConfig = {
     "What she's had to adjust, on the other hand, is patience. In badminton, you often look to create an opening quickly and finish the point; in padel, you sometimes have to accept building the point, defending, playing extra shots and waiting for the right moment. It's probably the adjustment that's demanded the most from her.",
     "Her tennis and badminton backgrounds complement each other too: tennis brings construction of the point, consistency and power; badminton brings more speed, reflexes and explosiveness — qualities that combine well on a padel court.",
   ],
-  media: { src: "/images/players/kate-foo-kune-alt.jpg", alt: "Kate Foo Kune, Team Mauritius, close-up on court with her Olympic rings tattoo visible" },
+  media: { src: "/images/players/kate-foo-kune-alt.jpg", alt: "Kate Foo Kune, Team Mauritius, close-up on court with her Olympic rings tattoo visible", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -373,7 +374,7 @@ const kateChapterFour: PlayerStoryChapterConfig = {
     "Her relationship with winning and losing has changed since her high-level days. As a young athlete, a defeat could feel enormous; with experience, she's learned to step back, analyse what didn't work, and move on quickly — without wanting to win any less. She simply manages the emotions around victory and defeat better now.",
     "Representing Mauritius again means something special to her. Having already had the chance to represent the country in another sport, she thought she knew that feeling — but wearing the country's colours again, in a different sport, gives her a particular sensation. It's also a chance to show that athletes can reinvent themselves and keep representing their country in a different way.",
   ],
-  media: { src: "/images/players/kate-foo-kune.jpg", alt: "Kate Foo Kune, Team Mauritius, playing a forehand volley" },
+  media: { src: "/images/players/kate-foo-kune.jpg", alt: "Kate Foo Kune, Team Mauritius, playing a forehand volley", objectPosition: "50% 12%" },
   mediaSide: "left",
 };
 
@@ -417,7 +418,7 @@ const marineChapterOne: PlayerStoryChapterConfig = {
     "Before padel, Marine Giraud's sporting life was already a full one. She started tennis young and moved quickly into competition, spending years on the junior and then professional circuit, reaching a best world ranking of 233 on the WTA tour. She travelled extensively, competed internationally, and represented Mauritius along the way — tennis, in her words, built her enormously, both as an athlete and as a person.",
     "She discovered padel around two years ago, pushed onto the court by her older sister. At first it was pure curiosity, no ambition attached — and what hooked her immediately was how playful, social and easy-going the sport felt. After years of living tennis at high intensity, she rediscovered the simple pleasure of playing without pressure. Predictably, though, her competitive streak didn't stay dormant for long.",
   ],
-  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net" },
+  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -428,7 +429,7 @@ const marineChapterTwo: PlayerStoryChapterConfig = {
     "The real turning point came watching last year's Island Padel Cup at Urban Rivière Noire. Seeing the matches and the Mauritian team compete, she remembers thinking: “Next year, I want to be part of this.” That's the moment her whole approach to padel shifted, and the pull of competition came back.",
     "She hadn't expected to feel that adrenaline again in another sport. When she stopped playing professional tennis, she assumed that chapter was closed. What's struck her about padel is finding that same hunger to win in a completely different setting — one that today carries a lot more lightness and enjoyment around the competition itself.",
   ],
-  media: { src: "/images/players/marine-giraud.jpg", alt: "Marine Giraud, Team Mauritius, stretching for a backhand at the glass" },
+  media: { src: "/images/players/marine-giraud.jpg", alt: "Marine Giraud, Team Mauritius, stretching for a backhand at the glass", objectPosition: "50% 18%" },
   mediaSide: "left",
 };
 
@@ -438,7 +439,7 @@ const marineChapterThree: PlayerStoryChapterConfig = {
   paragraphs: [
     "Tennis still shows up everywhere in her padel: trajectory reading, reflexes, the volley, forward movement, and the mental side of the game. Having played so many matches also helps her manage pressure and big moments. But she's careful not to overstate the overlap — padel is a different sport, and not everything from tennis transfers cleanly.",
   ],
-  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net" },
+  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -448,7 +449,7 @@ const marineChapterFour: PlayerStoryChapterConfig = {
   paragraphs: [
     "Asked how far tennis actually took her: a best ranking of 233 in the world, several years on the professional circuit. But looking back, she doesn't hold onto the ranking or a single result — she holds onto the whole journey: the travel, the tournaments, the people, the hard moments too, and the chance to represent Mauritius. When you're living it, she says, you don't always realise how lucky you are to have it.",
   ],
-  media: { src: "/images/players/marine-giraud-podium.jpg", alt: "Marine Giraud and Magaly Schaffo celebrate an AfrAsia Bank Padel League title" },
+  media: { src: "/images/players/marine-giraud-podium.jpg", alt: "Marine Giraud and Magaly Schaffo celebrate an AfrAsia Bank Padel League title", objectPosition: "50% 20%" },
   mediaSide: "left",
 };
 
