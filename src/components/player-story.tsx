@@ -205,7 +205,7 @@ const lauraChapterTwo: PlayerStoryChapterConfig = {
     "She's watched Mauritian padel change fast since 2023. There are far more tournaments now, far more young players coming through, and a level that's climbed noticeably — she's especially struck by how quickly the younger boys are improving, to the point where they're now challenging the men's draw itself.",
     "On court, she's an attacking player who plays her best padel next to a partner who can calm her down while staying aggressive and consistent — a system she says she's naturally comfortable in. Asked what's improved most in her own game, she points to her defence and her targeting at the net, especially on the volley. What she's still chasing: her smashes, her attacking game, her defence, and — she adds — her mental game too. Under real pressure — a tie-break, a deciding point, a third set — her routine is simple: remind herself she's done it hundreds of times before, breathe, focus, and go.",
   ],
-  media: { src: "/images/players/laura-koenig-action-3.jpg", alt: "Laura Koenig, Team Mauritius, jumping for an overhead smash", objectPosition: "50% 0%" },
+  media: { src: "/images/players/laura-koenig-attack.jpg", alt: "Laura Koenig, Team Mauritius, attacking the ball from the back court", objectPosition: "50% 22%" },
   mediaSide: "left",
 };
 
