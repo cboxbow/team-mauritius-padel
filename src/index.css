@@ -732,8 +732,8 @@ h3 { font-size: clamp(1.8rem, 3vw, 3rem); line-height: .92; font-weight: 800; }
   inset: 0;
   z-index: 0;
   background:
-    linear-gradient(90deg, rgba(5,5,6,.96) 0%, rgba(5,5,6,.76) 44%, rgba(5,5,6,.28) 100%),
-    url("/images/team-campaign-hero.jpg") center 28% / cover no-repeat;
+    linear-gradient(90deg, rgba(5,5,6,.92) 0%, rgba(5,5,6,.68) 44%, rgba(5,5,6,.18) 100%),
+    url("/images/team-campaign-hero.jpg") center 10% / cover no-repeat;
   filter: saturate(.86) contrast(1.08);
 }
 .newsroom-hero::before {

@@ -205,7 +205,7 @@ function Team({ players }: { players: Player[] }) {
   const men = players.filter(p => p.gender === "Men"), women = players.filter(p => p.gender === "Women"), coach = players.find(p => p.gender === "Coach");
   return <>
     <section className="team-campaign-hero">
-      <DotWave intensity={0.62} />
+      <DotWave intensity={0.42} />
       <div className="team-campaign-copy">
         <p className="eyebrow light">SELECTED SQUAD / ROAD TO LA RÉUNION 2026</p>
         <h1>Team<br /><span>Mauritius.</span></h1>
