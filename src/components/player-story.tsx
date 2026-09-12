@@ -292,7 +292,7 @@ const magalyChapterTwo: PlayerStoryChapterConfig = {
     "Tennis had been her sport since the age of five, and she reached a best ranking of 2/6 in France at 21. But she felt she'd reached a plateau there, with little room left to progress. Padel offered the opposite: a new project to sink her teeth into, almost starting from zero, with a steep learning curve ahead. For a lifelong competitor, that was exactly the kind of challenge she needed.",
     "On court, she describes her main quality as refusing to ever give up — a trait she has carried since childhood. She's also a naturally offensive player, having always been an attacking presence in her tennis days, and that instinct has carried straight over to padel: she's more comfortable attacking than defending. She's right-handed but prefers to play the left side of the court, occasionally switching to the right in mixed doubles.",
   ],
-  media: { src: "/images/players/magaly-schaffo.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a backhand", objectPosition: "50% 18%" },
+  media: { src: "/images/players/magaly-schaffo-action-2.jpg", alt: "Magaly Schaffo, Team Mauritius, tracking a forehand during match play", objectPosition: "35% 22%" },
   mediaSide: "left",
 };
 
@@ -303,7 +303,7 @@ const magalyChapterThree: PlayerStoryChapterConfig = {
     "Her ideal partner, she says, would be someone who can defend the right side and still finish points at the net. What she actually found is almost the opposite: her partner isn't especially fond of defending behind the glass and plays a highly aggressive game on the right, regularly catching opponents off guard. The contrast, she admits, works surprisingly well — their games complement each other. She's clear-eyed about what she still needs to work on: her defensive play off the back glass, and her footwork, to gain speed and efficiency on the ball.",
     "Magaly and her family moved to Mauritius in August 2025. Getting to compete at the Island Cup — and wear the Mauritius colours — is a source of real pride for her, and she's grateful to the team for the trust placed in her to wear the jersey.",
   ],
-  media: { src: "/images/players/magaly-schaffo-alt.jpg", alt: "Magaly Schaffo, Team Mauritius, playing a forehand under the lights", objectPosition: "50% 20%" },
+  media: { src: "/images/players/magaly-schaffo-podium.jpg", alt: "Marine Giraud and Magaly Schaffo celebrating an AfrAsia Bank Padel League title", objectPosition: "50% 26%" },
   mediaSide: "right",
 };
 

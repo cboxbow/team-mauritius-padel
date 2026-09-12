@@ -43,7 +43,7 @@ function readState(): LocalState {
       matches: seedIsFresh && value?.matches ? value.matches : seedMatches,
       liveUrl: value?.liveUrl ?? "",
       trainingSessions: seedIsFresh && value?.trainingSessions ? value.trainingSessions : seedTrainingSessions,
-      newsItems: seedIsFresh && value?.newsItems ? value.newsItems : seedNewsItems,
+      newsItems: seedIsFresh && value?.newsItems ? mergeSeedNews(value.newsItems) : seedNewsItems,
       coach: null,
     };
   } catch { return { mode: "pre_event", players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null }; }
