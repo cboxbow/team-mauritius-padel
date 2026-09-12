@@ -1,0 +1,12 @@
+export { DotWave, type DotWaveProps, type DotWaveVariant, type DotWaveFade } from "./DotWave";
+export { DotField, type DotFieldProps } from "./DotField";
+export { RedGlow, type RedGlowProps, type RedGlowPosition } from "./RedGlow";
+export { MauritiusAccent, type MauritiusAccentProps } from "./MauritiusAccent";
+export { EditorialFrame, type EditorialFrameProps } from "./EditorialFrame";
+export { HeroTreatment, type HeroTreatmentProps } from "./HeroTreatment";
+export { PhotoTreatment, type PhotoTreatmentProps, type PhotoTreatmentGrade } from "./PhotoTreatment";
+export { EditorialQuote, type EditorialQuoteProps } from "./EditorialQuote";
+export { CoachInfoBar, type CoachInfoBarProps, type CoachInfoBarItem } from "./CoachInfoBar";
+export { CoachFeatureHero, type CoachFeatureHeroProps } from "./CoachFeatureHero";
+export { MauritiusAccent as TeamMauritiusAccent } from "./MauritiusAccent";
+export { VisualEngineShowcase } from "./VisualEngineShowcase";

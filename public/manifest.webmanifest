@@ -1,0 +1,25 @@
+{
+  "name": "Team Mauritius · Road to Island Padel Cup 2026",
+  "short_name": "Team Mauritius",
+  "description": "The official digital hub for Team Mauritius.",
+  "start_url": "/",
+  "display": "standalone",
+  "scope": "/",
+  "orientation": "portrait-primary",
+  "categories": ["sports", "news", "entertainment"],
+  "background_color": "#070708",
+  "theme_color": "#070708",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "any",
+      "type": "image/x-icon",
+      "purpose": "any"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Live Center", "url": "/live" },
+    { "name": "Training", "url": "/training" },
+    { "name": "Schedule", "url": "/schedule" }
+  ]
+}
