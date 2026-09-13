@@ -289,43 +289,53 @@ function EmptyState({ text }: { text: string }) { return <div className="empty-s
 function Training({ trainingSessions }: { trainingSessions: TrainingSession[] }) {
   const buildSession = trainingSessions.find(session => session.id === "13-sep-build") ?? trainingSessions[1] ?? trainingSessions[0];
   const progressSessions = trainingSessions.slice(0, 4);
+  const session02Path = "/images/sessions/session-02-build";
   const objectives = [
-    { title: "Pair chemistry", copy: "Understanding which players naturally elevate each other.", icon: <Users size={22} /> },
-    { title: "Communication", copy: "Calls. Trust. Leadership.", icon: <MessageCircle size={22} /> },
-    { title: "Tactical patterns", copy: "Serve-return. Transition. Net occupation.", icon: <Target size={22} /> },
-    { title: "Pressure decisions", copy: "Choosing the right shot at the right moment.", icon: <Brain size={22} /> },
+    { title: "Pair chemistry", copy: "Understanding which players naturally improve each other.", icon: <Users size={22} /> },
+    { title: "Communication", copy: "Calls, trust, leadership and responsibility.", icon: <MessageCircle size={22} /> },
+    { title: "Tactical patterns", copy: "Serve + first ball, transition, net occupation and pair positioning.", icon: <Target size={22} /> },
+    { title: "Pressure decisions", copy: "Decision-making during decisive points, tie-breaks and match pressure.", icon: <Brain size={22} /> },
   ];
   const timelineColumns = [
-    { label: "Left — Session 01", title: "Assess", points: ["Player assessment.", "Pressure situations.", "Communication observations.", "Initial pair testing."] },
-    { label: "Right — Session 02", title: "Build", points: ["Pair combinations.", "Role definition.", "Tactical identity.", "Chemistry under pressure."] },
+    { label: "Session 01", title: "Assess", points: ["Player evaluation.", "Pressure situations.", "Communication observations.", "First pair combinations."] },
+    { label: "Session 02", title: "Build", points: ["Pair chemistry.", "Defined roles.", "Tactical patterns.", "Communication.", "Pair behaviour under pressure."] },
   ];
   const pairLab = [
-    ["Balance", "Attack + Defence."],
-    ["Communication", "Who leads. Who stabilises."],
-    ["Court side", "Right / Left compatibility."],
-    ["Pressure", "Third set behaviour."],
-    ["History", "Existing chemistry from Mauritius Padel League tournaments."],
+    ["Balance", "Attack + defence."],
+    ["Communication", "Who leads? Who stabilises?"],
+    ["Court side", "Right / left compatibility."],
+    ["Pressure", "How does the pair react when the score tightens?"],
+    ["History", "Existing chemistry and previous competition experience."],
+  ];
+  const pairLabImages = [
+    { title: "Pair work", src: `${session02Path}/session-02-pair-lab-01.jpg`, position: "center 48%" },
+    { title: "Court-side testing", src: `${session02Path}/session-02-pair-lab-02.jpg`, position: "center 45%" },
+    { title: "Training camp", src: `${session02Path}/session-02-match-play.jpg`, position: "center 38%" },
   ];
   const gallery = [
-    { label: "Photo 1", title: "Team group photo", src: "/images/team-campaign-hero.jpg", className: "is-wide", position: "center 10%" },
-    { label: "Photo 2", title: "Two players training together", src: "/images/sessions/first-day-mathieu-nicolas.jpg", className: "is-vertical", position: "center 22%" },
-    { label: "Photo 3", title: "Coach observing players", src: "/images/players/adam-auckland-hit.jpg", className: "is-coach", position: "center 18%" },
+    { label: "TEAM MAURITIUS", title: "Session 02 · Caña Club", src: `${session02Path}/session-02-group.jpg`, className: "is-wide", position: "center 45%" },
+    { label: "PAIR WORK", title: "Road to La Réunion", src: `${session02Path}/session-02-pair-lab-01.jpg`, className: "is-tall", position: "center 48%" },
+    { label: "ACTION", title: "Training camp", src: `${session02Path}/session-02-action-01.jpg`, className: "is-small", position: "center 44%" },
+    { label: "ADAM AUCKLAND", title: "Head coach", src: `${session02Path}/session-02-coach.jpg`, className: "is-small", position: "center 42%" },
+    { label: "MATCH PLAY", title: "13 September 2026", src: `${session02Path}/session-02-match-play.jpg`, className: "is-small", position: "center 38%" },
+    { label: "TECHNICAL DRILLS", title: "Session detail", src: `${session02Path}/session-02-technical.jpg`, className: "is-small", position: "center 44%" },
   ];
   const moments = [
-    { title: "Serve + first ball", image: "/images/players/mathieu-vallet-alt.jpg", caption: "Serve patterns set the first tactical tone, then the second shot decides whether the pair can take control." },
-    { title: "Volley repetitions", image: "/images/players/marine-giraud-alt.jpg", caption: "Net work sharpens the team rhythm: compact movement, earlier contact and cleaner choices under quick pressure." },
-    { title: "Defensive transitions", image: "/images/players/laura-koenig-attack.jpg", caption: "Players move from glass defence into attack, learning when to absorb and when to accelerate forward." },
-    { title: "Match simulations", image: "/images/players/olivier-couacaud-alt.jpg", caption: "Rotations test pair chemistry in live patterns, with Adam reading roles, spacing and emotional response." },
-    { title: "Pressure tiebreaks", image: "/images/players/magaly-schaffo-action-2.jpg", caption: "Short scoring blocks reveal who communicates clearly when the score gets tight and the margin disappears." },
+    { title: "Pair communication", image: `${session02Path}/session-02-pair-lab-02.jpg`, position: "center 45%", caption: "Players gather around the net during the Session 02 pair-testing block." },
+    { title: "Net positioning", image: `${session02Path}/session-02-action-02.jpg`, position: "center 38%", caption: "Live court positioning work during the morning session at Caña Club." },
+    { title: "Match play", image: `${session02Path}/session-02-match-play.jpg`, position: "center 38%", caption: "Players rotate through match-play situations as the Build phase begins." },
+    { title: "Coaching", image: `${session02Path}/session-02-coach.jpg`, position: "center 42%", caption: "Adam Auckland observes the group during the on-court preparation block." },
+    { title: "Technical drills", image: `${session02Path}/session-02-technical.jpg`, position: "center 44%", caption: "Equipment and ball-feed details from the 07:00–09:00 training window." },
   ];
   const takeaways = [
-    { title: "Chemistry matters", icon: <Users size={20} /> },
-    { title: "Communication wins points", icon: <MessageCircle size={20} /> },
-    { title: "Complementary styles create stronger pairs", icon: <RotateCw size={20} /> },
-    { title: "Team Mauritius is taking shape", icon: <ShieldCheck size={20} /> },
+    { title: "Chemistry matters", copy: "Strong individual players do not automatically create the strongest pair.", icon: <Users size={20} /> },
+    { title: "Communication wins points", copy: "Clear calls and shared decision-making are essential.", icon: <MessageCircle size={20} /> },
+    { title: "Complementary styles", copy: "Attack, defence, temperament and court side all influence pair balance.", icon: <RotateCw size={20} /> },
+    { title: "The team is taking shape", copy: "Team Mauritius is moving from assessment toward structure.", icon: <ShieldCheck size={20} /> },
   ];
   return <>
     <section className="training-v5-hero">
+      <img className="training-v5-hero-photo" src={`${session02Path}/session-02-hero.jpg`} alt="Team Mauritius Session 02 training at Caña Club" />
       <DotWave intensity={0.84} />
       <div className="training-v5-script">Better Players.<br />A Stronger Mauritius.</div>
       <div className="training-v5-hero-copy">
@@ -357,7 +367,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
     </section>
 
     <section className="section training-v5-timeline">
-      <SectionHead eyebrow="FROM ASSESS TO BUILD" title="One step deeper" />
+      <SectionHead eyebrow="FROM ASSESS TO BUILD" title="From assess to build" />
       <div className="training-v5-split">
         <span className="training-v5-split-line" aria-hidden="true" />
         {timelineColumns.map((column, index) => <Reveal className="training-v5-split-card" delay={index * 100} key={column.title}>
@@ -372,7 +382,13 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       <DotWave intensity={0.18} />
       <div className="training-v5-section-lead">
         <p className="eyebrow light">PAIR LAB</p>
-        <h2>What Adam Auckland is analysing today.</h2>
+        <h2>What Team Mauritius is testing today.</h2>
+      </div>
+      <div className="training-v5-pair-media">
+        {pairLabImages.map((item, index) => <figure key={item.title}>
+          <img loading="lazy" src={item.src} alt={item.title} style={{ objectPosition: item.position }} />
+          <figcaption>{String(index + 1).padStart(2, "0")} — {item.title}</figcaption>
+        </figure>)}
       </div>
       <div className="training-v5-lab-grid">
         {pairLab.map(([title, copy], index) => <Reveal className="training-v5-lab-card" delay={index * 70} key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}
@@ -380,10 +396,10 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
     </section>
 
     <section className="section training-v5-gallery">
-      <SectionHead eyebrow="TODAY AT CAÑA CLUB" title="Training frame" />
+      <SectionHead eyebrow="SESSION 02 · BUILD" title="Today at Caña Club" />
       <div className="training-v5-gallery-grid">
         {gallery.map(item => <figure className={`training-v5-photo ${item.className}`} key={item.title}>
-          <img src={item.src} alt={item.title} style={{ objectPosition: item.position }} />
+          <img loading="lazy" src={item.src} alt={item.title} style={{ objectPosition: item.position }} />
           <figcaption><span>{item.label}</span>{item.title}</figcaption>
         </figure>)}
       </div>
@@ -393,42 +409,55 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       <SectionHead eyebrow="TRAINING MOMENTS" title="The work inside the morning" />
       <div className="training-v5-moment-row">
         {moments.map(item => <article className="training-v5-moment" key={item.title}>
-          <img src={item.image} alt={item.title} />
+          <img loading="lazy" src={item.image} alt={item.title} style={{ objectPosition: item.position }} />
           <h3>{item.title}</h3>
           <p>{item.caption}</p>
         </article>)}
       </div>
     </section>
 
-    <section className="section training-v5-coach-note">
+    <section className="section training-v5-coach-note training-v5-coach-focus">
+      <figure><img loading="lazy" src={`${session02Path}/session-02-coach.jpg`} alt="Adam Auckland observing Team Mauritius training" /></figure>
       <div>
-        <p className="eyebrow">COACH'S NOTE</p>
-        <p>The objective today is not simply to identify the strongest individual players.</p>
-        <p>It is to discover which partnerships create the strongest Team Mauritius.</p>
-        <p>Every session gives new information about chemistry, communication and decision-making under pressure.</p>
+        <p className="eyebrow">COACH FOCUS</p>
+        <h2>Adam Auckland</h2>
+        <span>Head Coach · Team Mauritius</span>
+        <p className="eyebrow detail-eyebrow">SESSION NOTE</p>
+        <p>Today’s focus is on understanding which combinations make Team Mauritius stronger as a collective — not simply identifying the strongest individual players.</p>
       </div>
     </section>
 
-    <section className="training-v5-player-quote">
+    <section className="training-v5-player-quote training-v5-philosophy">
       <DotWave intensity={0.18} />
-      <blockquote>"The more we train together, the more we understand each other's game.<br />That's how a real team is built."<cite>TEAM MAURITIUS — SESSION 02</cite></blockquote>
+      <blockquote>Rankings identify strong players.<br />Chemistry builds strong pairs.<cite>PAIRING PHILOSOPHY — SESSION 02</cite></blockquote>
     </section>
 
     <section className="section training-v5-takeaways">
-      <SectionHead eyebrow="KEY TAKEAWAYS" title="What matters now" />
+      <SectionHead eyebrow="SESSION 02" title="Key takeaways" />
       <div className="training-v5-takeaway-grid">
-        {takeaways.map((item, index) => <Reveal className="training-v5-takeaway" delay={index * 80} key={item.title}>{item.icon}<span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3></Reveal>)}
+        {takeaways.map((item, index) => <Reveal className="training-v5-takeaway" delay={index * 80} key={item.title}>{item.icon}<span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3><p>{item.copy}</p></Reveal>)}
       </div>
     </section>
 
+    <section className="training-v5-player-quote training-v5-player-voice">
+      <DotWave intensity={0.12} />
+      <blockquote>Player Voice<cite>Session reactions will be added after player feedback.</cite></blockquote>
+    </section>
+
+    <section className="section training-v5-brunch">
+      <p className="eyebrow">TEAM BRUNCH</p>
+      <h2>More than training.</h2>
+      <p>The Sunday brunch remains part of the preparation process — a moment for players and coach to connect away from the court, review the session and strengthen the Team Mauritius identity.</p>
+    </section>
+
     <section className="training-v5-next">
-      <img src="/images/players/olivier-couacaud-alt.jpg" alt="Team Mauritius competition preparation" />
+      <img loading="lazy" src={`${session02Path}/session-02-action-01.jpg`} alt="Team Mauritius competition preparation" />
       <DotWave intensity={0.22} />
       <div>
-        <p className="eyebrow light">COMING NEXT</p>
+        <p className="eyebrow light">NEXT UP</p>
         <h2>Session 03 — Compete</h2>
-        <p>Match intensity increases.<br />Pairs begin to take shape.</p>
-        <span className="training-v5-disabled-button">Coming after next training</span>
+        <p>24 September 2026 · 12:30–14:30<br />Match simulation. Competition intensity. Pressure situations.</p>
+        <span className="training-v5-disabled-button">Next confirmed training block</span>
       </div>
     </section>
 
