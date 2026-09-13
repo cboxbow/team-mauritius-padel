@@ -336,7 +336,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
   return <>
     <section className="training-v5-hero">
       <img className="training-v5-hero-photo" src={`${session02Path}/session-02-hero.jpg`} alt="Team Mauritius Session 02 training at Caña Club" />
-      <DotWave intensity={0.84} />
+      <DotWave intensity={0.44} />
       <div className="training-v5-script">Better Players.<br />A Stronger Mauritius.</div>
       <div className="training-v5-hero-copy">
         <p className="eyebrow light">SESSION 02 / ROAD TO LA RÉUNION 2026</p>
