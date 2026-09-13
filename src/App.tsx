@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
 import { Menu, X, ArrowUpRight, ChevronRight, Clock3, MapPin, Play, Radio, Settings2, Plus, Minus, RotateCcw, Check, Users, Camera, Video, Gauge, LockKeyhole, ArrowLeftRight, Hand, TrendingUp, ShieldCheck, AtSign, Target, Shield, Zap, ArrowUpCircle, Wind, Eye, RotateCw, Brain, MessageCircle, Trash2 } from "lucide-react";
 import { event, matches as seedMatches, navItems, newsItems as seedNewsItems, nations, players as seedPlayers, SEED_VERSION, trainingSessions as seedTrainingSessions, type Match, type Player, type TrainingSession, type NewsItem, type CoachData } from "./lib/data";
-import { AssessSessionJournal, BehindTheTeamPage, CoachGoldMissionArticle, CoachPage, EditorialRoadmap, HomeEditorialGrid, MplStoryPage, ModePriorityPanel, QuickNavigation, TrainingStoryBlocks } from "./components/platform-sections";
+import { AssessSessionJournal, BehindTheTeamPage, CoachGoldMissionArticle, CoachPage, EditorialRoadmap, HomeEditorialGrid, MplStoryPage, ModePriorityPanel, QuickNavigation, Reveal, TrainingStoryBlocks } from "./components/platform-sections";
 import { PlayerStoryArticle, LAURA_KOENIG_STORY, MAGALY_SCHAFFO_STORY, KATE_FOO_KUNE_STORY, MARINE_GIRAUD_STORY, type PlayerStoryConfig } from "./components/player-story";
 import { mapNewsRow, mapPlayerRow, mapTrainingSessionRow } from "./lib/api-mappers";
 import { isSupabaseConfigured, supabase, SUPABASE_URL } from "./lib/supabase-client";
@@ -286,65 +286,157 @@ function dnaIcon(strength: string) {
 function ordinal(n: number) { const v = n % 100; const suffixes: Record<number, string> = { 1: "st", 2: "nd", 3: "rd" }; return `${n}${suffixes[(v - 20) % 10] ?? suffixes[v] ?? "th"}`; }
 function EmptyState({ text }: { text: string }) { return <div className="empty-state">{text}</div>; }
 
-function journeyState(session: TrainingSession, isNext: boolean) {
-  if (session.status === "COMPLETED") return "completed";
-  if (new Date(session.startsAt).toDateString() === new Date().toDateString()) return "today";
-  if (isNext) return "next";
-  return "upcoming";
-}
-
 function Training({ trainingSessions }: { trainingSessions: TrainingSession[] }) {
-  const completedSessions = trainingSessions.filter(s => s.status === "COMPLETED");
-  const latestCompleted = completedSessions[completedSessions.length - 1];
-  const nextIndex = trainingSessions.findIndex(s => s.status !== "COMPLETED");
-  const nextSession = nextIndex >= 0 ? trainingSessions[nextIndex] : undefined;
-  const daysToGo = nextSession ? Math.ceil((new Date(nextSession.startsAt).getTime() - Date.now()) / 86400000) : 0;
-  const featuredImage = (session?: TrainingSession) => seedPlayers.find(p => p.name === session?.featuredPlayer)?.image ?? "/images/players/olivier-couacaud-alt.jpg";
+  const buildSession = trainingSessions.find(session => session.id === "13-sep-build") ?? trainingSessions[1] ?? trainingSessions[0];
+  const progressSessions = trainingSessions.slice(0, 4);
+  const objectives = [
+    { title: "Pair chemistry", copy: "Understanding which players naturally elevate each other.", icon: <Users size={22} /> },
+    { title: "Communication", copy: "Calls. Trust. Leadership.", icon: <MessageCircle size={22} /> },
+    { title: "Tactical patterns", copy: "Serve-return. Transition. Net occupation.", icon: <Target size={22} /> },
+    { title: "Pressure decisions", copy: "Choosing the right shot at the right moment.", icon: <Brain size={22} /> },
+  ];
+  const timelineColumns = [
+    { label: "Left — Session 01", title: "Assess", points: ["Player assessment.", "Pressure situations.", "Communication observations.", "Initial pair testing."] },
+    { label: "Right — Session 02", title: "Build", points: ["Pair combinations.", "Role definition.", "Tactical identity.", "Chemistry under pressure."] },
+  ];
+  const pairLab = [
+    ["Balance", "Attack + Defence."],
+    ["Communication", "Who leads. Who stabilises."],
+    ["Court side", "Right / Left compatibility."],
+    ["Pressure", "Third set behaviour."],
+    ["History", "Existing chemistry from Mauritius Padel League tournaments."],
+  ];
+  const gallery = [
+    { label: "Photo 1", title: "Team group photo", src: "/images/team-campaign-hero.jpg", className: "is-wide", position: "center 10%" },
+    { label: "Photo 2", title: "Two players training together", src: "/images/sessions/first-day-mathieu-nicolas.jpg", className: "is-vertical", position: "center 22%" },
+    { label: "Photo 3", title: "Coach observing players", src: "/images/players/adam-auckland-hit.jpg", className: "is-coach", position: "center 18%" },
+  ];
+  const moments = [
+    { title: "Serve + first ball", image: "/images/players/mathieu-vallet-alt.jpg", caption: "Serve patterns set the first tactical tone, then the second shot decides whether the pair can take control." },
+    { title: "Volley repetitions", image: "/images/players/marine-giraud-alt.jpg", caption: "Net work sharpens the team rhythm: compact movement, earlier contact and cleaner choices under quick pressure." },
+    { title: "Defensive transitions", image: "/images/players/laura-koenig-attack.jpg", caption: "Players move from glass defence into attack, learning when to absorb and when to accelerate forward." },
+    { title: "Match simulations", image: "/images/players/olivier-couacaud-alt.jpg", caption: "Rotations test pair chemistry in live patterns, with Adam reading roles, spacing and emotional response." },
+    { title: "Pressure tiebreaks", image: "/images/players/magaly-schaffo-action-2.jpg", caption: "Short scoring blocks reveal who communicates clearly when the score gets tight and the margin disappears." },
+  ];
+  const takeaways = [
+    { title: "Chemistry matters", icon: <Users size={20} /> },
+    { title: "Communication wins points", icon: <MessageCircle size={20} /> },
+    { title: "Complementary styles create stronger pairs", icon: <RotateCw size={20} /> },
+    { title: "Team Mauritius is taking shape", icon: <ShieldCheck size={20} /> },
+  ];
   return <>
-    <section className="journey-hero"><DotWave intensity={0.25} /><p className="eyebrow">TEAM MAURITIUS / PREPARATION CAMP</p><h1 className="journey-hero-title">4 sessions.<br />One <span>goal.</span></h1><p className="journey-hero-sub">LA RÉUNION 2026</p></section>
-    {latestCompleted ? <section className="section journey-recap">
-      <div className="journey-recap-top"><span className="journey-next-count">{String(trainingSessions.indexOf(latestCompleted) + 1).padStart(2, "0")} / {String(trainingSessions.length).padStart(2, "0")}</span><Tag tone="green">Completed ✓</Tag></div>
-      <p className="eyebrow">{latestCompleted.shortDate} · {latestCompleted.location}</p>
-      <h2>{latestCompleted.title}</h2>
-      <div className="journey-next-meta"><Clock3 size={16} /> {latestCompleted.time} <span>•</span> <MapPin size={16} /> {latestCompleted.location}</div>
-      <p className="eyebrow detail-eyebrow">COACH'S NOTE</p>
-      {latestCompleted.coachNote ? <p className="detail-note">{latestCompleted.coachNote}</p> : <EmptyState text="Adam's note will be published after the session." />}
-      <div className="journey-recap-links">
-        <Link className="text-link" to={`/training/${latestCompleted.id}`}>View session gallery <ArrowUpRight size={16} /></Link>
-        {latestCompleted.videoUrl && <a className="text-link" href={latestCompleted.videoUrl} target="_blank" rel="noreferrer">Watch highlights <ArrowUpRight size={16} /></a>}
+    <section className="training-v5-hero">
+      <DotWave intensity={0.84} />
+      <div className="training-v5-script">Better Players.<br />A Stronger Mauritius.</div>
+      <div className="training-v5-hero-copy">
+        <p className="eyebrow light">SESSION 02 / ROAD TO LA RÉUNION 2026</p>
+        <h1>Build</h1>
+        <p className="training-v5-line">From individual talent to winning pairs.</p>
+        <p className="training-v5-meta"><MapPin size={16} /> Caña Club — Sunday 13 September 2026 <span /> <Clock3 size={16} /> 07:00 — 09:00</p>
       </div>
-      {nextSession && <div className="journey-up-next"><span>Next up</span><strong>{nextSession.shortDate} — {nextSession.phase}</strong></div>}
-    </section> : nextSession ? <section className="section journey-next">
-      <div className="journey-next-top"><p className="eyebrow">NEXT SESSION</p><span className="journey-next-count">{String(nextIndex + 1).padStart(2, "0")} / {String(trainingSessions.length).padStart(2, "0")}</span></div>
-      <div className="journey-next-grid">
-        <div className="journey-next-copy">
-          <span className="journey-next-date">{nextSession.date.toUpperCase()}</span>
-          <h2>{nextSession.title}.</h2>
-          <div className="journey-next-meta"><MapPin size={16} /> {nextSession.location} <span>•</span> <Clock3 size={16} /> {nextSession.time}</div>
-          <ul className="clean-list">{nextSession.objectives.map(item => <li key={item}>{item}</li>)}</ul>
-          <div className="journey-next-footer"><span className="session-countdown">{daysToGo > 0 ? `${daysToGo} day${daysToGo === 1 ? "" : "s"} to go` : "Today"}</span><ButtonLink to={`/training/${nextSession.id}`}>View session</ButtonLink></div>
-        </div>
-        <div className="journey-next-media"><img src={featuredImage(nextSession)} alt="Team Mauritius training" /></div>
-      </div>
-    </section> : null}
-    <section className="section journey-map">
-      <SectionHead eyebrow="THE JOURNEY" title="Road to La Réunion" />
-      <div className="journey-map-track">
-        {trainingSessions.flatMap((session, index) => [
-          <Link className={`journey-node state-${journeyState(session, session.id === nextSession?.id)}`} to={`/training/${session.id}`} key={session.id}>
-            <span className="journey-node-index">{String(index + 1).padStart(2, "0")}</span>
-            <span className="journey-node-date">{session.shortDate}</span>
-            <strong className="journey-node-phase">{session.phase}</strong>
-            <span className="journey-node-state">{journeyState(session, session.id === nextSession?.id).toUpperCase()}</span>
-          </Link>,
-          <span className="journey-connector" aria-hidden="true" key={`${session.id}-connector`} />,
-        ])}
-        <div className="journey-node journey-node-milestone"><strong>Team<br />departure</strong></div>
-        <span className="journey-connector" aria-hidden="true" />
-        <div className="journey-node journey-node-destination"><strong>La Réunion</strong><span className="journey-node-state">Island Padel Cup · 01–04 Oct 2026</span></div>
+      <div className="training-v5-scroll"><span /> Scroll</div>
+    </section>
+
+    <section className="training-v5-progress" aria-label="Session progress">
+      <div className="training-v5-progress-line" aria-hidden="true" />
+      {progressSessions.map((session, index) => {
+        const isActive = session.id === buildSession.id;
+        const isComplete = index === 0;
+        return <Link className={`training-v5-progress-step${isActive ? " is-active" : ""}${isComplete ? " is-complete" : ""}`} to={`/training/${session.id}`} key={session.id}>
+          <b>{String(index + 1).padStart(2, "0")}</b>
+          <span>Session {String(index + 1).padStart(2, "0")} — {session.phase === "FINAL CAMP" ? "READY" : session.phase}{isComplete ? " ✓" : ""}</span>
+        </Link>;
+      })}
+    </section>
+
+    <section className="section training-v5-objectives">
+      <SectionHead eyebrow="TODAY'S OBJECTIVES" title="Build the pairs" />
+      <div className="training-v5-card-grid">
+        {objectives.map((item, index) => <Reveal className="training-v5-card" delay={index * 70} key={item.title}>{item.icon}<h3>{item.title}</h3><p>{item.copy}</p></Reveal>)}
       </div>
     </section>
-    <section className="section purpose-panel"><div><p className="eyebrow">TRAIN WITH PURPOSE</p><h2>Quality <span>&gt;</span> volume.</h2></div><div><p>Every block has a competition objective. Adam controls intensity, rotations and tactical focus. The Sunday sessions run from 07:00–09:00; the Thursday competition block runs from 12:30–14:30.</p><p className="sunday-brunch-copy">BRUNCH AFTER THE SUNDAY SESSIONS · CAÑA CLUB</p></div></section>
+
+    <section className="section training-v5-timeline">
+      <SectionHead eyebrow="FROM ASSESS TO BUILD" title="One step deeper" />
+      <div className="training-v5-split">
+        <span className="training-v5-split-line" aria-hidden="true" />
+        {timelineColumns.map((column, index) => <Reveal className="training-v5-split-card" delay={index * 100} key={column.title}>
+          <p className="eyebrow">{column.label}</p>
+          <h3>{column.title}</h3>
+          <ul>{column.points.map(point => <li key={point}>{point}</li>)}</ul>
+        </Reveal>)}
+      </div>
+    </section>
+
+    <section className="section training-v5-pair-lab">
+      <DotWave intensity={0.18} />
+      <div className="training-v5-section-lead">
+        <p className="eyebrow light">PAIR LAB</p>
+        <h2>What Adam Auckland is analysing today.</h2>
+      </div>
+      <div className="training-v5-lab-grid">
+        {pairLab.map(([title, copy], index) => <Reveal className="training-v5-lab-card" delay={index * 70} key={title}><span>{String(index + 1).padStart(2, "0")}</span><h3>{title}</h3><p>{copy}</p></Reveal>)}
+      </div>
+    </section>
+
+    <section className="section training-v5-gallery">
+      <SectionHead eyebrow="TODAY AT CAÑA CLUB" title="Training frame" />
+      <div className="training-v5-gallery-grid">
+        {gallery.map(item => <figure className={`training-v5-photo ${item.className}`} key={item.title}>
+          <img src={item.src} alt={item.title} style={{ objectPosition: item.position }} />
+          <figcaption><span>{item.label}</span>{item.title}</figcaption>
+        </figure>)}
+      </div>
+    </section>
+
+    <section className="section training-v5-moments">
+      <SectionHead eyebrow="TRAINING MOMENTS" title="The work inside the morning" />
+      <div className="training-v5-moment-row">
+        {moments.map(item => <article className="training-v5-moment" key={item.title}>
+          <img src={item.image} alt={item.title} />
+          <h3>{item.title}</h3>
+          <p>{item.caption}</p>
+        </article>)}
+      </div>
+    </section>
+
+    <section className="section training-v5-coach-note">
+      <div>
+        <p className="eyebrow">COACH'S NOTE</p>
+        <p>The objective today is not simply to identify the strongest individual players.</p>
+        <p>It is to discover which partnerships create the strongest Team Mauritius.</p>
+        <p>Every session gives new information about chemistry, communication and decision-making under pressure.</p>
+      </div>
+    </section>
+
+    <section className="training-v5-player-quote">
+      <DotWave intensity={0.18} />
+      <blockquote>"The more we train together, the more we understand each other's game.<br />That's how a real team is built."<cite>TEAM MAURITIUS — SESSION 02</cite></blockquote>
+    </section>
+
+    <section className="section training-v5-takeaways">
+      <SectionHead eyebrow="KEY TAKEAWAYS" title="What matters now" />
+      <div className="training-v5-takeaway-grid">
+        {takeaways.map((item, index) => <Reveal className="training-v5-takeaway" delay={index * 80} key={item.title}>{item.icon}<span>{String(index + 1).padStart(2, "0")}</span><h3>{item.title}</h3></Reveal>)}
+      </div>
+    </section>
+
+    <section className="training-v5-next">
+      <img src="/images/players/olivier-couacaud-alt.jpg" alt="Team Mauritius competition preparation" />
+      <DotWave intensity={0.22} />
+      <div>
+        <p className="eyebrow light">COMING NEXT</p>
+        <h2>Session 03 — Compete</h2>
+        <p>Match intensity increases.<br />Pairs begin to take shape.</p>
+        <span className="training-v5-disabled-button">Coming after next training</span>
+      </div>
+    </section>
+
+    <section className="training-v5-footer">
+      <DotWave intensity={0.2} />
+      <h2>One Island.<br />One Team.<br />One Game.</h2>
+      <span className="training-v5-flag-line" />
+    </section>
   </>;
 }
 
