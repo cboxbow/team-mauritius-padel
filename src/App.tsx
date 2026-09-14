@@ -230,7 +230,7 @@ function Team({ players }: { players: Player[] }) {
   </>;
 }
 function PlayerCard({ player }: { player: Player }) {
-  const image = player.image ?? "/images/hero-team.jpg";
+  const image = player.detailImage ?? player.image ?? "/images/hero-team.jpg";
   const role = player.role ?? player.strengths?.[0] ?? "Selected player";
   return <Link className="player-card campaign-player-card" to={`/team/${player.id}`}>
     <div className="player-image"><img loading="lazy" src={image} alt={`${player.name} — Team Mauritius`} style={player.heroFocus ? { objectPosition: player.heroFocus } : undefined} /><span className="player-overlay" /></div>

@@ -21,6 +21,8 @@ export type Player = {
   social: string;
   sponsors: string[];
   image?: string;
+  // Optional landscape image for the profile hero when the card portrait would crop badly.
+  detailImage?: string;
   // A second, distinct action shot (if one exists on disk) — used for Player Media so it never repeats the hero portrait.
   imageAlt?: string;
   // The player's own top-3 selected strengths from their Player Profile form — never invented.
@@ -283,6 +285,10 @@ const playerOverrides: Record<string, Partial<Player>> = {
   },
   "Alice Danjoux": {
     heroFocus: "center 42%",
+  },
+  "Laura Koenig": {
+    detailImage: "/images/players/laura-koenig-hero.jpg",
+    heroFocus: "center center",
   },
   "Amaury de Beer": {
     club: "RM Club Tamarin",
