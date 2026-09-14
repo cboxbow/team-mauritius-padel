@@ -109,7 +109,7 @@ const newsVisualOverrides: Record<string, { image: string; imageFocus: string }>
   "building-the-team": { image: "/images/sessions/first-day-mathieu-nicolas.jpg", imageFocus: "center 44%" },
   "competition-mode": { image: "/images/newsroom/coach-around-team.png", imageFocus: "center center" },
   "ready-for-la-reunion": { image: "/images/newsroom/island-padel-cup-group.jpg", imageFocus: "center 52%" },
-  "laura-koenig-the-only-point": { image: "/images/players/laura-koenig-newsroom.jpg", imageFocus: "center 28%" },
+  "laura-koenig-the-only-point": { image: "/images/players/laura-koenig-alt.jpg", imageFocus: "center 42%" },
   "magaly-schaffo-tennispro-to-padel": { image: "/images/players/magaly-schaffo-newsroom.jpg", imageFocus: "center 30%" },
   "kate-foo-kune-badminton-to-padel": { image: "/images/players/kate-foo-kune-newsroom.jpg", imageFocus: "center 25%" },
   "marine-giraud-wta-to-padel": { image: "/images/players/marine-giraud-newsroom.jpg", imageFocus: "center 24%" },
