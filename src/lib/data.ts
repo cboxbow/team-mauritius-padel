@@ -301,6 +301,8 @@ const playerOverrides: Record<string, Partial<Player>> = {
     media: ["/images/players/amaury-de-beer-media-2.jpg", "/images/players/amaury-de-beer-media-3.jpg"],
   },
   "Céline Desvaux de Marigny": {
+    detailImage: "/images/players/celine-desvaux-de-marigny-hero.jpg",
+    heroFocus: "center center",
     biography: "I'm coming from beach tennis but appreciate much more the padel. To play with my sister is just so special. I play at Urban Black River and enjoy the outdoor court as well as the good vibes and ambiance!",
     quote: "Trust the flow of life and believe in yourself!",
     social: "@celine_desvaux",
