@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 47;
+export const SEED_VERSION = 48;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -77,6 +77,7 @@ export type NewsItem = {
   tags: string[];
   // Full article text, published via the admin/Supabase phase. Left undefined until real copy exists.
   body?: string;
+  cta?: { label: string; to: string };
 };
 
 export type CoachData = { full_name: string; role: string | null; nationality: string | null; club: string | null; social_links: Record<string, string> | null; background: string | null; experience: string | null; philosophy: string | null; main_objective: string | null; preparation_priorities: string[] | null; playing_identity: string | null; expectations: string | null; message_to_team: string | null; team_word: string | null };
@@ -592,6 +593,21 @@ export const newsItems: NewsItem[] = [
     body: "On Sunday 27 September, Team Mauritius came together at Caña Club for the Final Camp — the fourth and last collective session of the Road to La Réunion.\n\nAfter Assess on 6 September, Build on 13 September and the Compete block on 24 September, the Final Camp was designed as the bridge between preparation and competition. The programme left no room for experiments: final pairings, an Island Cup simulation and a closing team briefing before departure.\n\nHead coach Adam Auckland led the session as he had led the whole preparation, with one objective in mind since the first morning at Caña Club: turning a group of selected players into one competitive national unit.\n\nThe preparation was never only about tactics. Across four sessions and the Sunday brunches, the men's and women's squads trained, travelled and prepared as one team — the cohesion Team Mauritius would need in a nations cup format.\n\nThe Final Camp marked the end of the Road to La Réunion and the start of the competition. Next stop: the Island Padel Cup 2026 at Club de Champ Fleuri, Saint-Denis, from 1 to 4 October.",
   },
   {
+    id: "news-final-day",
+    slug: "final-day-island-padel-cup-2026",
+    category: "Island Padel Cup",
+    date: "04 October 2026",
+    title: "Team Mauritius finish runners-up at the 2026 Island Padel Cup",
+    excerpt: "La Réunion claimed the men's final 2-0. After topping the round-robin with wins over Madagascar and La Réunion, Mauritius finish runners-up.",
+    image: "/images/island-padel-cup-2026/gallery/day3-07.jpg",
+    imageFocus: "center 35%",
+    featured: true,
+    author: "Team Mauritius",
+    tags: ["Island Padel Cup", "Final", "Runners-up", "Saint-Denis"],
+    body: "Team Mauritius concluded its Island Padel Cup 2026 campaign as men's runners-up after La Réunion claimed the final 2-0.\n\nMauritius entered the final after an excellent round-robin campaign and had already defeated both Madagascar (2-1) and La Réunion (3-0) during the competition.\n\nIn the first match of the final, Mickael GRENIER and Hugo MARCILLE defeated Olivier COUACAUD and Nicolas LEGROS 7-5, 6-4.\n\nLa Réunion then secured the title when Paul-Henri TESSEYDRE and Giovanni ROMEO defeated Jake LAM HAU CHING and Amaury DE BEER 6-4, 6-4.\n\nFinal: La Réunion 2-0 Mauritius.\n\nDespite the defeat in the final, Mauritius finishes the 2026 Island Padel Cup as men's runners-up after a strong campaign in La Réunion.",
+    cta: { label: "Full results", to: "/results" },
+  },
+  {
     id: "news-p500-final",
     slug: "p500-final-vallet-de-beer-go-for-the-title",
     category: "Results",
@@ -603,22 +619,9 @@ export const newsItems: NewsItem[] = [
     featured: true,
     author: "Team Mauritius",
     tags: ["P500 Saint-Denis", "Final", "Mathieu VALLET", "Amaury DE BEER"],
-    body: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4 in the semi-final.\n\nThey will face Paul SOUBIES and Paul-Henri TEYSSEDRE for the title.\n\nTheir road to the final: 6-2 6-2 against Noah HOUAREAU / Olivier DE FONDAUMIERE, 6-3 6-1 against Alexandre LALLEMAND / Lucas LANDAIS, 6-3 6-2 against Antoine BLIN / Tomy SALAS, then 7-5 6-4 against Romain GUTSTEIN / Giovanni ROMEO. Four matches, four wins.\n\nIn the women's draw, Alice DANJOUX / Laura KOENIG reached the semi-finals.\n\nThe P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026. The final result will be published once official.",
+    body: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4 in the semi-final.\n\nThey will face Paul SOUBIES and Paul-Henri TESSEYDRE for the title.\n\nTheir road to the final: 6-2 6-2 against Noah HOUAREAU / Olivier DE FONDAUMIERE, 6-3 6-1 against Alexandre LALLEMAND / Lucas LANDAIS, 6-3 6-2 against Antoine BLIN / Tomy SALAS, then 7-5 6-4 against Romain GUTSTEIN / Giovanni ROMEO. Four matches, four wins.\n\nIn the women's draw, Alice DANJOUX / Laura KOENIG reached the semi-finals.\n\nThe P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026. The final result will be published once official.",
   },
-  {
-    id: "news-final-day",
-    slug: "final-day-island-padel-cup-2026",
-    category: "Island Padel Cup",
-    date: "04 October 2026",
-    title: "Final Day: Mauritius play for the men's title",
-    excerpt: "Unbeaten in the pool — 2-1 against Madagascar, 3-0 against La Réunion — Team Mauritius play La Réunion for the men's title at 18:00.",
-    image: "/images/island-padel-cup-2026/gallery/day3-07.jpg",
-    imageFocus: "center 35%",
-    featured: true,
-    author: "Team Mauritius",
-    tags: ["Island Padel Cup", "Final Day", "Men's Final", "Saint-Denis"],
-    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion. Both finals start at 18:00 (GMT+4).\n\nThe Mauritius men reached the final unbeaten. On Day 2 they beat Madagascar 2-1, with wins for Olivier COUACAUD / Jake LAM HAU CHING (6-4 6-3) and Amaury DE BEER / Mathieu VALLET (6-0 7-6). On Day 3 they swept La Réunion 3-0: Ryan WONG / Mathieu VALLET (6-4 6-2), Nicolas LEGROS / Olivier COUACAUD (7-5 7-6) and Amaury DE BEER / Jake LAM HAU CHING (6-4 6-4).\n\nThe Mauritius women won one match in the pool — Laura KOENIG / Kate FOO KUNE beat Madagascar 6-4 6-2 — but lost the ties 1-2 against Madagascar and 0-3 against La Réunion. The women's final is Madagascar vs La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. Follow the finals and every confirmed result in the Live Center.",
-  },
+
   {
     id: "news-p500-saint-denis",
     slug: "p500-saint-denis-mauritians-in-action",

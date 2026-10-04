@@ -17,14 +17,14 @@ function escapeHtml(value) {
 
 function campaignMarkup() {
   const stories = [
-    ["Final Day: Mauritius play for the men's title", "Men's final: Mauritius vs La Réunion. Women's final: Madagascar vs La Réunion."],
-    ["P500 Saint-Denis: Mauritians in action", "Alice DANJOUX / Laura KOENIG win 9-0. Céline DESVAUX DE MARIGNY / Cécile PARK win 9-2."],
+    ["Team Mauritius finish runners-up at the 2026 Island Padel Cup", "Men's final: La Réunion 2-0 Mauritius. La Réunion champions, Mauritius runners-up."],
+    ["P500 Saint-Denis: Vallet / De Beer in the final", "Alice DANJOUX / Laura KOENIG win 9-0. Céline DESVAUX DE MARIGNY / Cécile PARK win 9-2."],
     ["Road to La Réunion", "Assess, Build, Compete and the Final Camp — preparation complete."],
   ];
   return `
     <section class="prerender-home">
-      <p>ISLAND PADEL CUP 2026 / FINAL DAY</p>
-      <h1>Final Day.</h1>
+      <p>ISLAND PADEL CUP 2026 / FINAL RESULT</p>
+      <h1>La Réunion champions. Mauritius runners-up.</h1>
       <p>Team Mauritius at the Island Padel Cup 2026 — Club de Champ Fleuri, Saint-Denis, La Réunion, 1–4 October 2026.</p>
       <nav aria-label="Primary prerender links">
         <a href="/live">Follow the action</a>

@@ -66,8 +66,13 @@ function FinalCard({ match }: { match: CompetitionMatch }) {
       <em>VS</em>
       <div className={match.winner === 2 ? "is-winner" : ""}>{match.country2 && <Flag nation={match.country2} className="final-flag" />}<strong>{match.team2}</strong><small>{match.country2 && nationCodes[match.country2]}</small></div>
     </div>
+    {match.status === "FINISHED" && match.winner && <div className="final-card-result">
+      <span><b>🏆 Champions</b>{match.winner === 1 ? match.team1 : match.team2}</span>
+      <span><b>🥈 Runners-up</b>{match.winner === 1 ? match.team2 : match.team1}</span>
+    </div>}
+    {match.status === "FINISHED" && ipcMatches.some(m => m.tie === `d4-${match.category === "Men" ? "men" : "women"}`) && <div className="fr-rubbers is-compact">{ipcMatches.filter(m => m.tie === `d4-${match.category === "Men" ? "men" : "women"}`).map(m => <FinalRubberLine match={m} key={m.id} />)}</div>}
     <div className="final-card-foot">
-      <span>{match.score ?? (match.status === "LIVE" ? "Live now" : "Result pending")}</span>
+      <span>{match.status === "FINISHED" && match.score && match.winner ? `FT · ${match.winner === 1 ? match.team1 : match.team2} ${Math.max(...match.score.split("-").map(Number))}–${Math.min(...match.score.split("-").map(Number))} ${match.winner === 1 ? match.team2 : match.team1}` : match.score ?? (match.status === "LIVE" ? "Live now" : "Result pending")}</span>
       <span>{[match.time, match.court].filter(Boolean).join(" · ") || dayDates[4]}</span>
     </div>
   </Link>;
@@ -81,10 +86,10 @@ export function FinalDaySection({ compact = false }: { compact?: boolean }) {
     <div className="final-day-head">
       <p className="eyebrow">ISLAND PADEL CUP 2026 · SUNDAY 04 OCTOBER</p>
       <h2>Final Day<span className="red-dot">.</span></h2>
-      <p>Unbeaten in the pool, Mauritius play La Réunion for the men's title. Madagascar meet La Réunion in the women's final. Both finals at 18:00.</p>
+      <p>La Réunion won the men's final 2-0 — Mauritius finish runners-up after topping the round-robin. Women's final: Madagascar vs La Réunion.</p>
     </div>
     <div className="final-grid">{[men, women].filter((m): m is CompetitionMatch => Boolean(m)).map(match => <FinalCard match={match} key={match.id} />)}</div>
-    <p className="final-day-note">Both finals start at 18:00 (GMT+4) · Club de Champ Fleuri, Saint-Denis.</p>
+    <p className="final-day-note">Finals played at 18:00 (GMT+4) · Club de Champ Fleuri, Saint-Denis. Results are published once official.</p>
   </section>;
 }
 
@@ -102,11 +107,107 @@ export function ResultCard({ match }: { match: CompetitionMatch }) {
   </Link>;
 }
 
+// ── Island Padel Cup 2026 · men's final result (official) ──
+const menFinal = () => finals.find(m => m.category === "Men");
+const menFinalRubbers = () => ipcMatches.filter(m => m.tie === "d4-men");
+const surnames = (pair: string) => pair.split(" / ").map(p => p.split(" ").filter(w => w === w.toUpperCase() && /[A-ZÀ-Ý]/.test(w)).join(" ")).join(" / ");
+const flip = (score: string) => score.replace(/(\d+)-(\d+)/g, "$2-$1");
+
+/** One decisive match, written from the winner's side ("GRENIER / MARCILLE 7-5 6-4 COUACAUD / LEGROS"). */
+function FinalRubberLine({ match, full = false }: { match: CompetitionMatch; full?: boolean }) {
+  if (!match.score || !match.winner) return null;
+  const winnerPair = match.winner === 1 ? match.team1 : match.team2;
+  const loserPair = match.winner === 1 ? match.team2 : match.team1;
+  const winnerNation = match.winner === 1 ? match.country1 : match.country2;
+  const loserNation = match.winner === 1 ? match.country2 : match.country1;
+  const score = match.winner === 1 ? match.score : flip(match.score);
+  return <Link to={`/matches/${match.id}`} className="final-rubber">
+    <span className="final-rubber-ft">FT</span>
+    <span className="final-rubber-pair is-winner">{winnerNation && <Flag nation={winnerNation} className="cm-flag" />}{full ? winnerPair : surnames(winnerPair)}</span>
+    <b>{score}</b>
+    <span className="final-rubber-pair">{loserNation && <Flag nation={loserNation} className="cm-flag" />}{full ? loserPair : surnames(loserPair)}</span>
+  </Link>;
+}
+
+/** Homepage story 01: official men's final result. */
+export function FinalResultHero() {
+  const final = menFinal();
+  if (!final || final.status !== "FINISHED" || !final.winner) return <CompetitionHero />;
+  const champion = (final.winner === 1 ? final.country1 : final.country2) as Nation;
+  const runnerUp = (final.winner === 1 ? final.country2 : final.country1) as Nation;
+  const [s1, s2] = (final.score ?? "0-0").split("-").map(Number);
+  const champScore = final.winner === 1 ? s1 : s2, runnerScore = final.winner === 1 ? s2 : s1;
+  return <section className="fr-hero">
+    <img className="cx-hero-photo" src="/images/Team Mauritius 2.jpeg" alt="Official Team Mauritius squad at the Island Padel Cup 2026" />
+    <span className="cx-hero-scrim fr-scrim" />
+    <CampaignBackground variant="editorial" intensity={0.3} />
+    <div className="fr-copy">
+      <p className="eyebrow light">ISLAND PADEL CUP 2026 <span className="slash">/</span> FINAL RESULT · MEN</p>
+      <h1>{champion}<br /><span>Champions</span></h1>
+      <div className="fr-score">
+        <div><Flag nation={champion} className="fr-flag" /><strong>{String(champScore).padStart(2, "0")}</strong><small>{champion}</small></div>
+        <i>—</i>
+        <div><Flag nation={runnerUp} className="fr-flag" /><strong>{String(runnerScore).padStart(2, "0")}</strong><small>{runnerUp}</small></div>
+      </div>
+      <p className="fr-runner">🥈 {runnerUp} · Runners-up 2026</p>
+      <div className="fr-rubbers">{menFinalRubbers().map(m => <FinalRubberLine match={m} key={m.id} />)}</div>
+      <p className="fr-editorial">Team Mauritius finishes runner-up in the 2026 Island Padel Cup after an impressive campaign in La Réunion.</p>
+      <div className="hero-actions">
+        <Link className="button" to="/results">Full results<ArrowUpRight size={15} /></Link>
+        <Link className="button button-secondary" to="/news/final-day-island-padel-cup-2026">Read the story<ArrowUpRight size={15} /></Link>
+      </div>
+    </div>
+  </section>;
+}
+
+/** Team Mauritius men's campaign: round-robin record + final. */
+export function MauritiusMenCampaign() {
+  const pool = nationsTies.filter(t => t.day < 4 && t.category === "Men" && (t.nation1 === "Mauritius" || t.nation2 === "Mauritius") && t.winner);
+  const won = pool.filter(t => (t.nation1 === "Mauritius" ? 1 : 2) === t.winner).length;
+  const finalTie = nationsTies.find(t => t.day === 4 && t.category === "Men");
+  const final = menFinal();
+  const mauritiusWon = final?.status === "FINISHED" && final.winner === (final.country1 === "Mauritius" ? 1 : 2);
+  return <section className="section mri-campaign">
+    <div className="section-head"><div><p className="eyebrow">TEAM MAURITIUS · MEN</p><h2>The campaign</h2></div><Link className="text-link" to="/results">Full results<ArrowUpRight size={16} /></Link></div>
+    <div className="mri-campaign-grid">
+      <div className="mri-campaign-step"><small>ROUND-ROBIN STAGE</small><strong>{won}<i>W</i> {pool.length - won}<i>L</i></strong><p>Top of the group after wins against Madagascar (2-1) and La Réunion (3-0).</p></div>
+      <div className="mri-campaign-step"><small>FINAL</small>{finalTie && <strong className="mri-campaign-final"><Flag nation={finalTie.nation2} className="tie-flag" />{finalTie.wins2}<i>–</i>{finalTie.wins1}<Flag nation={finalTie.nation1} className="tie-flag" /></strong>}<p>{final?.status === "FINISHED" ? `${finalTie?.nation2 ?? ""} ${finalTie?.wins2 ?? ""}–${finalTie?.wins1 ?? ""} ${finalTie?.nation1 ?? ""}` : AWAITING_RESULT}</p></div>
+      <div className="mri-campaign-step is-position"><small>FINAL POSITION</small><strong>{final?.status === "FINISHED" ? (mauritiusWon ? "🏆" : "🥈") : "—"}</strong><p>{final?.status === "FINISHED" ? (mauritiusWon ? "Mauritius · Champions" : "Mauritius · Runners-up · Island Padel Cup 2026") : AWAITING_RESULT}</p></div>
+    </div>
+  </section>;
+}
+
+/** Results page: final standings block (men decided, women pending until official). */
+export function FinalStandings() {
+  return <section className="section final-standings">
+    <div className="section-head"><div><p className="eyebrow">ISLAND PADEL CUP 2026</p><h2>Final standings</h2></div></div>
+    <div className="fs-grid">{(["Men", "Women"] as const).map(category => {
+      const final = finals.find(m => m.category === category);
+      const done = final?.status === "FINISHED" && final.winner;
+      const champion = done ? (final.winner === 1 ? final.country1 : final.country2) : undefined;
+      const runnerUp = done ? (final.winner === 1 ? final.country2 : final.country1) : undefined;
+      const tie = nationsTies.find(t => t.day === 4 && t.category === category);
+      return <article className="fs-card" key={category}>
+        <p className="eyebrow">{category === "Men" ? "MEN" : "WOMEN"}</p>
+        {champion && runnerUp ? <>
+          <div className="fs-row is-champion"><span>🏆 Champions</span><b><Flag nation={champion} className="standing-flag" /> {champion}</b></div>
+          <div className="fs-row"><span>🥈 Runners-up</span><b><Flag nation={runnerUp} className="standing-flag" /> {runnerUp}</b></div>
+          {tie && <p className="fs-final">FINAL · {tie.winner === 1 ? tie.nation1 : tie.nation2} {Math.max(tie.wins1, tie.wins2)}–{Math.min(tie.wins1, tie.wins2)} {tie.winner === 1 ? tie.nation2 : tie.nation1}</p>}
+          {category === "Men" && <div className="fr-rubbers is-compact">{menFinalRubbers().map(m => <FinalRubberLine match={m} key={m.id} />)}</div>}
+        </> : <>
+          <div className="fs-row"><span>Final</span><b>{final ? <>{final.country1 && <Flag nation={final.country1} className="standing-flag" />} {final.team1} vs {final.country2 && <Flag nation={final.country2} className="standing-flag" />} {final.team2}</> : "—"}</b></div>
+          <p className="fs-final">{AWAITING_RESULT}</p>
+        </>}
+      </article>;
+    })}</div>
+  </section>;
+}
+
 function TieCard({ tie }: { tie: NationsTie }) {
   const mauritiusSide = tie.nation1 === "Mauritius" ? 1 : tie.nation2 === "Mauritius" ? 2 : undefined;
   const winnerNation = tie.winner === 1 ? tie.nation1 : tie.winner === 2 ? tie.nation2 : undefined;
-  const label = !winnerNation ? (tie.day === 4 ? "LIVE" : "RESULT PENDING") : mauritiusSide ? (tie.winner === mauritiusSide ? "WIN" : "LOSS") : `${nationCodes[winnerNation]} WIN`;
-  const tone = label === "WIN" ? "green" : label === "LIVE" ? "red" : label.endsWith(" WIN") ? "gold" : "muted";
+  const label = !winnerNation ? (tie.day === 4 ? "LIVE" : "RESULT PENDING") : tie.day === 4 ? (mauritiusSide ? (tie.winner === mauritiusSide ? "CHAMPIONS" : "RUNNERS-UP") : `${nationCodes[winnerNation]} CHAMPIONS`) : mauritiusSide ? (tie.winner === mauritiusSide ? "WIN" : "LOSS") : `${nationCodes[winnerNation]} WIN`;
+  const tone = label === "WIN" || label === "CHAMPIONS" ? "green" : label === "LIVE" ? "red" : label.endsWith(" WIN") || label === "RUNNERS-UP" || label.endsWith("CHAMPIONS") ? "gold" : "muted";
   return <div className={`tie-card${label === "WIN" ? " is-win" : ""}`}>
     {tie.image && <img className="tie-card-photo" src={tie.image} alt="" loading="lazy" />}
     <div className="tie-card-top"><span>{dayLabels[tie.day].toUpperCase()} · {tie.category === "Men" ? "MEN" : "WOMEN"}</span><Badge label={label} tone={tone} /></div>
@@ -115,7 +216,7 @@ function TieCard({ tie }: { tie: NationsTie }) {
       <b>{tie.wins1}<i>–</i>{tie.wins2}</b>
       <div><Flag nation={tie.nation2} className="tie-flag" /><strong>{tie.nation2}</strong></div>
     </div>
-    <small>{dayDates[tie.day]} · {tie.day === 4 ? "Final · in progress" : "Nations tie, best of 3 matches"}</small>
+    <small>{dayDates[tie.day]} · {tie.day === 4 ? (tie.winner ? "Final · FT" : "Final · in progress") : "Nations tie, best of 3 matches"}</small>
   </div>;
 }
 
@@ -167,7 +268,8 @@ export function P500Hero({ compact = false }: { compact?: boolean }) {
     <div className="p500-hero-grid">
       <div className="p500-hero-copy">
         <p className="p500-kicker"><Flag nation="Mauritius" className="p500-kicker-flag" /> Vallet / De Beer</p>
-        <h2>P500 finalists<span className="red-dot">.</span></h2>
+        <h2>{compact ? <>One more final<span className="red-dot">.</span></> : <>P500 finalists<span className="red-dot">.</span></>}</h2>
+        {compact && <p className="p500-status">P500 Finalists · final next vs Soubies / Tesseydre</p>}
         <div className="p500-stats">
           <div><strong>{played.length}</strong><span>Matches</span></div>
           <div><strong>{wins}</strong><span>Wins</span></div>
@@ -244,8 +346,7 @@ export function EventSwitcher() {
   </nav>;
 }
 
-export function MauritiusResultsByDay() {
-  const days: CompetitionDay[] = [1, 2, 3, 4];
+export function MauritiusResultsByDay({ days = [1, 2, 3, 4] }: { days?: CompetitionDay[] }) {
   return <section className="section mri-results">
     <div className="section-head"><div><p className="eyebrow">ISLAND PADEL CUP 2026</p><h2>Results — day by day</h2></div></div>
     {days.map(day => {
@@ -304,8 +405,9 @@ export function ResultsPage() {
     <section className="page-intro"><p className="eyebrow">ISLAND PADEL CUP 2026 · P500 SAINT-DENIS 2026</p><h1>Results</h1><p className="intro-copy">Confirmed scores only. Two separate competitions, listed separately.</p></section>
     <EventSwitcher />
     <div id="island-padel-cup" className="event-block-label"><span>01</span>Island Padel Cup 2026</div>
+    <FinalStandings />
     <section className="section results-section">
-      {ipcFinished.length ? <div className="cm-grid">{ipcFinished.map(m => <ResultCard match={m} key={m.id} />)}</div> : <div className="empty-state">{AWAITING_RESULT}</div>}
+      {ipcFinished.length ? <MauritiusResultsByDay days={[1, 2, 3]} /> : <div className="empty-state">{AWAITING_RESULT}</div>}
     </section>
     <div id="p500" className="event-block-label"><span>02</span>P500 Saint-Denis 2026</div>
     <P500Hub />

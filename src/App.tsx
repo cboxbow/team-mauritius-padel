@@ -7,7 +7,7 @@ import { PlayerStoryArticle, LAURA_KOENIG_STORY, MAGALY_SCHAFFO_STORY, KATE_FOO_
 import { mapNewsRow, mapPlayerRow, mapTrainingSessionRow } from "./lib/api-mappers";
 import { isSupabaseConfigured, supabase, SUPABASE_URL } from "./lib/supabase-client";
 import { CampaignBackground, PlayerEnergyWave, VisualEngineShowcase, type DotWaveVariant } from "./components/brand";
-import { CompetitionHero, CompetitionMatchPage, CompetitionStrip, FinalDaySection, JourneyRecap, LatestResults, LiveCenterPage, NationsStandings, P500Section, ResultsPage, ScheduleMatches, TournamentGallery } from "./components/competition-sections";
+import { CompetitionMatchPage, FinalResultHero, MauritiusMenCampaign, CompetitionStrip, FinalDaySection, JourneyRecap, LatestResults, LiveCenterPage, NationsStandings, P500Section, ResultsPage, ScheduleMatches, TournamentGallery } from "./components/competition-sections";
 import { COMPETITION_PHASE, competitionMatches } from "./lib/competition";
 import type { Session } from "@supabase/supabase-js";
 
@@ -173,10 +173,11 @@ function Tag({ children, tone = "red" }: { children: React.ReactNode; tone?: "re
 
 function Home({ state }: { state: LocalState }) {
   return <>
-    <CompetitionHero />
+    <FinalResultHero />
     <CompetitionStrip />
-    <FinalDaySection />
     <P500Section />
+    <MauritiusMenCampaign />
+    <FinalDaySection />
     <LatestResults />
     <TournamentGallery />
     <MeetTeamMauritius players={state.players} />
@@ -543,7 +544,7 @@ function NewsDetail({ newsItems }: { newsItems: NewsItem[] }) {
     return <PlayerStoryArticle item={item} next={nextForRotation} story={playerStory} />;
   }
   const chapters = articleChapters(item);
-  return <><section className="article-hero editorial-article-hero"><DotWave intensity={0.25} /><div className="article-image"><img src={item.image} alt={item.title} style={item.imageFocus ? { objectPosition: item.imageFocus } : undefined} /></div><div className="article-title"><p className="eyebrow">{item.category} / {item.date}</p><h1>{item.title}</h1><p>{item.excerpt}</p><div className="article-byline"><span>BY {item.author}</span><ShareButton title={item.title} /></div></div></section><article className="article-body editorial-article-body"><div className="article-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div>{chapters.map((chapter, index) => <section className="article-chapter" key={`${chapter.title}-${index}`}><span className="gold-chapter-number">{String(index + 1).padStart(2, "0")}</span><h2>{chapter.title}</h2>{chapter.paragraphs.map((paragraph, pIndex) => <ArticleParagraph text={paragraph} key={pIndex} />)}</section>)}<div className="article-media-slots"><div><Camera size={20} /><h3>Media block</h3><p>Official images will be added when supplied by the media team.</p></div><div><Video size={20} /><h3>Broadcast layer</h3><p>Video highlights and replay links remain ready for publication.</p></div></div><div className="article-signoff">MSRA × MAURITIUS PADEL LEAGUE<br /><span>ROAD TO LA RÉUNION 2026</span></div></article><section className="section related-stories"><SectionHead eyebrow="KEEP FOLLOWING" title="Related stories" /><div className="news-grid">{related.map(newsItem => <NewsCard item={newsItem} key={newsItem.id} />)}</div></section></>;
+  return <><section className="article-hero editorial-article-hero"><DotWave intensity={0.25} /><div className="article-image"><img src={item.image} alt={item.title} style={item.imageFocus ? { objectPosition: item.imageFocus } : undefined} /></div><div className="article-title"><p className="eyebrow">{item.category} / {item.date}</p><h1>{item.title}</h1><p>{item.excerpt}</p><div className="article-byline"><span>BY {item.author}</span><ShareButton title={item.title} /></div></div></section><article className="article-body editorial-article-body"><div className="article-tags">{item.tags.map(tag => <span key={tag}>{tag}</span>)}</div>{chapters.map((chapter, index) => <section className="article-chapter" key={`${chapter.title}-${index}`}><span className="gold-chapter-number">{String(index + 1).padStart(2, "0")}</span><h2>{chapter.title}</h2>{chapter.paragraphs.map((paragraph, pIndex) => <ArticleParagraph text={paragraph} key={pIndex} />)}</section>)}<div className="article-media-slots"><div><Camera size={20} /><h3>Media block</h3><p>Official images will be added when supplied by the media team.</p></div><div><Video size={20} /><h3>Broadcast layer</h3><p>Video highlights and replay links remain ready for publication.</p></div></div><div className="article-signoff">MSRA × MAURITIUS PADEL LEAGUE<br /><span>ROAD TO LA RÉUNION 2026</span></div>{item.cta && <div className="article-cta"><ButtonLink to={item.cta.to}>{item.cta.label}</ButtonLink></div>}</article><section className="section related-stories"><SectionHead eyebrow="KEEP FOLLOWING" title="Related stories" /><div className="news-grid">{related.map(newsItem => <NewsCard item={newsItem} key={newsItem.id} />)}</div></section></>;
 }
 function articleChapters(item: NewsItem) {
   const paragraphs = (item.body ?? item.excerpt).split("\n\n").map(p => p.trim()).filter(Boolean);

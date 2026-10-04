@@ -2487,3 +2487,66 @@ h3 { font-size: clamp(1.8rem, 3vw, 3rem); line-height: .92; font-weight: 800; }
   .p500-pair li a { grid-template-columns: 30px 22px auto; }
   .p500-pair li small { grid-column: 1 / -1; padding-left: 62px; margin-top: -4px; }
 }
+
+/* ─── Island Padel Cup 2026 · final result ─────────────────────────────── */
+.fr-hero { position: relative; min-height: min(860px, calc(100svh - 68px)); display: flex; align-items: flex-end; padding: clamp(80px, 9vw, 130px) clamp(20px, 8vw, 132px) clamp(44px, 6vw, 84px); overflow: hidden; background: var(--black); }
+.fr-scrim { background: linear-gradient(90deg, rgba(7,7,8,.95) 0%, rgba(7,7,8,.75) 50%, rgba(7,7,8,.35) 100%), linear-gradient(0deg, rgba(7,7,8,.96) 0%, rgba(7,7,8,.2) 60%); }
+.fr-hero .campaign-background { z-index: 0; }
+.fr-copy { position: relative; z-index: 1; max-width: 860px; animation: rise .7s ease-out both; }
+.fr-copy h1 { font-size: clamp(3.6rem, 9vw, 8.4rem); line-height: .9; margin-bottom: 22px; }
+.fr-copy h1 span { color: var(--gold); }
+.fr-score { display: flex; align-items: center; gap: clamp(14px, 3vw, 34px); margin-bottom: 10px; }
+.fr-score > div { display: grid; grid-template-columns: auto auto; grid-template-rows: auto auto; column-gap: 14px; align-items: center; }
+.fr-score strong { font-family: var(--font-display); font-size: clamp(64px, 11vw, 132px); line-height: .85; font-weight: 900; }
+.fr-score > div:last-child strong { color: rgba(244,244,240,.55); }
+.fr-score small { grid-column: 1 / -1; font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: rgba(244,244,240,.75); margin-top: 6px; }
+.fr-score i { color: var(--red); font-style: normal; font-family: var(--font-display); font-size: clamp(30px, 5vw, 60px); }
+.fr-flag { width: clamp(38px, 5vw, 58px); height: auto; }
+.fr-runner { display: inline-block; margin: 8px 0 18px; padding: 8px 14px; border: 1px solid var(--gold); color: var(--gold); font-family: var(--font-display); font-size: clamp(20px, 2.6vw, 28px); font-weight: 800; letter-spacing: .06em; text-transform: uppercase; }
+.fr-rubbers { display: grid; gap: 8px; margin-bottom: 18px; max-width: 760px; }
+.final-rubber { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 12px; padding: 12px 14px; background: rgba(17,21,28,.82); border: 1px solid var(--line); transition: border-color .2s ease; }
+.final-rubber:hover { border-color: var(--gold); }
+.final-rubber-ft { color: var(--gold); font-family: var(--font-mono); font-size: 10px; font-weight: 700; letter-spacing: .1em; }
+.final-rubber-pair { display: flex; align-items: center; gap: 8px; min-width: 0; font-family: var(--font-display); font-size: 18px; text-transform: uppercase; letter-spacing: .03em; color: rgba(244,244,240,.7); overflow-wrap: anywhere; }
+.final-rubber-pair.is-winner { color: var(--white); }
+.final-rubber-pair:last-child { justify-content: flex-end; text-align: right; }
+.final-rubber b { font-family: var(--font-mono); font-size: 20px; white-space: nowrap; }
+.fr-rubbers.is-compact .final-rubber { padding: 9px 10px; }
+.fr-rubbers.is-compact .final-rubber-pair { font-size: 15px; }
+.fr-rubbers.is-compact .final-rubber b { font-size: 16px; }
+.fr-editorial { max-width: 640px; color: rgba(244,244,240,.82); font-size: 18px; line-height: 1.55; margin-bottom: 4px; }
+.final-card-result { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.final-card-result span { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px; background: rgba(7,7,8,.55); border: 1px solid var(--line); font-family: var(--font-display); font-size: 20px; text-transform: uppercase; }
+.final-card-result b { font-family: var(--font-mono); font-size: 9px; letter-spacing: .12em; color: var(--gold); }
+.mri-campaign { background: var(--navy); border-bottom: 1px solid var(--line-soft); }
+.mri-campaign-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.mri-campaign-step { padding: 22px; background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--green); }
+.mri-campaign-step:nth-child(2) { border-top-color: var(--red); }
+.mri-campaign-step.is-position { border-top-color: var(--gold); }
+.mri-campaign-step small { color: var(--muted); font-family: var(--font-mono); font-size: 10px; letter-spacing: .14em; }
+.mri-campaign-step strong { display: flex; align-items: center; gap: 10px; margin: 12px 0 8px; font-family: var(--font-display); font-size: clamp(44px, 5vw, 64px); line-height: 1; font-weight: 900; }
+.mri-campaign-step strong i { font-style: normal; font-size: .45em; color: var(--muted); margin-left: 2px; }
+.mri-campaign-final i { color: var(--red) !important; font-size: .8em !important; }
+.mri-campaign-step p { margin: 0; color: rgba(244,244,240,.72); line-height: 1.5; }
+.final-standings { background: var(--black); border-bottom: 1px solid var(--line-soft); }
+.fs-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 14px; }
+.fs-card { padding: 22px; background: var(--surface); border: 1px solid var(--line); }
+.fs-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; border-top: 1px solid var(--line); font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.fs-row b { display: flex; align-items: center; gap: 8px; color: var(--white); font-family: var(--font-display); font-size: 24px; letter-spacing: .04em; text-align: right; }
+.fs-row.is-champion b { color: var(--gold); }
+.fs-final { margin: 12px 0; color: rgba(244,244,240,.8); font-family: var(--font-mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; }
+.p500-status { margin: -12px 0 18px; color: var(--gold); font-family: var(--font-mono); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+.article-cta { margin-top: 34px; }
+@media (max-width: 900px) { .mri-campaign-grid, .fs-grid { grid-template-columns: 1fr; } }
+@media (max-width: 580px) {
+  .fr-hero { min-height: auto; padding: 84px 16px 44px; }
+  .fr-copy h1 { font-size: clamp(3.2rem, 15vw, 4.6rem); }
+  .fr-score strong { font-size: 72px; }
+  .final-rubber { grid-template-columns: 30px minmax(0, 1fr) auto; row-gap: 6px; }
+  .final-rubber-pair:last-child { grid-column: 2 / -1; justify-content: flex-start; text-align: left; }
+  .final-rubber-pair { font-size: 16px; }
+  .final-rubber b { font-size: 17px; }
+  .final-card-result { grid-template-columns: 1fr; }
+  .fs-row b { font-size: 20px; }
+  .fr-editorial { font-size: 16px; }
+}
