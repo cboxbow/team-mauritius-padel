@@ -105,8 +105,8 @@ export function ResultCard({ match }: { match: CompetitionMatch }) {
 function TieCard({ tie }: { tie: NationsTie }) {
   const mauritiusSide = tie.nation1 === "Mauritius" ? 1 : tie.nation2 === "Mauritius" ? 2 : undefined;
   const winnerNation = tie.winner === 1 ? tie.nation1 : tie.winner === 2 ? tie.nation2 : undefined;
-  const label = !winnerNation ? "RESULT PENDING" : mauritiusSide ? (tie.winner === mauritiusSide ? "WIN" : "LOSS") : `${nationCodes[winnerNation]} WIN`;
-  const tone = label === "WIN" ? "green" : label.endsWith(" WIN") ? "gold" : "muted";
+  const label = !winnerNation ? (tie.day === 4 ? "LIVE" : "RESULT PENDING") : mauritiusSide ? (tie.winner === mauritiusSide ? "WIN" : "LOSS") : `${nationCodes[winnerNation]} WIN`;
+  const tone = label === "WIN" ? "green" : label === "LIVE" ? "red" : label.endsWith(" WIN") ? "gold" : "muted";
   return <div className={`tie-card${label === "WIN" ? " is-win" : ""}`}>
     {tie.image && <img className="tie-card-photo" src={tie.image} alt="" loading="lazy" />}
     <div className="tie-card-top"><span>{dayLabels[tie.day].toUpperCase()} · {tie.category === "Men" ? "MEN" : "WOMEN"}</span><Badge label={label} tone={tone} /></div>
@@ -115,7 +115,7 @@ function TieCard({ tie }: { tie: NationsTie }) {
       <b>{tie.wins1}<i>–</i>{tie.wins2}</b>
       <div><Flag nation={tie.nation2} className="tie-flag" /><strong>{tie.nation2}</strong></div>
     </div>
-    <small>{dayDates[tie.day]} · Nations tie, best of 3 matches</small>
+    <small>{dayDates[tie.day]} · {tie.day === 4 ? "Final · in progress" : "Nations tie, best of 3 matches"}</small>
   </div>;
 }
 
@@ -256,7 +256,8 @@ export function MauritiusResultsByDay() {
         {dayTies.length ? dayTies.map(tie => <div className="mri-tie" key={tie.id}>
           <TieCard tie={tie} />
           <div className="cm-grid">{dayMatches.filter(m => m.tie === tie.id).map(match => <ResultCard match={match} key={match.id} />)}</div>
-        </div>) : <div className="cm-grid">{dayMatches.map(match => <ResultCard match={match} key={match.id} />)}</div>}
+        </div>) : null}
+        {dayMatches.some(m => !m.tie) && <div className="cm-grid">{dayMatches.filter(m => !m.tie).map(match => <ResultCard match={match} key={match.id} />)}</div>}
       </div>;
     })}
   </section>;

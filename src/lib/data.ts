@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 45;
+export const SEED_VERSION = 46;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 

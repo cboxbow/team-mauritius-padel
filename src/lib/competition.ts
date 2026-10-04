@@ -94,7 +94,10 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "d3-women-3", tie: "d3-women", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Women", stage: "Pool", team1: "Kate FOO KUNE / Laura KOENIG", team2: "Elisa GUIRAUD / Shona-Li QUERY", country1: "Mauritius", country2: "La Réunion", score: "3-6 5-7", status: "FINISHED", winner: 2, image: R("d3-women-3") },
 
   // ── FINAL DAY · SUNDAY 04 OCTOBER · 18:00 GMT+4 (official finals visuals) ──
-  { id: "ipc-final-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Mauritius", team2: "La Réunion", country1: "Mauritius", country2: "La Réunion", status: "UPCOMING", time: "18:00 (GMT+4)", image: R("finals-men") },
+  { id: "ipc-final-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Mauritius", team2: "La Réunion", country1: "Mauritius", country2: "La Réunion", score: "0-2", status: "LIVE", note: "La Réunion lead 2-0 after two matches. Final result to be confirmed.", time: "18:00 (GMT+4)", image: R("finals-men") },
+  // Men's final rubbers — scores from the live scoreboard (18:11), confirmed finished by the organiser.
+  { id: "d4-men-1", tie: "d4-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Olivier COUACAUD / Nicolas LEGROS", team2: "Mickael GRENIER / Hugo MARCILLE", country1: "Mauritius", country2: "La Réunion", score: "5-7 4-6", status: "FINISHED", winner: 2 },
+  { id: "d4-men-2", tie: "d4-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Jake LAM HAU CHING / Amaury DE BEER", team2: "Paul-Henri TEYSSEDRE / Giovanni ROMEO", country1: "Mauritius", country2: "La Réunion", score: "4-6 4-6", status: "FINISHED", winner: 2 },
   { id: "ipc-final-women", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Women", stage: "Women's Final", team1: "Madagascar", team2: "La Réunion", country1: "Madagascar", country2: "La Réunion", status: "UPCOMING", time: "18:00 (GMT+4)", image: R("finals-women") },
 
   // ── P500 SAINT-DENIS · SEPARATE COMPETITION (never part of the Island Padel Cup nations standings) ──
@@ -147,7 +150,7 @@ export const p500Pairs: { key: string; category: "Men" | "Women"; label: string;
   { key: "schaffo-giraud", category: "Women", label: "Magaly SCHAFFO / Marinne GIRAUD", result: "Result pending" },
 ];
 export const p500PairMatches = (key: string) => p500Matches.filter(m => m.pair === key);
-export const finals = ipcMatches.filter(m => m.day === 4);
+export const finals = ipcMatches.filter(m => m.day === 4 && !m.tie);
 export const isMauritiusMatch = (m: CompetitionMatch) => m.country1 === "Mauritius" || m.country2 === "Mauritius";
 export const mauritiusIpcMatches = ipcMatches.filter(isMauritiusMatch);
 
@@ -178,14 +181,16 @@ export const nationsTies: NationsTie[] = [...new Set(ipcMatches.filter(m => m.ti
   const first = rubbers[0];
   const wins1 = rubbers.filter(m => m.status === "FINISHED" && m.winner === 1).length;
   const wins2 = rubbers.filter(m => m.status === "FINISHED" && m.winner === 2).length;
-  return { id, day: first.day, category: first.category, nation1: first.country1 as Nation, nation2: first.country2 as Nation, wins1, wins2, played: wins1 + wins2, winner: wins1 >= 2 ? 1 : wins2 >= 2 ? 2 : undefined, image: tieImages[id] };
+  const finalMatch = first.day === 4 ? ipcMatches.find(m => !m.tie && m.day === 4 && m.category === first.category) : undefined;
+  const winner = first.day === 4 ? (finalMatch?.status === "FINISHED" ? finalMatch.winner : undefined) : wins1 >= 2 ? 1 : wins2 >= 2 ? 2 : undefined;
+  return { id, day: first.day, category: first.category, nation1: first.country1 as Nation, nation2: first.country2 as Nation, wins1, wins2, played: wins1 + wins2, winner, image: tieImages[id] };
 });
 
 export type StandingRow = { nation: Nation; played: number; won: number; rubbersWon: number; rubbersLost: number };
 export function poolStandings(category: "Men" | "Women"): StandingRow[] {
   const nations: Nation[] = ["Mauritius", "La Réunion", "Madagascar"];
   return nations.map(nation => {
-    const ties = nationsTies.filter(t => t.category === category && (t.nation1 === nation || t.nation2 === nation) && t.winner);
+    const ties = nationsTies.filter(t => t.day < 4 && t.category === category && (t.nation1 === nation || t.nation2 === nation) && t.winner);
     const side = (t: NationsTie) => t.nation1 === nation ? 1 : 2;
     return {
       nation,
