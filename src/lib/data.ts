@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 44;
+export const SEED_VERSION = 45;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -574,7 +574,6 @@ export const newsItems: NewsItem[] = [
     excerpt: "A Thursday competition block from 12:30–14:30: match simulation, competition intensity and pressure situations.",
     image: "/images/sessions/session-03-compete/hero-team.jpg",
     imageFocus: "center center",
-    featured: true,
     author: "Team Mauritius",
     tags: ["Competition Mode", "Training Camp", "Caña Club"],
     body: "Team Mauritius completed the third stage of its Road to La Réunion at Caña Club on Thursday 24 September.\n\nThe 12:30–14:30 block moved the squad into competition mode through match simulation, competition intensity and pressure situations.\n\nThe session closed with the team together on court before the final preparation camp on Sunday 27 September.",
@@ -591,6 +590,20 @@ export const newsItems: NewsItem[] = [
     author: "Team Mauritius",
     tags: ["Final Camp", "Adam Auckland", "La Réunion", "Team Mauritius"],
     body: "On Sunday 27 September, Team Mauritius came together at Caña Club for the Final Camp — the fourth and last collective session of the Road to La Réunion.\n\nAfter Assess on 6 September, Build on 13 September and the Compete block on 24 September, the Final Camp was designed as the bridge between preparation and competition. The programme left no room for experiments: final pairings, an Island Cup simulation and a closing team briefing before departure.\n\nHead coach Adam Auckland led the session as he had led the whole preparation, with one objective in mind since the first morning at Caña Club: turning a group of selected players into one competitive national unit.\n\nThe preparation was never only about tactics. Across four sessions and the Sunday brunches, the men's and women's squads trained, travelled and prepared as one team — the cohesion Team Mauritius would need in a nations cup format.\n\nThe Final Camp marked the end of the Road to La Réunion and the start of the competition. Next stop: the Island Padel Cup 2026 at Club de Champ Fleuri, Saint-Denis, from 1 to 4 October.",
+  },
+  {
+    id: "news-p500-final",
+    slug: "p500-final-vallet-de-beer-go-for-the-title",
+    category: "Results",
+    date: "04 October 2026",
+    title: "P500 Final: Vallet / De Beer go for the title",
+    excerpt: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4.",
+    image: "/images/players/official-2026/mathieu-vallet-alt.jpg",
+    imageFocus: "center 30%",
+    featured: true,
+    author: "Team Mauritius",
+    tags: ["P500 Saint-Denis", "Final", "Mathieu VALLET", "Amaury DE BEER"],
+    body: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4 in the semi-final.\n\nThey will face Paul SOUBIES and Paul-Henri TEYSSEDRE for the title.\n\nTheir road to the final: 6-2 6-2 against Noah HOUAREAU / Olivier DE FONDAUMIERE, 6-3 6-1 against Alexandre LALLEMAND / Lucas LANDAIS, 6-3 6-2 against Antoine BLIN / Tomy SALAS, then 7-5 6-4 against Romain GUTSTEIN / Giovanni ROMEO. Four matches, four wins.\n\nIn the women's draw, Alice DANJOUX / Laura KOENIG reached the semi-finals.\n\nThe P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026. The final result will be published once official.",
   },
   {
     id: "news-final-day",

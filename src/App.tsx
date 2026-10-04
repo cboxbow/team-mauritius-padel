@@ -40,7 +40,7 @@ const resolveMode = (mode?: SiteMode): SiteMode => mode && modeOrder.indexOf(mod
 type StoredState = Partial<LocalState> & { seedVersion?: number };
 
 function readState(): LocalState {
-  if (typeof window === "undefined") return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null };
+  if (typeof window === "undefined") return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: mergeSeedNews([]), coach: null };
   try {
     const value = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null") as StoredState | null;
     const seedIsFresh = value?.seedVersion === SEED_VERSION;
@@ -50,10 +50,10 @@ function readState(): LocalState {
       matches: seedIsFresh && value?.matches ? value.matches : seedMatches,
       liveUrl: value?.liveUrl ?? "",
       trainingSessions: seedIsFresh && value?.trainingSessions ? value.trainingSessions : seedTrainingSessions,
-      newsItems: seedIsFresh && value?.newsItems ? mergeSeedNews(value.newsItems) : seedNewsItems,
+      newsItems: seedIsFresh && value?.newsItems ? mergeSeedNews(value.newsItems) : mergeSeedNews([]),
       coach: null,
     };
-  } catch { return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null }; }
+  } catch { return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: mergeSeedNews([]), coach: null }; }
 }
 
 function saveState(state: LocalState) { if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, seedVersion: SEED_VERSION })); }
@@ -176,10 +176,10 @@ function Home({ state }: { state: LocalState }) {
     <CompetitionHero />
     <CompetitionStrip />
     <FinalDaySection />
+    <P500Section />
     <LatestResults />
     <TournamentGallery />
     <MeetTeamMauritius players={state.players} />
-    <P500Section />
     <section className="section newsroom-preview"><SectionHead eyebrow="THE LATEST" title="Latest news" link="Open newsroom" to="/news" /><div className="news-grid">{state.newsItems.map(item => <NewsCard key={item.id} item={item} />)}</div></section>
     <JourneyRecap sessions={state.trainingSessions} />
     <QuickNavigation />
