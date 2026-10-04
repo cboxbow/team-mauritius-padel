@@ -18,7 +18,7 @@ function escapeHtml(value) {
 function campaignMarkup() {
   const stories = [
     ["Team Mauritius finish runners-up at the 2026 Island Padel Cup", "Men's final: La Réunion 2-0 Mauritius. La Réunion champions, Mauritius runners-up."],
-    ["P500 Saint-Denis: Vallet / De Beer in the final", "Alice DANJOUX / Laura KOENIG win 9-0. Céline DESVAUX DE MARIGNY / Cécile PARK win 9-2."],
+    ["Vallet & De Beer are P500 champions", "Five matches, five wins: Mathieu VALLET / Amaury DE BEER win the P500 Saint-Denis final 6-4 6-7 6-4."],
     ["Road to La Réunion", "Assess, Build, Compete and the Final Camp — preparation complete."],
   ];
   return `

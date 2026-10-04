@@ -173,9 +173,9 @@ function Tag({ children, tone = "red" }: { children: React.ReactNode; tone?: "re
 
 function Home({ state }: { state: LocalState }) {
   return <>
-    <FinalResultHero />
-    <CompetitionStrip />
     <P500Section />
+    <CompetitionStrip />
+    <FinalResultHero />
     <MauritiusMenCampaign />
     <FinalDaySection />
     <LatestResults />

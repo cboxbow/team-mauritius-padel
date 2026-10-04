@@ -48,9 +48,25 @@ export function CompetitionHero() {
 }
 
 export function CompetitionStrip() {
-  return <section className="cx-strip">
+  if (COMPETITION_PHASE === "FINAL_DAY") return <section className="cx-strip">
     <div><p className="eyebrow">FINAL DAY · LA RÉUNION · TWO EVENTS</p><strong>Island Padel Cup 2026 <i>+</i> P500 Saint-Denis</strong></div>
-    <Badge label={COMPETITION_PHASE === "FINAL_DAY" ? "FINAL DAY" : "COMPLETE"} tone="red" />
+    <Badge label="FINAL DAY" tone="red" />
+  </section>;
+  return <FinalWeekendRecap />;
+}
+
+/** Two separate competitions, told side by side — never merged. */
+export function FinalWeekendRecap() {
+  const ipcMen = finals.find(m => m.category === "Men");
+  const ipcMauritiusSide = ipcMen?.country1 === "Mauritius" ? 1 : 2;
+  const ipcDone = ipcMen?.status === "FINISHED" && ipcMen.winner;
+  const ipcLabel = ipcDone ? (ipcMen.winner === ipcMauritiusSide ? "🏆 Mauritius — Men's Champions" : "🥈 Mauritius — Men's Runner-Up") : AWAITING_RESULT;
+  return <section className="weekend-recap">
+    <p className="eyebrow">FINAL WEEKEND RECAP · LA RÉUNION · 04 OCTOBER 2026</p>
+    <div className="weekend-recap-grid">
+      <Link to="/results#island-padel-cup" className="weekend-recap-card"><small>ISLAND PADEL CUP 2026 · NATIONS</small><strong>{ipcLabel}</strong><span>{ipcDone ? "Final: La Réunion 2–0 Mauritius" : ""}</span></Link>
+      <Link to="/results#p500" className={`weekend-recap-card${p500Won() ? " is-gold" : ""}`}><small>P500 SAINT-DENIS · PAIRS</small><strong>{p500Won() ? "🏆 Mathieu VALLET / Amaury DE BEER — Champions" : "Mathieu VALLET / Amaury DE BEER — Finalists"}</strong><span>{p500MenFinal?.score ? `Final: ${p500MenFinal.score.split(" ").join(" / ")}` : ""}</span></Link>
+    </div>
   </section>;
 }
 
@@ -238,46 +254,58 @@ export function TournamentGallery() {
 const shortPair = (pair: string) => pair.split(" / ").map(p => p.split(" ").filter(w => w === w.toUpperCase() && /[A-ZÀ-Ý]/.test(w)).map(w => w.charAt(0) + w.slice(1).toLowerCase()).join(" ")).join(" / ");
 const roundShort: Record<string, string> = { "Round of 32": "R32", "Round of 16": "R16", "Quarter-final": "QF", "Semi-final": "SF", "Final": "FINAL" };
 
+const p500Won = () => p500MenFinal?.status === "FINISHED" && mauritiusOutcome(p500MenFinal) === "WIN";
+
 function P500FinalCard() {
   const final = p500MenFinal;
   if (!final) return null;
   const badge = matchBadge(final);
-  return <Link to={`/matches/${final.id}`} className={`final-card p500-final-card is-mauritius${final.status === "LIVE" ? " is-live" : ""}`}>
+  const done = final.status === "FINISHED" && final.winner;
+  return <Link to={`/matches/${final.id}`} className={`final-card p500-final-card is-mauritius${final.status === "LIVE" ? " is-live" : ""}${p500Won() ? " is-champions" : ""}`}>
     <div className="final-card-top"><span><Trophy size={15} /> P500 Saint-Denis · Men's Final</span><Badge {...badge} /></div>
     <div className="final-card-teams">
       <div className={final.winner === 1 ? "is-winner" : ""}><Flag nation="Mauritius" className="final-flag" /><strong>{final.team1.split(" / ").map(n => <span key={n}>{n}</span>)}</strong></div>
-      <em>VS</em>
+      <em>{done ? "DEF." : "VS"}</em>
       <div className={final.winner === 2 ? "is-winner" : ""}>{final.country2 && <Flag nation={final.country2} className="final-flag" />}<strong>{final.team2.split(" / ").map(n => <span key={n}>{n}</span>)}</strong></div>
     </div>
-    <div className="final-card-foot"><span>{final.score ?? (final.status === "LIVE" ? "Live now" : "Result pending")}</span><span>{final.time ?? "Time to be confirmed"}</span></div>
+    {done && final.score && <div className="p500-final-sets">{final.score.split(" ").map((set, i) => { const [a, b] = set.split("-").map(Number); return <span key={i} className={a > b ? "is-won" : "is-lost"}><small>SET {i + 1}</small>{a}–{b}</span>; })}</div>}
+    <div className="final-card-foot"><span>{done ? (p500Won() ? "🏆 P500 Champions · Vallet / De Beer" : "FT") : final.score ?? (final.status === "LIVE" ? "Live now" : "Result pending")}</span><span>{done ? (final.matchNo ? `${final.matchNo} · FT` : "FT") : final.time ?? "Time to be confirmed"}</span></div>
   </Link>;
 }
 
-/** Headline P500 block: the visitor must see in 3 seconds that Mauritius has a men's pair in the P500 final. */
+/** Headline P500 block. Champions view once the final is official; finalists view before. */
 export function P500Hero({ compact = false }: { compact?: boolean }) {
   const road = p500PairMatches("vallet-debeer");
   const played = road.filter(m => m.status === "FINISHED");
   const wins = played.filter(m => mauritiusOutcome(m) === "WIN").length;
   const semi = road.find(m => m.round === "Semi-final");
-  return <section className={`section p500-hero${compact ? " is-compact" : ""}`}>
+  const final = p500MenFinal;
+  const champions = p500Won();
+  const goToRoad = (e: React.MouseEvent) => { e.preventDefault(); document.getElementById("road-to-the-final")?.scrollIntoView({ behavior: "smooth" }); };
+  return <section className={`section p500-hero${compact ? " is-compact" : ""}${champions ? " is-champions" : ""}`}>
     <CampaignBackground variant="subtle" intensity={0.16} />
     <div className="p500-hero-head">
-      <p className="eyebrow">P500 SAINT-DENIS · FINAL DAY · 04 OCTOBER 2026</p>
-      <p className="p500-hero-sub">Team Mauritius in action · separate from the Island Padel Cup</p>
+      <p className="eyebrow">P500 SAINT-DENIS · 04 OCTOBER 2026</p>
+      <p className="p500-hero-sub">Team Mauritius · separate from the Island Padel Cup</p>
     </div>
     <div className="p500-hero-grid">
       <div className="p500-hero-copy">
-        <p className="p500-kicker"><Flag nation="Mauritius" className="p500-kicker-flag" /> Vallet / De Beer</p>
-        <h2>{compact ? <>One more final<span className="red-dot">.</span></> : <>P500 finalists<span className="red-dot">.</span></>}</h2>
-        {compact && <p className="p500-status">P500 Finalists · final next vs Soubies / Tesseydre</p>}
+        {champions && <div className="p500-portraits" aria-hidden="true"><img src="/images/players/official-2026/mathieu-vallet.jpg" alt="" loading="lazy" /><img src="/images/players/official-2026/amaury-de-beer.jpg" alt="" loading="lazy" /></div>}
+        <p className="p500-kicker"><Flag nation="Mauritius" className="p500-kicker-flag" /> {champions ? "Vallet & De Beer" : "Vallet / De Beer"}</p>
+        <h2>{champions ? <>P500 champions<span className="red-dot">.</span></> : compact ? <>One more final<span className="red-dot">.</span></> : <>P500 finalists<span className="red-dot">.</span></>}</h2>
+        {champions ? <p className="p500-status">Bring the title home · 🇲🇺 Mauritius</p> : compact && <p className="p500-status">P500 Finalists · final next</p>}
         <div className="p500-stats">
           <div><strong>{played.length}</strong><span>Matches</span></div>
           <div><strong>{wins}</strong><span>Wins</span></div>
-          <div><strong>Final</strong><span>Next</span></div>
+          <div><strong>{champions ? "🏆" : "Final"}</strong><span>{champions ? "Champions" : "Next"}</span></div>
         </div>
-        {semi && semi.score && <Link to={`/matches/${semi.id}`} className="p500-latest"><small>LATEST RESULT · SEMI-FINAL</small><b>{semi.score.replace(" ", " / ")}</b><span>vs {shortPair(semi.team2)}</span></Link>}
+        {champions && final?.score ? <Link to={`/matches/${final.id}`} className="p500-latest"><small>FINAL · FT</small><b>{final.score.split(" ").join(" / ")}</b><span>def. {shortPair(final.team2)}</span></Link>
+          : semi && semi.score && <Link to={`/matches/${semi.id}`} className="p500-latest"><small>LATEST RESULT · SEMI-FINAL</small><b>{semi.score.replace(" ", " / ")}</b><span>vs {shortPair(semi.team2)}</span></Link>}
         <div className="hero-actions">
-          <Link className="button" to={compact ? "/live#p500" : "#road-to-the-final"} onClick={compact ? undefined : (e => { e.preventDefault(); document.getElementById("road-to-the-final")?.scrollIntoView({ behavior: "smooth" }); })}>{compact ? "Follow P500" : "View road to the final"}<ArrowUpRight size={15} /></Link>
+          {compact ? <>
+            <Link className="button" to="/live#road-to-the-final">{champions ? "Road to the title" : "Follow P500"}<ArrowUpRight size={15} /></Link>
+            {champions && <Link className="button button-secondary" to="/news/vallet-de-beer-p500-champions">Read the story<ArrowUpRight size={15} /></Link>}
+          </> : <Link className="button" to="#road-to-the-final" onClick={goToRoad}>{champions ? "View road to the title" : "View road to the final"}<ArrowUpRight size={15} /></Link>}
         </div>
       </div>
       <P500FinalCard />
@@ -288,7 +316,7 @@ export function P500Hero({ compact = false }: { compact?: boolean }) {
 export function RoadToTheFinal() {
   const road = p500PairMatches("vallet-debeer");
   return <section className="section road-final" id="road-to-the-final">
-    <div className="section-head"><div><p className="eyebrow">P500 SAINT-DENIS · MEN</p><h2>Road to the final</h2></div></div>
+    <div className="section-head"><div><p className="eyebrow">P500 SAINT-DENIS · MEN</p><h2>{p500Won() ? "Road to the title" : "Road to the final"}</h2></div></div>
     <p className="road-final-pair"><Flag nation="Mauritius" className="p500-kicker-flag" /> Mathieu VALLET <i>/</i> Amaury DE BEER</p>
     <ol className="road-steps">{road.map(m => {
       const outcome = mauritiusOutcome(m);
@@ -340,7 +368,7 @@ export function P500Section({ standalone = false }: { standalone?: boolean }) {
 
 export function EventSwitcher() {
   return <nav className="event-switcher" aria-label="Final day events">
-    <span className="event-switcher-label"><span className="live-dot" /> LIVE / FINAL DAY</span>
+    <span className="event-switcher-label">{COMPETITION_PHASE === "FINAL_DAY" ? <><span className="live-dot" /> LIVE / FINAL DAY</> : "FINAL WEEKEND · RESULTS"}</span>
     <a href="#island-padel-cup" onClick={e => { e.preventDefault(); document.getElementById("island-padel-cup")?.scrollIntoView({ behavior: "smooth" }); }}>Island Padel Cup</a>
     <a href="#p500" onClick={e => { e.preventDefault(); document.getElementById("p500")?.scrollIntoView({ behavior: "smooth" }); }}>P500 Saint-Denis</a>
   </nav>;

@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 48;
+export const SEED_VERSION = 50;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -593,6 +593,21 @@ export const newsItems: NewsItem[] = [
     body: "On Sunday 27 September, Team Mauritius came together at Caña Club for the Final Camp — the fourth and last collective session of the Road to La Réunion.\n\nAfter Assess on 6 September, Build on 13 September and the Compete block on 24 September, the Final Camp was designed as the bridge between preparation and competition. The programme left no room for experiments: final pairings, an Island Cup simulation and a closing team briefing before departure.\n\nHead coach Adam Auckland led the session as he had led the whole preparation, with one objective in mind since the first morning at Caña Club: turning a group of selected players into one competitive national unit.\n\nThe preparation was never only about tactics. Across four sessions and the Sunday brunches, the men's and women's squads trained, travelled and prepared as one team — the cohesion Team Mauritius would need in a nations cup format.\n\nThe Final Camp marked the end of the Road to La Réunion and the start of the competition. Next stop: the Island Padel Cup 2026 at Club de Champ Fleuri, Saint-Denis, from 1 to 4 October.",
   },
   {
+    id: "news-p500-champions",
+    slug: "vallet-de-beer-p500-champions",
+    category: "P500 Saint-Denis",
+    date: "04 October 2026",
+    title: "Vallet & De Beer are P500 champions",
+    excerpt: "Five matches. Five wins. One title. Mathieu VALLET and Amaury DE BEER win the P500 Saint-Denis, beating Paul SOUBIES / Paul-Henri TEYSSEDRE 6-4, 6-7, 6-4 in the final.",
+    image: "/images/players/official-2026/mathieu-vallet-alt.jpg",
+    imageFocus: "center 30%",
+    featured: true,
+    author: "Team Mauritius",
+    tags: ["P500 Saint-Denis", "Champions", "Mathieu VALLET", "Amaury DE BEER"],
+    body: "Mathieu VALLET and Amaury DE BEER ended their week in La Réunion on a high by winning the P500 Saint-Denis title.\n\nThe Mauritian pair defeated Paul SOUBIES and Paul-Henri TEYSSEDRE in a hard-fought three-set final, 6-4, 6-7, 6-4.\n\nTheir road to the title was perfect: R32, def. Noah HOUAREAU / Olivier DE FONDAUMIERE 6-2, 6-2 · R16, def. Alexandre LALLEMAND / Lucas LANDAIS 6-3, 6-1 · Quarter-final, def. Antoine BLIN / Tomy SALAS 6-3, 6-2 · Semi-final, def. Romain GUTSTEIN / Giovanni ROMEO 7-5, 6-4 · Final, def. Paul SOUBIES / Paul-Henri TEYSSEDRE 6-4, 6-7, 6-4.\n\nFive matches. Five victories. P500 champions.\n\nA perfect conclusion to an intense week of padel in La Réunion for Team Mauritius. The P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026, where Mauritius finished men's runners-up.",
+    cta: { label: "Road to the title", to: "/live#road-to-the-final" },
+  },
+  {
     id: "news-final-day",
     slug: "final-day-island-padel-cup-2026",
     category: "Island Padel Cup",
@@ -604,7 +619,7 @@ export const newsItems: NewsItem[] = [
     featured: true,
     author: "Team Mauritius",
     tags: ["Island Padel Cup", "Final", "Runners-up", "Saint-Denis"],
-    body: "Team Mauritius concluded its Island Padel Cup 2026 campaign as men's runners-up after La Réunion claimed the final 2-0.\n\nMauritius entered the final after an excellent round-robin campaign and had already defeated both Madagascar (2-1) and La Réunion (3-0) during the competition.\n\nIn the first match of the final, Mickael GRENIER and Hugo MARCILLE defeated Olivier COUACAUD and Nicolas LEGROS 7-5, 6-4.\n\nLa Réunion then secured the title when Paul-Henri TESSEYDRE and Giovanni ROMEO defeated Jake LAM HAU CHING and Amaury DE BEER 6-4, 6-4.\n\nFinal: La Réunion 2-0 Mauritius.\n\nDespite the defeat in the final, Mauritius finishes the 2026 Island Padel Cup as men's runners-up after a strong campaign in La Réunion.",
+    body: "Team Mauritius concluded its Island Padel Cup 2026 campaign as men's runners-up after La Réunion claimed the final 2-0.\n\nMauritius entered the final after an excellent round-robin campaign and had already defeated both Madagascar (2-1) and La Réunion (3-0) during the competition.\n\nIn the first match of the final, Mickael GRENIER and Hugo MARCILLE defeated Olivier COUACAUD and Nicolas LEGROS 7-5, 6-4.\n\nLa Réunion then secured the title when Paul-Henri TEYSSEDRE and Giovanni ROMEO defeated Jake LAM HAU CHING and Amaury DE BEER 6-4, 6-4.\n\nFinal: La Réunion 2-0 Mauritius.\n\nDespite the defeat in the final, Mauritius finishes the 2026 Island Padel Cup as men's runners-up after a strong campaign in La Réunion.",
     cta: { label: "Full results", to: "/results" },
   },
   {
@@ -612,14 +627,13 @@ export const newsItems: NewsItem[] = [
     slug: "p500-final-vallet-de-beer-go-for-the-title",
     category: "Results",
     date: "04 October 2026",
-    title: "P500 Final: Vallet / De Beer go for the title",
+    title: "P500 semi-final: Vallet / De Beer reach the final",
     excerpt: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4.",
     image: "/images/players/official-2026/mathieu-vallet-alt.jpg",
     imageFocus: "center 30%",
-    featured: true,
     author: "Team Mauritius",
     tags: ["P500 Saint-Denis", "Final", "Mathieu VALLET", "Amaury DE BEER"],
-    body: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4 in the semi-final.\n\nThey will face Paul SOUBIES and Paul-Henri TESSEYDRE for the title.\n\nTheir road to the final: 6-2 6-2 against Noah HOUAREAU / Olivier DE FONDAUMIERE, 6-3 6-1 against Alexandre LALLEMAND / Lucas LANDAIS, 6-3 6-2 against Antoine BLIN / Tomy SALAS, then 7-5 6-4 against Romain GUTSTEIN / Giovanni ROMEO. Four matches, four wins.\n\nIn the women's draw, Alice DANJOUX / Laura KOENIG reached the semi-finals.\n\nThe P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026. The final result will be published once official.",
+    body: "Mathieu VALLET and Amaury DE BEER are through to the P500 Saint-Denis final after defeating Romain GUTSTEIN and Giovanni ROMEO 7-5, 6-4 in the semi-final.\n\nIn the final they faced Paul SOUBIES and Paul-Henri TEYSSEDRE — and won 6-4, 6-7, 6-4 to become P500 champions.\n\nTheir road to the final: 6-2 6-2 against Noah HOUAREAU / Olivier DE FONDAUMIERE, 6-3 6-1 against Alexandre LALLEMAND / Lucas LANDAIS, 6-3 6-2 against Antoine BLIN / Tomy SALAS, then 7-5 6-4 against Romain GUTSTEIN / Giovanni ROMEO. Four matches, four wins.\n\nIn the women's draw, Alice DANJOUX / Laura KOENIG reached the semi-finals.\n\nThe P500 Saint-Denis is a separate tournament from the Island Padel Cup 2026. Update: Mathieu VALLET and Amaury DE BEER won the final 6-4, 6-7, 6-4. They are P500 Saint-Denis champions.",
   },
 
   {
@@ -633,7 +647,7 @@ export const newsItems: NewsItem[] = [
     imageFocus: "center 35%",
     author: "Team Mauritius",
     tags: ["P500 Saint-Denis", "Alice Danjoux", "Laura Koenig", "Céline Desvaux de Marigny", "Cécile Park"],
-    body: "Alongside the Island Padel Cup, a P500 tournament is being played in Saint-Denis on Sunday 4 October, with several Mauritian pairs entered. This event is separate from the Island Padel Cup nations standings.\n\nAlice DANJOUX / Laura KOENIG won 9-0 against Fanny GRONDIN / Joëlle THIEN KIN SIEN.\n\nCéline DESVAUX DE MARIGNY / Cécile PARK won 9-2 against Allison COSTA / Vanessa CABON.\n\nMagaly SCHAFFO / Marinne GIRAUD are also entered, seeded TS8. Their result will be published once confirmed.",
+    body: "Alongside the Island Padel Cup, a P500 tournament is being played in Saint-Denis on Sunday 4 October, with several Mauritian pairs entered. This event is separate from the Island Padel Cup nations standings.\n\nAlice DANJOUX / Laura KOENIG won 9-0 against Fanny GRONDIN / Joëlle THIEN KIN SIEN.\n\nCéline DESVAUX DE MARIGNY / Cécile PARK won 9-2 against Allison COSTA / Vanessa CABON.\n\nMagaly SCHAFFO / Marinne GIRAUD, seeded TS8, won 9-3 before retiring in the quarter-final (M18) while leading 2-0.",
   },
   {
     id: "news-laura-koenig-focus",

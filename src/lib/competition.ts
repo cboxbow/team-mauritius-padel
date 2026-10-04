@@ -13,7 +13,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 export type CompetitionPhase = "FINAL_DAY" | "TOURNAMENT_COMPLETE";
-export const COMPETITION_PHASE: CompetitionPhase = "FINAL_DAY";
+export const COMPETITION_PHASE: CompetitionPhase = "TOURNAMENT_COMPLETE";
 
 export const competitionPhaseCopy: Record<CompetitionPhase, { label: string; headline: string; badge: string }> = {
   FINAL_DAY: { label: "FINAL DAY", headline: "Final Day", badge: "FINAL DAY" },
@@ -72,7 +72,7 @@ export const competitionMatches: CompetitionMatch[] = [
   // `tie` groups the 3 rubbers of a nations tie. Third-set notation: (7-5) = tie-break of set 2, [10-8] = super tie-break.
   // DAY 1 · La Réunion vs Madagascar
   { id: "d1-men-1", tie: "d1-men", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Men", stage: "Pool", team1: "Romain GUTSTEIN / Giovanni ROMEO", team2: "Landry RABEZAFY / Tiavina RANDRIAMANANTENA", country1: "La Réunion", country2: "Madagascar", score: "6-4 6-2", status: "FINISHED", winner: 1, image: R("d1-men-1") },
-  { id: "d1-men-2", tie: "d1-men", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Men", stage: "Pool", team1: "Paul-Henri TESSEYDRE / Mickael GRENIER", team2: "Corentin HAËNER / Tokiana RATSIMANDRESY", country1: "La Réunion", country2: "Madagascar", score: "6-4 3-6 [10-8]", status: "FINISHED", winner: 1, image: R("d1-men-2") },
+  { id: "d1-men-2", tie: "d1-men", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Men", stage: "Pool", team1: "Paul-Henri TEYSSEDRE / Mickael GRENIER", team2: "Corentin HAËNER / Tokiana RATSIMANDRESY", country1: "La Réunion", country2: "Madagascar", score: "6-4 3-6 [10-8]", status: "FINISHED", winner: 1, image: R("d1-men-2") },
   { id: "d1-men-3", tie: "d1-men", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Men", stage: "Pool", team1: "Silvain MOREAU / Hugo MARCILLE", team2: "Miary Zo RAKOTONDRAMBOA / Toavina RATSIMANDRESY", country1: "La Réunion", country2: "Madagascar", score: "6-4 4-6 [8-10]", status: "FINISHED", winner: 2, image: R("d1-men-3") },
   { id: "d1-women-1", tie: "d1-women", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Women", stage: "Pool", team1: "Flore POUPART / Carole TIREL", team2: "Fitia ROBINSON ANDRIANAFETRA / Camille RANJANORO", country1: "La Réunion", country2: "Madagascar", score: "6-3 6-1", status: "FINISHED", winner: 1, image: R("d1-women-1") },
   { id: "d1-women-2", tie: "d1-women", competition: "Island Padel Cup 2026", day: 1, date: "2026-10-01", category: "Women", stage: "Pool", team1: "Anna-Blue HOUAREAU / Elisa GUIRAUD", team2: "Prisca RAZAFIMAMONJY / Lalaina RADILOFE", country1: "La Réunion", country2: "Madagascar", score: "7-6 6-0", status: "FINISHED", winner: 1, image: R("d1-women-2") },
@@ -87,7 +87,7 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "d2-women-3", tie: "d2-women", competition: "Island Padel Cup 2026", day: 2, date: "2026-10-02", category: "Women", stage: "Pool", team1: "Cécile PARK / Alice DANJOUX", team2: "Fitia RAKOTONDRAMBOA / Prisca RAZAFIMAMONJY", country1: "Mauritius", country2: "Madagascar", score: "5-7 2-6", status: "FINISHED", winner: 2, image: R("d2-women-3") },
   // DAY 3 · Mauritius vs La Réunion
   { id: "d3-men-1", tie: "d3-men", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Men", stage: "Pool", team1: "Ryan WONG / Mathieu VALLET", team2: "Lucas LANDAIS / Mickael GRENIER", country1: "Mauritius", country2: "La Réunion", score: "6-4 6-2", status: "FINISHED", winner: 1, image: R("d3-men-1") },
-  { id: "d3-men-2", tie: "d3-men", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Men", stage: "Pool", team1: "Nicolas LEGROS / Olivier COUACAUD", team2: "Paul-Henri TESSEYDRE / Silvain MOREAU", country1: "Mauritius", country2: "La Réunion", score: "7-5 7-6 (8-6)", status: "FINISHED", winner: 1, image: R("d3-men-2") },
+  { id: "d3-men-2", tie: "d3-men", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Men", stage: "Pool", team1: "Nicolas LEGROS / Olivier COUACAUD", team2: "Paul-Henri TEYSSEDRE / Silvain MOREAU", country1: "Mauritius", country2: "La Réunion", score: "7-5 7-6 (8-6)", status: "FINISHED", winner: 1, image: R("d3-men-2") },
   { id: "d3-men-3", tie: "d3-men", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Men", stage: "Pool", team1: "Amaury DE BEER / Jake LAM HAU CHING", team2: "Hugo MARCILLE / Giovanni ROMEO", country1: "Mauritius", country2: "La Réunion", score: "6-4 6-4", status: "FINISHED", winner: 1, image: R("d3-men-3") },
   { id: "d3-women-1", tie: "d3-women", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Women", stage: "Pool", team1: "Céline DESVAUX DE MARIGNY / Cécile PARK", team2: "Anna-Blue HOUAREAU / Laura GAMBLIN", country1: "Mauritius", country2: "La Réunion", score: "1-6 2-6", status: "FINISHED", winner: 2, image: R("d3-women-1") },
   { id: "d3-women-2", tie: "d3-women", competition: "Island Padel Cup 2026", day: 3, date: "2026-10-03", category: "Women", stage: "Pool", team1: "Magaly SCHAFFO / Marinne GIRAUD", team2: "Flore POUPART / Élodie NAEGELLEN", country1: "Mauritius", country2: "La Réunion", score: "4-6 4-6", status: "FINISHED", winner: 2, image: R("d3-women-2") },
@@ -97,7 +97,7 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "ipc-final-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Mauritius", team2: "La Réunion", country1: "Mauritius", country2: "La Réunion", score: "0-2", status: "FINISHED", winner: 2, note: "Official: La Réunion win the men's final 2-0 and are Island Padel Cup 2026 champions. Mauritius finish runners-up.", time: "18:00 (GMT+4)", image: R("finals-men") },
   // Men's final rubbers — official (organiser, 04 Oct 2026). La Réunion won the final 2-0; a third match, if any, never changes the tie result.
   { id: "d4-men-1", tie: "d4-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Olivier COUACAUD / Nicolas LEGROS", team2: "Mickael GRENIER / Hugo MARCILLE", country1: "Mauritius", country2: "La Réunion", score: "5-7 4-6", status: "FINISHED", winner: 2 },
-  { id: "d4-men-2", tie: "d4-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Jake LAM HAU CHING / Amaury DE BEER", team2: "Paul-Henri TESSEYDRE / Giovanni ROMEO", country1: "Mauritius", country2: "La Réunion", score: "4-6 4-6", status: "FINISHED", winner: 2 },
+  { id: "d4-men-2", tie: "d4-men", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Men", stage: "Men's Final", team1: "Jake LAM HAU CHING / Amaury DE BEER", team2: "Paul-Henri TEYSSEDRE / Giovanni ROMEO", country1: "Mauritius", country2: "La Réunion", score: "4-6 4-6", status: "FINISHED", winner: 2 },
   { id: "ipc-final-women", competition: "Island Padel Cup 2026", day: 4, date: "2026-10-04", category: "Women", stage: "Women's Final", team1: "Madagascar", team2: "La Réunion", country1: "Madagascar", country2: "La Réunion", status: "PENDING", time: "18:00 (GMT+4)", image: R("finals-women") },
 
   // ── P500 SAINT-DENIS · SEPARATE COMPETITION (never part of the Island Padel Cup nations standings) ──
@@ -109,10 +109,10 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "p500-m27", pair: "vallet-debeer", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Round of 16", matchNo: "M27", team1: "Mathieu VALLET / Amaury DE BEER", team2: "Alexandre LALLEMAND / Lucas LANDAIS", country1: "Mauritius", score: "6-3 6-1", status: "FINISHED", winner: 1 },
   { id: "p500-m34", pair: "vallet-debeer", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Quarter-final", matchNo: "M34", team1: "Mathieu VALLET / Amaury DE BEER", team2: "Antoine BLIN / Tomy SALAS", country1: "Mauritius", score: "6-3 6-2", status: "FINISHED", winner: 1 },
   { id: "p500-m37", pair: "vallet-debeer", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Semi-final", matchNo: "M37", team1: "Mathieu VALLET / Amaury DE BEER", team2: "Romain GUTSTEIN / Giovanni ROMEO", country1: "Mauritius", score: "7-5 6-4", status: "FINISHED", winner: 1 },
-  // FINAL — time not confirmed on Smatchup: never add a time, score or winner until official.
-  { id: "p500-men-final", pair: "vallet-debeer", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Final", team1: "Mathieu VALLET / Amaury DE BEER", team2: "Paul SOUBIES / Paul-Henri TESSEYDRE", country1: "Mauritius", country2: "La Réunion", status: "UPCOMING" },
+  // FINAL (M39) — official: organiser confirmation + Smatchup (6 6 6 / 4 7 4) + court scoreboard, 04 Oct 2026.
+  { id: "p500-men-final", pair: "vallet-debeer", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Final", matchNo: "M39", team1: "Mathieu VALLET / Amaury DE BEER", team2: "Paul SOUBIES / Paul-Henri TEYSSEDRE", country1: "Mauritius", country2: "La Réunion", score: "6-4 6-7 6-4", status: "FINISHED", winner: 1 },
   // Other semi-final (context for the final — no Team Mauritius player)
-  { id: "p500-men-sf2", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Semi-final", team1: "Paul SOUBIES / Paul-Henri TESSEYDRE", team2: "Andritoavina RATSIMANDRESY / Andriatokiana RATSIMANDRESY", score: "6-4 7-6", status: "FINISHED", winner: 1 },
+  { id: "p500-men-sf2", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", round: "Semi-final", team1: "Paul SOUBIES / Paul-Henri TEYSSEDRE", team2: "Andritoavina RATSIMANDRESY / Andriatokiana RATSIMANDRESY", score: "6-4 7-6", status: "FINISHED", winner: 1 },
   // MEN — other Team Mauritius pairs
   { id: "p500-m18", pair: "lam-couacaud", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M18", team1: "Jake LAM HAU CHING / Olivier COUACAUD", team2: "Luca NAVARRA / Charles MAROT", country1: "Mauritius", score: "7-5 6-1", status: "FINISHED", winner: 1 },
   { id: "p500-m26", pair: "lam-couacaud", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M26", team1: "Jake LAM HAU CHING / Olivier COUACAUD", team2: "Mathias LAVAL / Maheno FONTAINE", country1: "Mauritius", score: "6-1 6-4", status: "FINISHED", winner: 1 },
@@ -120,7 +120,7 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "p500-m20", pair: "koenig-legros", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M20", team1: "Simon KOENIG / Nicolas LEGROS", team2: "Antoine BLIN / Tomy SALAS", country1: "Mauritius", score: "4-6 3-6", status: "FINISHED", winner: 2 },
   // Mixed pair: Ryan WONG is Team Mauritius; his partner is not in the Team Mauritius selection → no pair flag.
   { id: "p500-m24", pair: "wong-sanchez", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M24", team1: "Ryan WONG PIN YOUNG / Aaron SANCHEZ ROMERO", team2: "Yohan MANDJEE TAHORA / Julien GUILLERY", teamSide: 1, score: "6-1 6-1", status: "FINISHED", winner: 1 },
-  { id: "p500-m32", pair: "wong-sanchez", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M32", team1: "Ryan WONG PIN YOUNG / Aaron SANCHEZ ROMERO", team2: "Paul SOUBIES / Paul-Henri TESSEYDRE", teamSide: 1, score: "4-6 6-7", status: "FINISHED", winner: 2 },
+  { id: "p500-m32", pair: "wong-sanchez", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Men", stage: "P500 Men", matchNo: "M32", team1: "Ryan WONG PIN YOUNG / Aaron SANCHEZ ROMERO", team2: "Paul SOUBIES / Paul-Henri TEYSSEDRE", teamSide: 1, score: "4-6 6-7", status: "FINISHED", winner: 2 },
   // WOMEN — Alice DANJOUX / Laura KOENIG · semi-finalists
   { id: "p500-danjoux-koenig-r1", pair: "danjoux-koenig", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", matchNo: "M6", team1: "Alice DANJOUX / Laura KOENIG", team2: "Fanny GRONDIN / Joelle THIEN KIN SIEN", country1: "Mauritius", score: "9-0", status: "FINISHED", winner: 1 },
   { id: "p500-w-m14", pair: "danjoux-koenig", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", matchNo: "M14", team1: "Alice DANJOUX / Laura KOENIG", team2: "Laura GAMBLIN / Céliane SANS", country1: "Mauritius", score: "9-8", status: "FINISHED", winner: 1 },
@@ -131,8 +131,8 @@ export const competitionMatches: CompetitionMatch[] = [
   { id: "p500-w-m15", pair: "desvaux-park", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", round: "Round of 16", matchNo: "M15", team1: "Céline DESVAUX DE MARIGNY / Cécile PARK", team2: "Élodie NAEGELLEN / Charline BRAIDY", country1: "Mauritius", score: "2-9", status: "FINISHED", winner: 2 },
   // WOMEN — Magaly SCHAFFO / Marinne GIRAUD (seed TS8)
   { id: "p500-w-m12", pair: "schaffo-giraud", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", matchNo: "M12", team1: "Magaly SCHAFFO / Marinne GIRAUD", team2: "Fitia RAKOTONDRAMBOA / Julia RAZAFIMAHATRATRA", country1: "Mauritius", score: "9-3", status: "FINISHED", winner: 1 },
-  // M18: Smatchup shows a retirement / special result — no score or winner entered until the official status is clear.
-  { id: "p500-schaffo-giraud", pair: "schaffo-giraud", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", matchNo: "M18", team1: "Magaly SCHAFFO / Marinne GIRAUD", team2: "Prisca RAZAFIMAMONJY / Verolalaina RADILOFE", country1: "Mauritius", status: "PENDING", note: "Smatchup shows a retirement / special result for this match. The official outcome will be published once confirmed." },
+  // M18 (quarter-final) — Smatchup: "Terminé", Schaffo / Giraud marked AB (retired) at 2-0 in games; Razafimamonjy / Radilofe advance.
+  { id: "p500-schaffo-giraud", pair: "schaffo-giraud", competition: "P500 Saint-Denis", day: 4, date: "2026-10-04", category: "Women", stage: "P500 Women", round: "Quarter-final", matchNo: "M18", team1: "Magaly SCHAFFO / Marinne GIRAUD", team2: "Prisca RAZAFIMAMONJY / Verolalaina RADILOFE", country1: "Mauritius", score: "2-0 ret.", status: "FINISHED", winner: 2, note: "Official Smatchup status: Schaffo / Giraud retired (AB) while leading 2-0 in games. Razafimamonjy / Radilofe advance." },
 ];
 
 // ── Derived helpers (no need to edit below) ────────────────────────────────
@@ -141,13 +141,13 @@ export const p500Matches = competitionMatches.filter(m => m.competition === "P50
 export const p500MenFinal = p500Matches.find(m => m.id === "p500-men-final");
 /** Team Mauritius P500 pairs, in display order. "result" is only the stage reached — never a title until the final is official. */
 export const p500Pairs: { key: string; category: "Men" | "Women"; label: string; result: string }[] = [
-  { key: "vallet-debeer", category: "Men", label: "Mathieu VALLET / Amaury DE BEER", result: "Finalists" },
+  { key: "vallet-debeer", category: "Men", label: "Mathieu VALLET / Amaury DE BEER", result: "Champions" },
   { key: "lam-couacaud", category: "Men", label: "Jake LAM HAU CHING / Olivier COUACAUD", result: "Quarter-finalists" },
   { key: "wong-sanchez", category: "Men", label: "Ryan WONG PIN YOUNG / Aaron SANCHEZ ROMERO", result: "Out (M32)" },
   { key: "koenig-legros", category: "Men", label: "Simon KOENIG / Nicolas LEGROS", result: "Out (M20)" },
   { key: "danjoux-koenig", category: "Women", label: "Alice DANJOUX / Laura KOENIG", result: "Semi-finalists" },
   { key: "desvaux-park", category: "Women", label: "Céline DESVAUX DE MARIGNY / Cécile PARK", result: "Round of 16" },
-  { key: "schaffo-giraud", category: "Women", label: "Magaly SCHAFFO / Marinne GIRAUD", result: "Result pending" },
+  { key: "schaffo-giraud", category: "Women", label: "Magaly SCHAFFO / Marinne GIRAUD", result: "Quarter-finalists (ret.)" },
 ];
 export const p500PairMatches = (key: string) => p500Matches.filter(m => m.pair === key);
 export const finals = ipcMatches.filter(m => m.day === 4 && !m.tie);
@@ -166,6 +166,7 @@ export function matchBadge(m: CompetitionMatch): { label: string; tone: "red" | 
   if (m.status === "LIVE") return { label: "LIVE", tone: "red" };
   if (m.status === "FINISHED" && m.competition === "Island Padel Cup 2026" && m.day === 4 && !m.tie) return { label: "FT", tone: "gold" };
   const outcome = mauritiusOutcome(m);
+  if (outcome && m.competition === "P500 Saint-Denis" && m.round === "Final") return outcome === "WIN" ? { label: "CHAMPIONS", tone: "green" } : { label: "RUNNERS-UP", tone: "gold" };
   if (outcome) return { label: outcome, tone: outcome === "WIN" ? "green" : "muted" };
   if (m.status === "FINISHED") { const w = m.winner === 1 ? m.country1 : m.winner === 2 ? m.country2 : undefined; return { label: w ? `${nationCodes[w]} WIN` : "FINISHED", tone: "gold" }; }
   if (m.status === "UPCOMING") return { label: (m.day === 4 && m.competition === "Island Padel Cup 2026") || m.round === "Final" ? "FINAL · UPCOMING" : "UPCOMING", tone: "gold" };

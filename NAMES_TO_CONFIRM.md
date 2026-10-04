@@ -14,7 +14,7 @@ Island Padel Cup results only. The P500 Saint-Denis is a separate competition an
 
 ## Consolidated official rosters (organiser, 04 Oct 2026)
 
-- **Paul-Henri TESSEYDRE.** This is the consolidated organiser spelling and replaces "TEYSSEDRE" in the Island Padel Cup and the P500.
+- **Paul-Henri TEYSSEDRE.** Final choice of the organiser (04 Oct 2026), matching Smatchup. The poster spelling "TESSEYDRE" is not used.
 - **Shona-Li QUÉRY**, with an accent, everywhere.
 - **Prisca RAZAFIMAMONJY** (poster and Smatchup).
 - Confirmed by the rosters: Lucas LANDAIS, Mickael GRENIER, Hugo MARCILLE, Giovanni ROMEO, Silvain MOREAU, Laura GAMBLIN (La Réunion women), Anna-Blue HOUAREAU, Tiavina RANDRIAMANANTENA.
@@ -28,7 +28,7 @@ Island Padel Cup results only. The P500 Saint-Denis is a separate competition an
 | D1 | W | 🇷🇪 La Réunion | "ELISA / JENNIFER" (🇲🇺 flag in error) | **Élodie NAEGELLEN / Jennifer DEGUIGNE** | `RESULTATS MADA REUNION PHOTOS/WhatsApp Image 2026-10-03 at 07.55.36 (1).jpeg` |
 | D2 | M | 🇲🇺 Mauritius | "SIMON / RICHARD" | **Simon KOENIG / Nicolas LEGROS** | `RESULTATS MADA REUNION PHOTOS/WhatsApp Image 2026-10-03 at 07.55.36 (2).jpeg` |
 | D3 | M | 🇷🇪 La Réunion | Lucas | **Lucas LANDAIS** | `PHOTOS RESULTATS MAURICE REUNION/WhatsApp Image 2026-10-04 at 08.03.28.jpeg` |
-| D3 | M | 🇷🇪 La Réunion | Paul | **Paul-Henri TESSEYDRE** | `PHOTOS RESULTATS MAURICE REUNION/WhatsApp Image 2026-10-04 at 08.03.28 (1).jpeg` |
+| D3 | M | 🇷🇪 La Réunion | Paul | **Paul-Henri TEYSSEDRE** | `PHOTOS RESULTATS MAURICE REUNION/WhatsApp Image 2026-10-04 at 08.03.28 (1).jpeg` |
 | D3 | M | 🇷🇪 La Réunion | Sylvain | **Silvain MOREAU** (spelled "Silvain") | same file |
 | D3 | W | 🇷🇪 La Réunion | Laura | **Laura GAMBLIN** (not Laura KOENIG) | `PHOTOS RESULTATS MAURICE REUNION/WhatsApp Image 2026-10-04 at 08.03.29.jpeg` |
 | D3 | W | 🇷🇪 La Réunion | Shona | **Shona-Li QUÉRY** | `PHOTOS RESULTATS MAURICE REUNION/WhatsApp Image 2026-10-04 at 08.05.51.jpeg` |
@@ -40,7 +40,7 @@ Island Padel Cup results only. The P500 Saint-Denis is a separate competition an
 
 Also validated:
 
-- **La Réunion:** Romain GUTSTEIN, Giovanni ROMEO (D1 card "Giovann"), Paul-Henri TESSEYDRE (D1 card "Paul Henry"), Mickael GRENIER, Silvain MOREAU, Hugo MARCILLE, Flore POUPART, Carole TIREL, Anna-Blue HOUAREAU, Elisa GUIRAUD.
+- **La Réunion:** Romain GUTSTEIN, Giovanni ROMEO (D1 card "Giovann"), Paul-Henri TEYSSEDRE (D1 card "Paul Henry"), Mickael GRENIER, Silvain MOREAU, Hugo MARCILLE, Flore POUPART, Carole TIREL, Anna-Blue HOUAREAU, Elisa GUIRAUD.
 - **Madagascar:** Corentin HAËNER, Tokiana RATSIMANDRESY, Toavina RATSIMANDRESY, Miary Zo RAKOTONDRAMBOA, Landry RABEZAFY, Prisca RAZAFIMAMONJY, Lalaina RADILOFE.
 - **Mauritius:** names from the official delegation.
 
