@@ -1,14 +1,22 @@
 # Names to confirm — Island Padel Cup 2026
 
-**Status: ✅ ALL RESOLVED.** Final validation by the organiser on 4 October 2026.
+**Status: ✅ 1 open question** (Camille RANJANORO, see below). All other names are resolved. Final validation by the organiser on 4 October 2026.
 
-The data lives in `src/lib/competition.ts`. The 18 Island Padel Cup matches (Days 1 to 3) use the full **Prénom NOM** format for all 41 players. No unresolved name remains.
+The data lives in `src/lib/competition.ts`. The 18 Island Padel Cup matches (Days 1 to 3) use the full **Prénom NOM** format for all 41 players. Only one point stays open: Camille RANJANORO (see Unresolved).
 
 Island Padel Cup results only. The P500 Saint-Denis is a separate competition and is not covered here.
 
 ## Unresolved
 
-_None._
+| Day | Cat. | Country | Name on the site | Official team poster | Source | Note |
+|---|---|---|---|---|---|---|
+| D1 + D2 | W | 🇲🇬 Madagascar | Camille RANJANORO | "RANJANORO TAM" (no Camille listed) | Official Island Padel Cup team poster, Madagascar | Is "Ranjanoro Tam" the same player as Camille? The site keeps Camille RANJANORO until confirmed. |
+
+## Corrections from the official team posters (4 Oct 2026)
+
+- Prisca RAZAFIAMAMONJY → **Prisca RAZAFIMAMONJY**. The official poster and Smatchup agree on this spelling.
+- P500: Shona-li QUÉRY → **Shona-Li QUERY**, the official poster form, which matches the Island Padel Cup data.
+- Kept despite the poster: **Paul-Henri TEYSSEDRE** (poster: "Paul Henry TESSEYDRE") and **Giovanni ROMEO** (poster: "Giovani"). Both are confirmed by Smatchup and the organiser. The same poster also misspells "Amaury DE BERG".
 
 ## Resolved
 
@@ -30,7 +38,7 @@ _None._
 Also validated:
 
 - **La Réunion:** Romain GUTSTEIN, Giovanni ROMEO (D1 card "Giovann"), Paul-Henri TEYSSEDRE (D1 card "Paul Henry"), Mickael GRENIER, Silvain MOREAU, Hugo MARCILLE, Flore POUPART, Carole TIREL, Anna-Blue HOUAREAU, Elisa GUIRAUD.
-- **Madagascar:** Corentin HAËNER, Tokiana RATSIMANDRESY, Toavina RATSIMANDRESY, Miary Zo RAKOTONDRAMBOA, Landry RABEZAFY, Prisca RAZAFIAMAMONJY, Lalaina RADILOFE.
+- **Madagascar:** Corentin HAËNER, Tokiana RATSIMANDRESY, Toavina RATSIMANDRESY, Miary Zo RAKOTONDRAMBOA, Landry RABEZAFY, Prisca RAZAFIMAMONJY, Lalaina RADILOFE.
 - **Mauritius:** names from the official delegation.
 
 ## Data corrections from the cards (scores unchanged)
