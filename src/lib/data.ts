@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 50;
+export const SEED_VERSION = 51;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -608,6 +608,20 @@ export const newsItems: NewsItem[] = [
     cta: { label: "Road to the title", to: "/live#road-to-the-final" },
   },
   {
+    id: "news-lexpress-final",
+    slug: "lexpress-the-points-that-decided-the-final",
+    category: "Team News",
+    date: "05 October 2026",
+    title: "In the press: the points that decided the final",
+    excerpt: "L'Express looks back on a men's final decided by a handful of key points, and on La Réunion's home double.",
+    image: "/images/island-padel-cup-2026/gallery/day3-03.jpg",
+    imageFocus: "center 40%",
+    author: "Stany Maurice / L'Express",
+    tags: ["Press Review", "L'Express", "Island Padel Cup", "Final"],
+    body: "On Monday 5 October 2026, L'Express (page 17) analysed the Island Padel Cup final, won 2-0 by La Réunion against Mauritius.\n\nThe article highlights how close the men's final was. Olivier COUACAUD and Nicolas LEGROS led 5-3 in the first set before Mickael GRENIER and Hugo MARCILLE turned it around to win 7-5, 6-4. In the second match, Jake LAM HAU CHING and Amaury DE BEER broke for 4-2 in the second set, but missed the chance to consolidate, and Paul-Henri TEYSSEDRE and Giovanni ROMEO closed it out 6-4, 6-4. The paper singles out the decisive points at deuce as the difference between the two teams.\n\nIn the women's final, La Réunion beat Madagascar 2-0: Anna-Blue HOUAREAU / Jennifer DEGUIGNE won 6-4, 6-2 against Lalaina RADILOFE / Fitia ROBINSON ANDRIANAFETRA, then Elisa GUIRAUD / Carole TIREL won 6-1, 6-0 against Camille RANJANORO / Steffy RAZAFIMAHATRATRA. La Réunion keep both titles won last year in Mauritius.\n\nThe paper concludes that Team Mauritius leave with silver — and with the confirmation that they can now compete with the champions, having beaten La Réunion 3-0 the day before the final.\n\nPress source: L'Express, Monday 5 October 2026, page 17, article by Stany Maurice. Photos in the original publication credited to Unais Aumeerruddy.",
+    cta: { label: "Full results", to: "/results" },
+  },
+  {
     id: "news-final-day",
     slug: "final-day-island-padel-cup-2026",
     category: "Island Padel Cup",
@@ -619,7 +633,7 @@ export const newsItems: NewsItem[] = [
     featured: true,
     author: "Team Mauritius",
     tags: ["Island Padel Cup", "Final", "Runners-up", "Saint-Denis"],
-    body: "Team Mauritius concluded its Island Padel Cup 2026 campaign as men's runners-up after La Réunion claimed the final 2-0.\n\nMauritius entered the final after an excellent round-robin campaign and had already defeated both Madagascar (2-1) and La Réunion (3-0) during the competition.\n\nIn the first match of the final, Mickael GRENIER and Hugo MARCILLE defeated Olivier COUACAUD and Nicolas LEGROS 7-5, 6-4.\n\nLa Réunion then secured the title when Paul-Henri TEYSSEDRE and Giovanni ROMEO defeated Jake LAM HAU CHING and Amaury DE BEER 6-4, 6-4.\n\nFinal: La Réunion 2-0 Mauritius.\n\nDespite the defeat in the final, Mauritius finishes the 2026 Island Padel Cup as men's runners-up after a strong campaign in La Réunion.",
+    body: "Team Mauritius concluded its Island Padel Cup 2026 campaign as men's runners-up after La Réunion claimed the final 2-0.\n\nMauritius entered the final after an excellent round-robin campaign and had already defeated both Madagascar (2-1) and La Réunion (3-0) during the competition.\n\nIn the first match of the final, Mickael GRENIER and Hugo MARCILLE defeated Olivier COUACAUD and Nicolas LEGROS 7-5, 6-4.\n\nLa Réunion then secured the title when Paul-Henri TEYSSEDRE and Giovanni ROMEO defeated Jake LAM HAU CHING and Amaury DE BEER 6-4, 6-4.\n\nFinal: La Réunion 2-0 Mauritius.\n\nDespite the defeat in the final, Mauritius finishes the 2026 Island Padel Cup as men's runners-up after a strong campaign in La Réunion.\n\nIn the women's final, La Réunion beat Madagascar 2-0 to complete a home double and keep both titles won last year in Mauritius.",
     cta: { label: "Full results", to: "/results" },
   },
   {

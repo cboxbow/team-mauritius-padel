@@ -102,7 +102,7 @@ export function FinalDaySection({ compact = false }: { compact?: boolean }) {
     <div className="final-day-head">
       <p className="eyebrow">ISLAND PADEL CUP 2026 · SUNDAY 04 OCTOBER</p>
       <h2>Final Day<span className="red-dot">.</span></h2>
-      <p>La Réunion won the men's final 2-0 — Mauritius finish runners-up after topping the round-robin. Women's final: Madagascar vs La Réunion.</p>
+      <p>La Réunion won both finals 2-0. Mauritius finish men's runners-up after topping the round-robin; Madagascar are women's runners-up.</p>
     </div>
     <div className="final-grid">{[men, women].filter((m): m is CompetitionMatch => Boolean(m)).map(match => <FinalCard match={match} key={match.id} />)}</div>
     <p className="final-day-note">Finals played at 18:00 (GMT+4) · Club de Champ Fleuri, Saint-Denis. Results are published once official.</p>
@@ -209,7 +209,7 @@ export function FinalStandings() {
           <div className="fs-row is-champion"><span>🏆 Champions</span><b><Flag nation={champion} className="standing-flag" /> {champion}</b></div>
           <div className="fs-row"><span>🥈 Runners-up</span><b><Flag nation={runnerUp} className="standing-flag" /> {runnerUp}</b></div>
           {tie && <p className="fs-final">FINAL · {tie.winner === 1 ? tie.nation1 : tie.nation2} {Math.max(tie.wins1, tie.wins2)}–{Math.min(tie.wins1, tie.wins2)} {tie.winner === 1 ? tie.nation2 : tie.nation1}</p>}
-          {category === "Men" && <div className="fr-rubbers is-compact">{menFinalRubbers().map(m => <FinalRubberLine match={m} key={m.id} />)}</div>}
+          <div className="fr-rubbers is-compact">{ipcMatches.filter(m => m.tie === `d4-${category === "Men" ? "men" : "women"}`).map(m => <FinalRubberLine match={m} key={m.id} />)}</div>
         </> : <>
           <div className="fs-row"><span>Final</span><b>{final ? <>{final.country1 && <Flag nation={final.country1} className="standing-flag" />} {final.team1} vs {final.country2 && <Flag nation={final.country2} className="standing-flag" />} {final.team2}</> : "—"}</b></div>
           <p className="fs-final">{AWAITING_RESULT}</p>

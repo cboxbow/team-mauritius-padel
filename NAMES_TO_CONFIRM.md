@@ -1,16 +1,18 @@
 # Names to confirm — Island Padel Cup 2026
 
-**Status: ✅ 1 open question** (Camille RANJANORO, see below). All other names are resolved. Final validation by the organiser on 4 October 2026.
+**Status: ✅ ALL RESOLVED.** Last item closed on 5 October 2026 (Camille RANJANORO, confirmed by L'Express).
 
-The data lives in `src/lib/competition.ts`. The 18 Island Padel Cup matches (Days 1 to 3) use the full **Prénom NOM** format for all 41 players. Only one point stays open: Camille RANJANORO (see Unresolved).
+The data lives in `src/lib/competition.ts`. The 18 Island Padel Cup matches (Days 1 to 3) use the full **Prénom NOM** format for all 41 players. No unresolved name remains.
 
 Island Padel Cup results only. The P500 Saint-Denis is a separate competition and is not covered here.
 
 ## Unresolved
 
-| Day | Cat. | Country | Name on the site | Official team poster | Source | Note |
-|---|---|---|---|---|---|---|
-| D1 + D2 | W | 🇲🇬 Madagascar | Camille RANJANORO | Poster: "RANJANORO TAM". Consolidated organiser list: "Ban-Janoro TAM". No "Camille" on either. | Official team poster and organiser roster, 04 Oct 2026 | Possibly the same player (she is the only roster name not matched to a card), but the first names differ, so she is not linked automatically. The site keeps "Camille RANJANORO" until confirmed. |
+_None._
+
+**Closed on 5 October 2026: Camille RANJANORO** (Madagascar women). The official poster prints "RANJANORO TAM" and the consolidated roster "Ban-Janoro TAM". L'Express (5 Oct 2026, p.17) and the Smatchup P500 draw both name her **Camille RANJANORO**, the name the site keeps.
+
+**Women's final (5 October 2026):** the newspaper wrote only "Fitia" for Lalaina RADILOFE's partner. The organiser identified her as **Fitia ROBINSON ANDRIANAFETRA**.
 
 ## Consolidated official rosters (organiser, 04 Oct 2026)
 
