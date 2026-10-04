@@ -6,3 +6,9 @@ dist/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local-only: logs and private player contact data (never push — public repo)
+*.log
+stany-pack/
+stany-pack.zip
+scripts/create_stany_pack.py

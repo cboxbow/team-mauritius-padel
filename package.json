@@ -5,9 +5,10 @@
   "type": "module",
   "scripts": {
     "dev": "node ./node_modules/vite/bin/vite.js",
+    "preview": "node ./node_modules/vite/bin/vite.js preview",
     "build": "node ./node_modules/vite/bin/vite.js build",
     "postbuild": "node scripts/postbuild.mjs",
-    "lint": "node ./node_modules/eslint/bin/eslint.js src/App.tsx src/main.tsx src/lib/data.ts src/lib/supabase-client.ts src/lib/api-mappers.ts src/components/platform-sections.tsx src/components/player-story.tsx src/components/brand api server vite.config.ts",
+    "lint": "node ./node_modules/eslint/bin/eslint.js src/App.tsx src/main.tsx src/lib/data.ts src/lib/supabase-client.ts src/lib/api-mappers.ts src/lib/competition.ts src/components/competition-sections.tsx src/components/platform-sections.tsx src/components/player-story.tsx src/components/brand api server vite.config.ts",
     "typecheck": "node ./node_modules/typescript/bin/tsc --noEmit -p tsconfig.app.json --strict"
   },
   "dependencies": {

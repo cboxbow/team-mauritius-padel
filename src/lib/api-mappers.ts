@@ -42,6 +42,7 @@ export function mapPlayerRow(row: DbPlayerRow, seed: Player): Player {
   const alt = row.media.find(m => m.role === "alt");
   const gallery = row.media.filter(m => m.role === "gallery" || m.role === null);
   const instagram = row.social_links?.instagram;
+  const useOfficial2026Portrait = seed.image?.includes("/official-2026/") ?? false;
   return {
     ...seed,
     id: row.slug,
@@ -53,8 +54,8 @@ export function mapPlayerRow(row: DbPlayerRow, seed: Player): Player {
     quote: row.quote ?? seed.quote,
     social: instagram ? `@${instagram}` : seed.social,
     strengths: row.strengths?.length ? row.strengths : seed.strengths,
-    image: hero ? mediaUrl(hero) ?? seed.image : seed.image,
-    imageAlt: alt ? mediaUrl(alt) ?? seed.imageAlt : seed.imageAlt,
+    image: useOfficial2026Portrait ? seed.image : hero ? mediaUrl(hero) ?? seed.image : seed.image,
+    imageAlt: useOfficial2026Portrait ? seed.imageAlt : alt ? mediaUrl(alt) ?? seed.imageAlt : seed.imageAlt,
     media: gallery.length ? gallery.map(mediaUrl).filter((u): u is string => Boolean(u)) : seed.media,
   };
 }
@@ -80,14 +81,14 @@ export function mapTrainingSessionRow(row: DbTrainingSessionRow, seed: TrainingS
   const clips = videos.filter(m => m.storage_path).map(mediaUrl).filter((u): u is string => Boolean(u));
   return {
     ...seed,
-    status: row.session_status,
-    coachNote: row.report?.coach_debrief ?? seed.coachNote,
-    keyTakeaways: row.report?.key_takeaways?.length ? row.report.key_takeaways : seed.keyTakeaways,
-    playerQuote: row.report?.player_quotes?.[0] ?? seed.playerQuote,
-    gallery: gallery.length ? gallery : seed.gallery,
+    status: seed.status === "COMPLETED" ? "COMPLETED" : row.session_status,
+    coachNote: seed.id === "24-sep-compete" ? seed.coachNote : row.report?.coach_debrief ?? seed.coachNote,
+    keyTakeaways: seed.id === "24-sep-compete" ? seed.keyTakeaways : row.report?.key_takeaways?.length ? row.report.key_takeaways : seed.keyTakeaways,
+    playerQuote: seed.id === "24-sep-compete" ? seed.playerQuote : row.report?.player_quotes?.[0] ?? seed.playerQuote,
+    gallery: seed.id === "24-sep-compete" ? seed.gallery : gallery.length ? gallery : seed.gallery,
     heroImage: hero ? mediaUrl(hero) : seed.heroImage,
     videoUrl: linkedVideo ? mediaUrl(linkedVideo) : seed.videoUrl,
-    videoClips: clips.length ? clips : seed.videoClips,
+    videoClips: seed.id === "24-sep-compete" ? seed.videoClips : clips.length ? clips : seed.videoClips,
   };
 }
 
@@ -107,7 +108,7 @@ type DbNewsRow = {
 const newsVisualOverrides: Record<string, { image: string; imageFocus: string }> = {
   "meet-team-mauritius": { image: "/images/newsroom/meet-team-training.jpg", imageFocus: "center 68%" },
   "building-the-team": { image: "/images/sessions/first-day-mathieu-nicolas.jpg", imageFocus: "center 44%" },
-  "competition-mode": { image: "/images/newsroom/coach-around-team.png", imageFocus: "center center" },
+  "competition-mode": { image: "/images/sessions/session-03-compete/hero-team.jpg", imageFocus: "center center" },
   "ready-for-la-reunion": { image: "/images/newsroom/island-padel-cup-group.jpg", imageFocus: "center 52%" },
   "laura-koenig-the-only-point": { image: "/images/players/laura-koenig-alt.jpg", imageFocus: "center 42%" },
   "magaly-schaffo-tennispro-to-padel": { image: "/images/players/magaly-schaffo-newsroom.jpg", imageFocus: "center 30%" },

@@ -8,5 +8,7 @@ export { PhotoTreatment, type PhotoTreatmentProps, type PhotoTreatmentGrade } fr
 export { EditorialQuote, type EditorialQuoteProps } from "./EditorialQuote";
 export { CoachInfoBar, type CoachInfoBarProps, type CoachInfoBarItem } from "./CoachInfoBar";
 export { CoachFeatureHero, type CoachFeatureHeroProps } from "./CoachFeatureHero";
+export { CampaignBackground, type CampaignBackgroundProps, type CampaignBackgroundVariant } from "./CampaignBackground";
+export { PlayerEnergyWave, type PlayerEnergyWaveProps, type PlayerEnergyWaveVariant } from "./PlayerEnergyWave";
 export { MauritiusAccent as TeamMauritiusAccent } from "./MauritiusAccent";
 export { VisualEngineShowcase } from "./VisualEngineShowcase";

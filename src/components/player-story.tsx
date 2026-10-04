@@ -303,7 +303,7 @@ const magalyChapterThree: PlayerStoryChapterConfig = {
     "Her ideal partner, she says, would be someone who can defend the right side and still finish points at the net. What she actually found is almost the opposite: her partner isn't especially fond of defending behind the glass and plays a highly aggressive game on the right, regularly catching opponents off guard. The contrast, she admits, works surprisingly well — their games complement each other. She's clear-eyed about what she still needs to work on: her defensive play off the back glass, and her footwork, to gain speed and efficiency on the ball.",
     "Magaly and her family moved to Mauritius in August 2025. Getting to compete at the Island Cup — and wear the Mauritius colours — is a source of real pride for her, and she's grateful to the team for the trust placed in her to wear the jersey.",
   ],
-  media: { src: "/images/players/magaly-schaffo-podium.jpg", alt: "Marine Giraud and Magaly Schaffo celebrating an AfrAsia Bank Padel League title", objectPosition: "50% 26%" },
+  media: { src: "/images/players/magaly-schaffo-podium.jpg", alt: "Marinne Giraud and Magaly Schaffo celebrating an AfrAsia Bank Padel League title", objectPosition: "50% 26%" },
   mediaSide: "right",
 };
 
@@ -401,7 +401,7 @@ export const KATE_FOO_KUNE_STORY: PlayerStoryConfig = {
   keyMoment: {
     competition: "M500, Terres Brunes Sports & Leisure",
     result: "Champion",
-    partner: "Marine Giraud",
+    partner: "Marinne Giraud",
     context: "She recently won the M500 at Terres Brunes with her partner — she puts it down to complementarity and trust. Different personalities and styles, but they understand each other well on court, communicate a lot, support each other through tough moments, and genuinely trust one another. A good pair, she says, isn't necessarily two players who play exactly the same way — it's two people who turn their differences into a strength.",
   },
   laterChapters: [kateChapterThree, kateChapterFour],
@@ -415,10 +415,10 @@ const marineChapterOne: PlayerStoryChapterConfig = {
   label: "01",
   title: <>From the<br />WTA tour.</>,
   paragraphs: [
-    "Before padel, Marine Giraud's sporting life was already a full one. She started tennis young and moved quickly into competition, spending years on the junior and then professional circuit, reaching a best world ranking of 233 on the WTA tour. She travelled extensively, competed internationally, and represented Mauritius along the way — tennis, in her words, built her enormously, both as an athlete and as a person.",
+    "Before padel, Marinne Giraud's sporting life was already a full one. She started tennis young and moved quickly into competition, spending years on the junior and then professional circuit, reaching a best world ranking of 233 on the WTA tour. She travelled extensively, competed internationally, and represented Mauritius along the way — tennis, in her words, built her enormously, both as an athlete and as a person.",
     "She discovered padel around two years ago, pushed onto the court by her older sister. At first it was pure curiosity, no ambition attached — and what hooked her immediately was how playful, social and easy-going the sport felt. After years of living tennis at high intensity, she rediscovered the simple pleasure of playing without pressure. Predictably, though, her competitive streak didn't stay dormant for long.",
   ],
-  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
+  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marinne Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -429,7 +429,7 @@ const marineChapterTwo: PlayerStoryChapterConfig = {
     "The real turning point came watching last year's Island Padel Cup at Urban Rivière Noire. Seeing the matches and the Mauritian team compete, she remembers thinking: “Next year, I want to be part of this.” That's the moment her whole approach to padel shifted, and the pull of competition came back.",
     "She hadn't expected to feel that adrenaline again in another sport. When she stopped playing professional tennis, she assumed that chapter was closed. What's struck her about padel is finding that same hunger to win in a completely different setting — one that today carries a lot more lightness and enjoyment around the competition itself.",
   ],
-  media: { src: "/images/players/marine-giraud.jpg", alt: "Marine Giraud, Team Mauritius, stretching for a backhand at the glass", objectPosition: "50% 18%" },
+  media: { src: "/images/players/marine-giraud.jpg", alt: "Marinne Giraud, Team Mauritius, stretching for a backhand at the glass", objectPosition: "50% 18%" },
   mediaSide: "left",
 };
 
@@ -439,7 +439,7 @@ const marineChapterThree: PlayerStoryChapterConfig = {
   paragraphs: [
     "Tennis still shows up everywhere in her padel: trajectory reading, reflexes, the volley, forward movement, and the mental side of the game. Having played so many matches also helps her manage pressure and big moments. But she's careful not to overstate the overlap — padel is a different sport, and not everything from tennis transfers cleanly.",
   ],
-  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marine Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
+  media: { src: "/images/players/marine-giraud-alt.jpg", alt: "Marinne Giraud, Team Mauritius, playing a forehand at the net", objectPosition: "50% 18%" },
   mediaSide: "right",
 };
 
@@ -449,7 +449,7 @@ const marineChapterFour: PlayerStoryChapterConfig = {
   paragraphs: [
     "Asked how far tennis actually took her: a best ranking of 233 in the world, several years on the professional circuit. But looking back, she doesn't hold onto the ranking or a single result — she holds onto the whole journey: the travel, the tournaments, the people, the hard moments too, and the chance to represent Mauritius. When you're living it, she says, you don't always realise how lucky you are to have it.",
   ],
-  media: { src: "/images/players/marine-giraud-podium.jpg", alt: "Marine Giraud and Magaly Schaffo celebrate an AfrAsia Bank Padel League title", objectPosition: "50% 20%" },
+  media: { src: "/images/players/marine-giraud-podium.jpg", alt: "Marinne Giraud and Magaly Schaffo celebrate an AfrAsia Bank Padel League title", objectPosition: "50% 20%" },
   mediaSide: "left",
 };
 
@@ -458,14 +458,14 @@ export const MARINE_GIRAUD_STORY: PlayerStoryConfig = {
   eyebrow: <>PLAYER FOCUS<br />ROAD TO LA RÉUNION 2026</>,
   headlineWhite: "A SECOND",
   headlineRed: "LIFE",
-  playerName: "MARINE GIRAUD",
+  playerName: "MARINNE GIRAUD",
   subheadline: "FROM WORLD NO. 233 ON THE WTA TOUR TO TEAM MAURITIUS",
   heroQuote: "Next year, I want to be part of this.",
   heroImage: "/images/players/marine-giraud.jpg",
-  heroImageAlt: "Marine Giraud, Team Mauritius, stretching for a backhand at the glass",
+  heroImageAlt: "Marinne Giraud, Team Mauritius, stretching for a backhand at the glass",
   heroObjectPosition: "center 18%",
   snapshot: [
-    { icon: <User size={16} />, label: "PLAYER", value: "Marine Giraud" },
+    { icon: <User size={16} />, label: "PLAYER", value: "Marinne Giraud" },
     { icon: <Flag size={16} />, label: "TEAM", value: "Mauritius" },
     { icon: <Trophy size={16} />, label: "RANK", value: "No. 2" },
     { icon: <Target size={16} />, label: "MISSION", value: "La Réunion 2026" },

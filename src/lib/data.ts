@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 33;
+export const SEED_VERSION = 40;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -51,6 +51,7 @@ export type TrainingSession = {
   status: "UPCOMING" | "LIVE" | "COMPLETED";
   summary: string;
   // Published by the media team once the session has taken place. Left undefined until real content exists.
+  report?: string;
   coachNote?: string;
   playerQuote?: { text: string; author: string };
   gallery?: string[];
@@ -105,13 +106,13 @@ const playerImageSlug = (name: string) =>
     .replace(/\p{Diacritic}/gu, "")
     .replace(/\s+/g, "-");
 
-const playerImage = (name: string) => `/images/players/${playerImageSlug(name)}.jpg`;
+const playerImage = (name: string) => `/images/players/official-2026/${playerImageSlug(name)}.jpg`;
 // Players with a second, distinct action shot on disk (`-alt.jpg`) — used in Player Media so it never repeats the hero portrait.
 const playersWithAltImage = new Set([
   "Mathieu Vallet", "Amaury de Beer", "Olivier Couacaud", "Jake Lam Hau Ching", "Ryan Wong", "Simon Koenig", "Nicolas Legros",
   "Marine Giraud", "Laura Koenig", "Alice Danjoux", "Kate Foo Kune", "Céline Desvaux de Marigny", "Cécile Park", "Magaly Schaffo",
 ]);
-const playerImageAlt = (name: string) => playersWithAltImage.has(name) ? `/images/players/${playerImageSlug(name)}-alt.jpg` : undefined;
+const playerImageAlt = (name: string) => name === "Magaly Schaffo" ? "/images/players/magaly-schaffo-alt.jpg" : playersWithAltImage.has(name) ? `/images/players/official-2026/${playerImageSlug(name)}-alt.jpg` : undefined;
 
 export type MplResult = { date: string; category: string; venue: string; partner: string; place: number; pts: number };
 type MplStats = { rank: number; rankingPts: number; careerPts: number; careerTournaments: number; wins: number; podiums: number; club: string; recent: MplResult[] };
@@ -198,13 +199,13 @@ const mplStats: Record<string, MplStats> = {
     { date: "19 Sep 2025", category: "M500", venue: "Studio by RM Azuri", partner: "Josselin Cotin", place: 4, pts: 300 },
   ] },
   "Magaly Schaffo": { rank: 1, rankingPts: 4900, careerPts: 6902, careerTournaments: 20, wins: 9, podiums: 12, club: "RM Club", recent: [
-    { date: "15 Aug 2026", category: "M1000", venue: "Caña Beau Plan", partner: "Marine Giraud", place: 2, pts: 700 },
-    { date: "20 Jun 2026", category: "M500", venue: "I Padel by RM Hennessy", partner: "Marine Giraud", place: 1, pts: 500 },
-    { date: "06 Jun 2026", category: "M1000", venue: "RM Club Grand Baie", partner: "Marine Giraud", place: 1, pts: 1000 },
-    { date: "11 Apr 2026", category: "M500", venue: "I Padel by RM Port Chambly", partner: "Marine Giraud", place: 1, pts: 500 },
-    { date: "14 Feb 2026", category: "M500", venue: "Labourdonnais Mapou", partner: "Marine Giraud", place: 1, pts: 500 },
-    { date: "17 Jan 2026", category: "M500", venue: "RM Club Tamarin", partner: "Marine Giraud", place: 1, pts: 500 },
-    { date: "12 Dec 2025", category: "M500", venue: "I Padel by RM Hennessy", partner: "Marine Giraud", place: 1, pts: 500 },
+    { date: "15 Aug 2026", category: "M1000", venue: "Caña Beau Plan", partner: "Marinne Giraud", place: 2, pts: 700 },
+    { date: "20 Jun 2026", category: "M500", venue: "I Padel by RM Hennessy", partner: "Marinne Giraud", place: 1, pts: 500 },
+    { date: "06 Jun 2026", category: "M1000", venue: "RM Club Grand Baie", partner: "Marinne Giraud", place: 1, pts: 1000 },
+    { date: "11 Apr 2026", category: "M500", venue: "I Padel by RM Port Chambly", partner: "Marinne Giraud", place: 1, pts: 500 },
+    { date: "14 Feb 2026", category: "M500", venue: "Labourdonnais Mapou", partner: "Marinne Giraud", place: 1, pts: 500 },
+    { date: "17 Jan 2026", category: "M500", venue: "RM Club Tamarin", partner: "Marinne Giraud", place: 1, pts: 500 },
+    { date: "12 Dec 2025", category: "M500", venue: "I Padel by RM Hennessy", partner: "Marinne Giraud", place: 1, pts: 500 },
     { date: "31 Oct 2025", category: "M1000", venue: "Urban Sport Black River", partner: "Ludivine Grondin", place: 3, pts: 700 },
   ] },
   "Marine Giraud": { rank: 2, rankingPts: 4700, careerPts: 8983, careerTournaments: 23, wins: 10, podiums: 14, club: "Terres Brunes", recent: [
@@ -259,7 +260,7 @@ const mplStats: Record<string, MplStats> = {
   ] },
   "Kate Foo Kune": { rank: 7, rankingPts: 3315, careerPts: 8292, careerTournaments: 30, wins: 4, podiums: 12, club: "Isla Padel", recent: [
     { date: "15 Aug 2026", category: "M1000", venue: "Caña Beau Plan", partner: "Martina Hola", place: 4, pts: 550 },
-    { date: "11 Jul 2026", category: "M500", venue: "Terres Brunes Sports & Leisure", partner: "Marine Giraud", place: 1, pts: 500 },
+    { date: "11 Jul 2026", category: "M500", venue: "Terres Brunes Sports & Leisure", partner: "Marinne Giraud", place: 1, pts: 500 },
     { date: "06 Jun 2026", category: "M1000", venue: "RM Club Grand Baie", partner: "Laetitia Gossart", place: 6, pts: 420 },
     { date: "11 Apr 2026", category: "M500", venue: "I Padel by RM Port Chambly", partner: "Laetitia Gossart", place: 2, pts: 325 },
     { date: "14 Mar 2026", category: "M1000", venue: "Sparc Cascavelle", partner: "Laetitia Gossart", place: 4, pts: 500 },
@@ -271,6 +272,9 @@ const mplStats: Record<string, MplStats> = {
 
 // Real bio/quote/social submitted by players via their Player Profile form — overrides the placeholder text below.
 const playerOverrides: Record<string, Partial<Player>> = {
+  "Marine Giraud": {
+    name: "Marinne Giraud",
+  },
   "Mathieu Vallet": {
     media: ["/images/players/mathieu-vallet-media-2.jpg", "/images/players/mathieu-vallet-media-3.jpg"],
   },
@@ -287,7 +291,7 @@ const playerOverrides: Record<string, Partial<Player>> = {
     heroFocus: "center 42%",
   },
   "Laura Koenig": {
-    detailImage: "/images/players/laura-koenig-hero.jpg",
+    detailImage: "/images/players/official-2026/laura-koenig.jpg",
     heroFocus: "center center",
   },
   "Amaury de Beer": {
@@ -301,7 +305,7 @@ const playerOverrides: Record<string, Partial<Player>> = {
     media: ["/images/players/amaury-de-beer-media-2.jpg", "/images/players/amaury-de-beer-media-3.jpg"],
   },
   "Céline Desvaux de Marigny": {
-    detailImage: "/images/players/celine-desvaux-de-marigny-hero.jpg",
+    detailImage: "/images/players/official-2026/celine-desvaux-de-marigny.jpg",
     heroFocus: "center center",
     biography: "I'm coming from beach tennis but appreciate much more the padel. To play with my sister is just so special. I play at Urban Black River and enjoy the outdoor court as well as the good vibes and ambiance!",
     quote: "Trust the flow of life and believe in yourself!",
@@ -444,7 +448,7 @@ export const trainingSessions: TrainingSession[] = [
     location: "Caña Club",
     objectives: ["Team building", "Player assessment", "Pressure points"],
     brunch: true,
-    status: "UPCOMING",
+    status: "COMPLETED",
     summary: "The opening block: establish the baseline, meet the team and surface the pressure points before the work begins.",
   },
   {
@@ -458,7 +462,7 @@ export const trainingSessions: TrainingSession[] = [
     location: "Caña Club",
     objectives: ["Pair chemistry", "Communication", "Tactical patterns"],
     brunch: true,
-    status: "UPCOMING",
+    status: "COMPLETED",
     summary: "From individual quality to collective rhythm: build the pair chemistry and shared language that will travel to La Réunion.",
   },
   {
@@ -470,10 +474,30 @@ export const trainingSessions: TrainingSession[] = [
     phase: "COMPETE",
     time: "12:30–14:30",
     location: "Caña Club",
-    objectives: ["Match simulation", "Competition intensity", "Pressure situations"],
+    objectives: ["Match simulation", "Pair communication", "Competition intensity", "Decision-making under pressure", "Pressure situations", "Team cohesion"],
     brunch: false,
-    status: "UPCOMING",
+    status: "COMPLETED",
     summary: "Competition mode: pressure situations, match simulation and the intensity required when every point starts to matter.",
+    report: "Team Mauritius completed another important preparation session at Caña Club on Thursday 24 September. With the men’s and women’s squads training together, the 12:30–14:30 session focused on match simulation, pair communication, competition intensity and decision-making under pressure.\n\nBeyond the on-court work, the session was another important step in bringing the group together ahead of the Island Padel Cup and the final preparation camp.",
+    coachNote: "The session focused on how the pairs respond under match pressure — communication, decision-making and staying composed when points become important. The objective now is to keep building the team’s competitive intensity while strengthening the connection between partners.",
+    playerQuote: { text: "Every session brings us closer — not only as players, but as one team. We know what we are preparing for, and we are ready to fight together for Mauritius.", author: "Team Mauritius" },
+    heroImage: "/images/sessions/session-03-compete/hero-team.jpg",
+    gallery: [
+      "/images/sessions/session-03-compete/official-team.jpg",
+      "/images/sessions/session-03-compete/women-team.jpg",
+      "/images/sessions/session-03-compete/men-team.jpg",
+    ],
+    videoClips: [
+      "/videos/sessions/session-03-compete/men-team.mp4?v=2",
+      "/videos/sessions/session-03-compete/women-team.mp4?v=2",
+      "/videos/sessions/session-03-compete/women-team-02.mp4?v=1",
+    ],
+    keyTakeaways: [
+      "Match simulation under competition conditions",
+      "Communication and decision-making under pressure",
+      "Building team cohesion and competitive intensity ahead of the final camp",
+    ],
+    completedAt: "2026-09-24T14:30:00+04:00",
   },
   {
     id: "27-sep-final-camp",
@@ -486,8 +510,20 @@ export const trainingSessions: TrainingSession[] = [
     location: "Caña Club",
     objectives: ["Final pairings", "Island Cup simulation", "Team briefing", "Official Team Mauritius photo"],
     brunch: true,
-    status: "UPCOMING",
+    status: "COMPLETED",
     summary: "No more experiments. Final pairings, the Island Cup simulation and the final team briefing before departure.",
+    report: "The Final Camp on Sunday 27 September closed the Road to La Réunion at Caña Club — the last collective session before Team Mauritius travelled to the Island Padel Cup.\n\nUnder head coach Adam Auckland, the programme was built around the final pairings, an Island Cup simulation and the closing team briefing ahead of departure.\n\nFour sessions — Assess, Build, Compete and the Final Camp — turned a group of selected players into one national unit. From here, the preparation became competition.",
+    heroImage: "/images/Team Mauritius 2.jpeg",
+    gallery: [
+      "/images/Team Mauritius 2.jpeg",
+      "/images/sessions/session-03-compete/official-team.jpg",
+    ],
+    keyTakeaways: [
+      "Final pairings for the Island Padel Cup",
+      "Island Cup simulation under competition conditions",
+      "Closing team briefing before departure to La Réunion",
+    ],
+    completedAt: "2026-09-27T09:00:00+04:00",
   },
 ];
 
@@ -501,7 +537,6 @@ export const newsItems: NewsItem[] = [
     excerpt: "The selected squad comes together at Caña Club for team building, player assessment and the first pressure-point sequences.",
     image: "/images/newsroom/meet-team-training.jpg",
     imageFocus: "center 68%",
-    featured: true,
     author: "Team Mauritius",
     tags: ["Team Mauritius", "Assess", "Caña Club"],
   },
@@ -518,16 +553,31 @@ export const newsItems: NewsItem[] = [
     tags: ["Training Camp", "Build", "Caña Club"],
   },
   {
+    id: "news-lexpress-pairs-pressure",
+    slug: "lexpress-pairs-under-pressure",
+    category: "Team News",
+    date: "19 September 2026",
+    title: "In the press: pairs under pressure",
+    excerpt: "L’Express follows Team Mauritius as pair communication, tactical decisions and composure become central to the Road to La Réunion.",
+    image: "/images/sessions/first-day-mathieu-nicolas.jpg",
+    imageFocus: "center 44%",
+    author: "Stany Maurice / L’Express",
+    tags: ["Press Review", "L’Express", "Pair Communication", "Road to La Réunion"],
+    body: "On 19 September 2026, L’Express devoted its sports page to Team Mauritius and the work being done to prepare the pairs for competition pressure.\n\nWritten by Stany Maurice, the feature looked back at the second camp at Caña Club, where pair-building drills, communication exercises and deliberately difficult scoring situations were used to assess tactical choices and composure.\n\nThe article also previewed the Competition Block scheduled for Thursday 24 September from 12:30–14:30 at Caña Club. That coverage marks an important point in the journey: the shift from individual assessment toward stronger pair structures and one competitive unit ahead of the Island Padel Cup.\n\nPress source: L’Express, Saturday 19 September 2026. Photography credited in the original publication to Krishna Pather.",
+  },
+  {
     id: "news-competition",
     slug: "competition-mode",
-    category: "Coach’s Corner",
+    category: "Training Camp",
     date: "24 September 2026",
     title: "Competition mode",
     excerpt: "A Thursday competition block from 12:30–14:30: match simulation, competition intensity and pressure situations.",
-    image: "/images/newsroom/coach-around-team.png",
+    image: "/images/sessions/session-03-compete/hero-team.jpg",
     imageFocus: "center center",
+    featured: true,
     author: "Team Mauritius",
-    tags: ["Competition Mode", "Coach", "Caña Club"],
+    tags: ["Competition Mode", "Training Camp", "Caña Club"],
+    body: "Team Mauritius completed the third stage of its Road to La Réunion at Caña Club on Thursday 24 September.\n\nThe 12:30–14:30 block moved the squad into competition mode through match simulation, competition intensity and pressure situations.\n\nThe session closed with the team together on court before the final preparation camp on Sunday 27 September.",
   },
   {
     id: "news-ready",
@@ -535,11 +585,39 @@ export const newsItems: NewsItem[] = [
     category: "Island Padel Cup",
     date: "27 September 2026",
     title: "Ready for La Réunion",
-    excerpt: "Final pairings, an Island Cup simulation and the closing team briefing before departure.",
-    image: "/images/newsroom/island-padel-cup-group.jpg",
-    imageFocus: "center 52%",
+    excerpt: "The Final Camp closed the preparation: final pairings, an Island Cup simulation and the last team briefing before Team Mauritius left for La Réunion.",
+    image: "/images/Team Mauritius 2.jpeg",
+    imageFocus: "center 40%",
     author: "Team Mauritius",
-    tags: ["Final Camp", "La Réunion", "Team Mauritius"],
+    tags: ["Final Camp", "Adam Auckland", "La Réunion", "Team Mauritius"],
+    body: "On Sunday 27 September, Team Mauritius came together at Caña Club for the Final Camp — the fourth and last collective session of the Road to La Réunion.\n\nAfter Assess on 6 September, Build on 13 September and the Compete block on 24 September, the Final Camp was designed as the bridge between preparation and competition. The programme left no room for experiments: final pairings, an Island Cup simulation and a closing team briefing before departure.\n\nHead coach Adam Auckland led the session as he had led the whole preparation, with one objective in mind since the first morning at Caña Club: turning a group of selected players into one competitive national unit.\n\nThe preparation was never only about tactics. Across four sessions and the Sunday brunches, the men's and women's squads trained, travelled and prepared as one team — the cohesion Team Mauritius would need in a nations cup format.\n\nThe Final Camp marked the end of the Road to La Réunion and the start of the competition. Next stop: the Island Padel Cup 2026 at Club de Champ Fleuri, Saint-Denis, from 1 to 4 October.",
+  },
+  {
+    id: "news-final-day",
+    slug: "final-day-island-padel-cup-2026",
+    category: "Island Padel Cup",
+    date: "04 October 2026",
+    title: "Final Day: Mauritius play for the men's title",
+    excerpt: "Team Mauritius reach the men's final of the Island Padel Cup 2026 against La Réunion. The women's final is Madagascar vs La Réunion.",
+    image: "/images/sessions/session-03-compete/men-team.jpg",
+    imageFocus: "center 40%",
+    featured: true,
+    author: "Team Mauritius",
+    tags: ["Island Padel Cup", "Final Day", "Men's Final", "Saint-Denis"],
+    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. In the women's final, Madagascar meet La Réunion.\n\nThe Island Padel Cup is played as a nations cup: three islands, one trophy, and every point counting for the flag.\n\nFollow the finals and every confirmed Team Mauritius result in the Live Center. Scores are published only once they are officially confirmed.",
+  },
+  {
+    id: "news-p500-saint-denis",
+    slug: "p500-saint-denis-mauritians-in-action",
+    category: "Results",
+    date: "04 October 2026",
+    title: "P500 Saint-Denis: Mauritians in action",
+    excerpt: "Alice Danjoux / Laura Koenig win 9-0 and Céline Desvaux de Marigny / Cécile Park win 9-2 at the P500 Saint-Denis.",
+    image: "/images/players/official-2026/laura-koenig-alt.jpg",
+    imageFocus: "center 35%",
+    author: "Team Mauritius",
+    tags: ["P500 Saint-Denis", "Alice Danjoux", "Laura Koenig", "Céline Desvaux de Marigny", "Cécile Park"],
+    body: "Alongside the Island Padel Cup, a P500 tournament is being played in Saint-Denis on Sunday 4 October, with several Mauritian pairs entered. This event is separate from the Island Padel Cup nations standings.\n\nAlice Danjoux / Laura Koenig won 9-0 against Fanny Grondin / Joëlle Thien Kin Sien.\n\nCéline Desvaux de Marigny / Cécile Park won 9-2 against Allison Costa / Vanessa Cabon.\n\nMagaly Schaffo / Marinne Giraud are also entered, seeded TS8. Their result will be published once confirmed.",
   },
   {
     id: "news-laura-koenig-focus",
@@ -582,40 +660,24 @@ export const newsItems: NewsItem[] = [
     slug: "marine-giraud-wta-to-padel",
     category: "Player Focus",
     date: "Road to La Réunion 2026",
-    title: "Marine Giraud: A Second Life",
+    title: "Marinne Giraud: A Second Life",
     excerpt: "From world No. 233 on the WTA tour to Team Mauritius: the competition chapter reopened in padel.",
     image: "/images/players/marine-giraud-newsroom.jpg",
     imageFocus: "center 24%",
     author: "Team Mauritius",
-    tags: ["Player Focus", "Marine Giraud", "Team Mauritius"],
+    tags: ["Player Focus", "Marinne Giraud", "Team Mauritius"],
   },
 ];
 
-export const matches: Match[] = [
-  {
-    id: "match-001",
-    date: "01 OCT",
-    court: "Court 1",
-    nationA: "Mauritius",
-    nationB: "La Réunion",
-    pairA: "Pair to be confirmed",
-    pairB: "Pair to be confirmed",
-    playerIdsA: [],
-    playerIdsB: [],
-    status: "UPCOMING",
-    scheduled: "Schedule to be published",
-    setsA: [],
-    setsB: [],
-    gameA: 0,
-    gameB: 0,
-  },
-];
+// Legacy broadcast/admin match shape. Competition results now live in src/lib/competition.ts (single source of truth).
+export const matches: Match[] = [];
 
 export const nations = ["Mauritius", "La Réunion", "Madagascar"];
 export const event = {
   title: "Island Padel Cup 2026",
   date: "1–4 October 2026",
   venue: "Club de Champ Fleuri",
+  city: "Saint-Denis",
   place: "La Réunion",
 };
 

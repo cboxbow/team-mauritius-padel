@@ -2,7 +2,7 @@ import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowUpRight, Camera, ChevronRight, CirclePlay, Link2, MapPin, MessageCircle, Radio, Share2, Target, Trophy, User, Users } from "lucide-react";
 import { Link } from "react-router-dom";
 import type { Match, Player, TrainingSession, CoachData, NewsItem } from "../lib/data";
-import { CoachFeatureHero, CoachInfoBar, EditorialQuote, PhotoTreatment, DotField } from "./brand";
+import { CampaignBackground, CoachFeatureHero, CoachInfoBar, EditorialQuote, PhotoTreatment } from "./brand";
 
 export type PlatformMode = "pre_event" | "live_event" | "post_event";
 
@@ -40,7 +40,7 @@ export function ModePriorityPanel({ mode, matches, liveUrl }: { mode: PlatformMo
 
 export function HomeEditorialGrid({ featuredPlayer }: { featuredPlayer?: Player }) {
   return <section className="section home-editorial-grid">
-    <article className="editorial-feature latest-video"><div><span className="editorial-icon"><CirclePlay size={22} /></span><small>LATEST VIDEO</small><h3>Video desk ready</h3><p>The next official Team Mauritius video will be published here.</p></div><Link to="/media">Open media <ArrowUpRight size={15} /></Link></article>
+    <article className="editorial-feature latest-video"><div><span className="editorial-icon"><CirclePlay size={22} /></span><small>LATEST VIDEO</small><h3>Competition Mode</h3><p>Team Mauritius moves into match simulation, competition intensity and pressure situations at Caña Club.</p></div><Link to="/training/24-sep-compete">Watch session <ArrowUpRight size={15} /></Link></article>
     <article className="editorial-feature featured-player"><div><span className="editorial-icon"><Users size={22} /></span><small>FEATURED PLAYER</small><h3>{featuredPlayer?.name ?? "Player feature pending"}</h3><p>Official facts, results and media remain editable without invented information.</p></div>{featuredPlayer && <Link to={`/team/${featuredPlayer.id}`}>View profile <ArrowUpRight size={15} /></Link>}</article>
     <article className="editorial-feature coach-card"><div><span className="editorial-icon"><Trophy size={22} /></span><small>HEAD COACH</small><h3>Adam Auckland</h3><p>Preparation approach, tactical priorities and recurring Adam’s Notes.</p></div><Link to="/coach/adam-auckland">Coach profile <ArrowUpRight size={15} /></Link></article>
   </section>;
@@ -48,15 +48,16 @@ export function HomeEditorialGrid({ featuredPlayer }: { featuredPlayer?: Player 
 
 export function TrainingStoryBlocks({ session }: { session: TrainingSession }) {
   const completed = session.status === "COMPLETED";
+  const publishedPhotoCount = (session.gallery?.length ?? 0) + (session.id === "24-sep-compete" ? 15 : 0);
   const blocks = [
-    { title: "Training Report", icon: <ArrowUpRight size={18} /> },
-    { title: "Photo Gallery", icon: <Camera size={18} /> },
-    { title: "Video Highlights", icon: <CirclePlay size={18} /> },
-    { title: "Coach Debrief", icon: <Trophy size={18} /> },
-    { title: "Player Quotes", icon: <Users size={18} /> },
-    { title: "What we learned", icon: <ChevronRight size={18} /> },
+    { title: "Training Report", icon: <ArrowUpRight size={18} />, ready: Boolean(session.report), copy: "The official session recap is available." },
+    { title: "Photo Gallery", icon: <Camera size={18} />, ready: Boolean(session.gallery?.length), copy: `${publishedPhotoCount} official images published.` },
+    { title: "Video Highlights", icon: <CirclePlay size={18} />, ready: Boolean(session.videoUrl || session.videoClips?.length), copy: `${session.videoClips?.length ?? 0} short videos published.` },
+    { title: session.id === "24-sep-compete" ? "Coaching Focus" : "Coach Debrief", icon: <Trophy size={18} />, ready: Boolean(session.coachNote), copy: session.id === "24-sep-compete" ? "The coaching focus is available." : "Adam's debrief is available." },
+    { title: session.id === "24-sep-compete" ? "Team Voice" : "Player Quotes", icon: <Users size={18} />, ready: Boolean(session.playerQuote), copy: session.id === "24-sep-compete" ? "The team voice is available." : "A player reaction is available." },
+    { title: "What we learned", icon: <ChevronRight size={18} />, ready: Boolean(session.keyTakeaways?.length), copy: `${session.keyTakeaways?.length ?? 0} key takeaways published.` },
   ];
-  return <section className="session-story"><div className="session-story-head"><div><small>SESSION CONTENT</small><h2>{completed ? "The full story" : "Ready to publish"}</h2></div><span className={`session-state state-${session.status.toLowerCase()}`}>{session.status}</span></div><div className="session-story-grid">{blocks.map(block => <article key={block.title}>{block.icon}<h3>{block.title}</h3><p>{completed ? "Official content will appear here when supplied by the media team." : "Available immediately after the session is completed."}</p><span>{completed ? "CONTENT PENDING" : "LOCKED UNTIL COMPLETED"}</span></article>)}</div></section>;
+  return <section className="session-story"><div className="session-story-head"><div><small>SESSION CONTENT</small><h2>{completed ? "The full story" : "Ready to publish"}</h2></div><span className={`session-state state-${session.status.toLowerCase()}`}>{session.status}</span></div><div className="session-story-grid">{blocks.map(block => <article key={block.title}>{block.icon}<h3>{block.title}</h3><p>{block.ready ? block.copy : completed ? "Pending editorial approval." : "Available immediately after the session is completed."}</p><span>{block.ready ? "PUBLISHED" : completed ? "CONTENT PENDING" : "LOCKED UNTIL COMPLETED"}</span></article>)}</div></section>;
 }
 
 export function CoachPage({ coach }: { coach: CoachData | null }) {
@@ -70,20 +71,104 @@ export function CoachPage({ coach }: { coach: CoachData | null }) {
     ["Expectations", coach?.expectations ?? "To be published by Adam Auckland."],
   ];
   const instagram = coach?.social_links?.instagram;
-  return <><section className="coach-page-hero"><div><p className="eyebrow">HEAD COACH / TEAM MAURITIUS</p><h1>Adam<br />Auckland</h1><p>{coach?.philosophy ?? "Leading the collective preparation for the Island Padel Cup 2026."}</p>{coach?.club && <span className="coach-structure">{coach.club}</span>}{coach?.nationality && <span className="coach-structure">{coach.nationality}</span>}{instagram && <span className="coach-structure">@{instagram}</span>}</div><div className="coach-page-media"><img src="/images/players/adam-auckland.jpg" alt="Adam Auckland — Head Coach, Team Mauritius" /></div></section><section className="section coach-dna"><div className="section-head"><div><p className="eyebrow">COACH DNA</p><h2>What Adam brings</h2></div></div><div className="behind-grid">{dna.map(([title, value], index) => <article key={title}><b>{String(index + 1).padStart(2, "0")}</b><h2>{title}</h2><p>{value}</p></article>)}</div>{coach?.preparation_priorities?.length ? <div className="dna-badges" style={{ marginTop: 30 }}>{coach.preparation_priorities.map(item => <Tag key={item}>{item}</Tag>)}</div> : null}</section><section className="section coach-page-grid">{sections.map(([title, copy]) => <article key={title}><small>{title}</small><p>{copy}</p></article>)}</section><section className="section adams-notes"><div><p className="eyebrow">{coach?.team_word ? `TEAM MAURITIUS: ${coach.team_word.toUpperCase()}` : "RECURRING EDITORIAL SERIES"}</p><h2>Adam’s Notes</h2><p>{coach?.message_to_team ?? "Key observations, tactical focus and next-step priorities after each camp."}</p></div><div className="notes-list"><span>06 SEP · NOTE PENDING</span><span>13 SEP · NOTE PENDING</span><span>24 SEP · NOTE PENDING</span><span>27 SEP · NOTE PENDING</span></div></section></>;
+  return <><section className="coach-page-hero"><CampaignBackground variant="editorial" intensity={0.36} /><div><p className="eyebrow">HEAD COACH / TEAM MAURITIUS</p><h1>Adam<br />Auckland</h1><p>{coach?.philosophy ?? "Leading the collective preparation for the Island Padel Cup 2026."}</p>{coach?.club && <span className="coach-structure">{coach.club}</span>}{coach?.nationality && <span className="coach-structure">{coach.nationality}</span>}{instagram && <span className="coach-structure">@{instagram}</span>}</div><div className="coach-page-media"><img src="/images/players/official-2026/adam-auckland.jpg" alt="Adam Auckland — Head Coach, Team Mauritius" /></div></section><section className="section coach-dna"><div className="section-head"><div><p className="eyebrow">COACH DNA</p><h2>What Adam brings</h2></div></div><div className="behind-grid">{dna.map(([title, value], index) => <article key={title}><b>{String(index + 1).padStart(2, "0")}</b><h2>{title}</h2><p>{value}</p></article>)}</div>{coach?.preparation_priorities?.length ? <div className="dna-badges" style={{ marginTop: 30 }}>{coach.preparation_priorities.map(item => <Tag key={item}>{item}</Tag>)}</div> : null}</section><section className="section coach-page-grid">{sections.map(([title, copy]) => <article key={title}><small>{title}</small><p>{copy}</p></article>)}</section><section className="section adams-notes"><div><p className="eyebrow">{coach?.team_word ? `TEAM MAURITIUS: ${coach.team_word.toUpperCase()}` : "RECURRING EDITORIAL SERIES"}</p><h2>Adam’s Notes</h2><p>{coach?.message_to_team ?? "Key observations, tactical focus and next-step priorities after each camp."}</p></div><div className="notes-list"><span>06 SEP · NOTE PENDING</span><span>13 SEP · NOTE PENDING</span><span>24 SEP · NOTE PENDING</span><span>27 SEP · NOTE PENDING</span></div></section></>;
 }
 
 function Tag({ children }: { children: ReactNode }) { return <span className="tag">{children}</span>; }
 
 export function BehindTheTeamPage() {
-  const areas = [
-    ["Coach", "Adam Auckland"], ["MSRA", "Team environment"], ["Mauritius Padel League", "Team environment"],
-    ["Physical preparation", "Details pending"], ["Medical / physio", "Staff pending"], ["Media / video", "Team pending"],
-    ["Travel logistics", "Details pending"], ["Partners", "Partner roster pending"],
+  const story = [
+    { number: "01", title: "Meet Team Mauritius", copy: "14 selected players. 7 men. 7 women. One national team.", image: "/images/sessions/session-03-compete/hero-team.jpg", alt: "Team Mauritius players together at Caña Club", caption: "TEAM SELECTION" },
+    { number: "02", title: "Building the Team", copy: "Individual players become pairs. Pairs become a squad. The squad becomes Team Mauritius.", image: "/images/sessions/session-02-build/session-02-group.jpg", alt: "Team Mauritius players working together during training", caption: "TEAM BUILDING" },
+    { number: "03", title: "Competition Mode", copy: "As the Island Padel Cup approaches, preparation shifts towards match simulation, pair communication, tactical decision-making and pressure situations.", image: "/images/sessions/session-02-build/session-02-match-play.jpg", alt: "Team Mauritius match preparation at Caña Club", caption: "MATCH PREPARATION" },
   ];
-  return <><section className="page-intro"><p className="eyebrow">THE PEOPLE BEHIND THE JOURNEY</p><h1>Behind Team Mauritius</h1><p className="intro-copy">The wider environment supporting the team from preparation to competition.</p></section><section className="section behind-grid">{areas.map(([title, value], index) => <article key={title}><b>{String(index + 1).padStart(2, "0")}</b><h2>{title}</h2><p>{value}</p></article>)}</section></>;
-}
+  const trainingGallery = [
+    { image: "/images/sessions/session-02-build/session-02-action-01.jpg", alt: "Team Mauritius training rally at Caña Club", caption: "TEAM SESSION", className: "is-large" },
+    { image: "/images/sessions/session-02-build/session-02-technical.jpg", alt: "Technical preparation during Team Mauritius training", caption: "PAIR WORK", className: "is-tall" },
+    { image: "/images/sessions/session-02-build/session-02-pair-lab-01.jpg", alt: "Players listening during a Team Mauritius tactical session", caption: "TACTICAL DISCUSSION", className: "is-small" },
+    { image: "/images/sessions/session-02-build/session-02-action-02.jpg", alt: "Team Mauritius player preparing a shot", caption: "COMPETITION INTENSITY", className: "is-wide" },
+  ];
 
+  return <main className="behind-editorial">
+    <section className="behind-editorial-hero">
+      <img src="/images/Team Mauritius 2.jpeg" alt="Official full Team Mauritius squad at Caña Club" />
+      <div className="behind-editorial-hero-overlay" />
+      <CampaignBackground variant="editorial" intensity={0.34} className="behind-editorial-energy" />
+      <div className="behind-editorial-hero-copy">
+        <p className="eyebrow">THE PEOPLE BEHIND THE JOURNEY</p>
+        <h1>Behind the Team</h1>
+        <h2>The people, preparation and commitment behind Team Mauritius.</h2>
+        <p>Behind every team is a group of people working together long before the first point is played. From organisation and logistics to coaching, preparation and team building, this is the work behind Team Mauritius on the road to the Island Padel Cup 2026.</p>
+      </div>
+      <div className="behind-editorial-numbers" aria-label="Team Mauritius structure"><span><b>14</b> Players</span><span><b>1</b> Coach</span><span><b>2</b> Team Managers</span><span><b>1</b> Flag</span></div>
+    </section>
+
+    <section className="section behind-leadership behind-leadership-managers">
+      <div className="behind-leadership-media"><img loading="lazy" src="/images/team-management/christian-bezandry-pascal-hoffmann.jpg" alt="Christian Bezandry and Pascal Hoffmann, Team Managers and Heads of Delegation" /><span>TEAM LEADERSHIP</span></div>
+      <div className="behind-leadership-copy">
+        <p className="eyebrow">TEAM LEADERSHIP</p>
+        <h2>Christian Bezandry<br />&amp; Pascal Hoffmann</h2>
+        <p className="behind-role">Team Managers / Heads of Delegation<br />Team Mauritius</p>
+        <p>Christian Bezandry and Pascal Hoffmann jointly lead and coordinate the Team Mauritius delegation for the Island Padel Cup 2026.</p>
+        <p>Long-time friends with a shared passion for sport, they oversee the organisation, logistics and overall preparation of the delegation, working closely with the players and coaching staff throughout the Road to La Réunion.</p>
+        <p>Their role is to create the environment, structure and support that allow the players to focus on one objective: representing Mauritius at their best.</p>
+        <p className="behind-highlight">One delegation. One responsibility. One objective.</p>
+      </div>
+    </section>
+
+    <section className="section behind-leadership behind-leadership-coach">
+      <div className="behind-leadership-copy">
+        <p className="eyebrow">SPORTING LEADERSHIP</p>
+        <h2>Adam Auckland</h2>
+        <p className="behind-role">Head Coach<br />Team Mauritius</p>
+        <p>Adam Auckland leads the sporting preparation of Team Mauritius for the Island Padel Cup.</p>
+        <p>His work with the squad focuses on pair chemistry, communication, tactical patterns, decision-making under pressure, match preparation and competition intensity.</p>
+        <p>Working alongside the Team Managers, the objective is clear: turn 14 selected players into one competitive unit.</p>
+        <p className="behind-highlight">Prepare. Trust. Compete together.</p>
+        <Link className="text-link" to="/coach/adam-auckland">Coach profile <ArrowUpRight size={15} /></Link>
+      </div>
+      <div className="behind-leadership-media"><img loading="lazy" src="/images/sessions/session-02-build/session-02-coach.jpg" alt="Head Coach Adam Auckland briefing Team Mauritius players" /><span>SPORTING LEADERSHIP</span></div>
+    </section>
+
+    <section className="section behind-story">
+      <div className="behind-section-heading"><p className="eyebrow">BUILDING THE TEAM</p><h2>From selection<br />to competition</h2></div>
+      <div className="behind-story-list">{story.map(item => <article className="behind-story-item" key={item.number}><div className="behind-story-image"><img loading="lazy" src={item.image} alt={item.alt} /><span>{item.caption}</span></div><div className="behind-story-copy"><b>{item.number}</b><h3>{item.title}</h3><p>{item.copy}</p></div></article>)}</div>
+    </section>
+
+    <section className="section behind-training">
+      <div className="behind-section-heading"><p className="eyebrow">PREPARATION AT CAÑA CLUB</p><h2>Training in Action</h2><p>Authentic moments from the work taking place on court — technical preparation, pair building, tactical discussion and competition intensity.</p></div>
+      <div className="behind-training-gallery">{trainingGallery.map(item => <figure className={item.className} key={item.image}><img loading="lazy" src={item.image} alt={item.alt} /><figcaption>{item.caption}</figcaption></figure>)}</div>
+    </section>
+
+    <section className="section behind-two-squads">
+      <div className="behind-section-heading"><p className="eyebrow">TEAM MAURITIUS</p><h2>Two Squads.<br />One Team.</h2><p>Seven men. Seven women. Fourteen players preparing under one flag.</p><p>Different pairs, different playing styles, one collective objective: represent Mauritius together.</p></div>
+      <div className="behind-squad-grid">
+        <figure><img loading="lazy" src="/images/sessions/session-03-compete/men-team.jpg" alt="Team Mauritius men's squad" /><figcaption><b>7 Men</b><span>Team Mauritius</span></figcaption></figure>
+        <figure><img loading="lazy" src="/images/sessions/session-03-compete/women-team.jpg" alt="Team Mauritius women's squad" /><figcaption><b>7 Women</b><span>Team Mauritius</span></figcaption></figure>
+      </div>
+    </section>
+
+    <section className="section behind-structure">
+      <div className="behind-section-heading"><p className="eyebrow">ONE COLLECTIVE STRUCTURE</p><h2>Team Mauritius</h2></div>
+      <div className="behind-structure-flow">
+        <div><span>TEAM LEADERSHIP</span><strong>Christian Bezandry <i>+</i> Pascal Hoffmann</strong><small>Team Managers / Heads of Delegation</small></div>
+        <b aria-hidden="true">↓</b>
+        <div><span>SPORTING LEADERSHIP</span><strong>Adam Auckland</strong><small>Head Coach</small></div>
+        <b aria-hidden="true">↓</b>
+        <div><span>THE SQUAD</span><strong>7 Men <i>+</i> 7 Women</strong><small>14 selected players</small></div>
+        <b aria-hidden="true">↓</b>
+        <div className="is-final"><span>ONE FLAG</span><strong>Team Mauritius</strong></div>
+      </div>
+    </section>
+
+    <section className="behind-manifesto">
+      <img loading="lazy" src="/images/sessions/session-03-compete/official-team.jpg" alt="Team Mauritius official squad" />
+      <div className="behind-manifesto-overlay" />
+      <CampaignBackground variant="team" intensity={0.22} className="behind-manifesto-energy" />
+      <div className="behind-manifesto-copy"><p>14 Players.<br />1 Coach.<br />2 Team Managers.<br />1 Flag.</p><h2>One Team.<br />One Island.<br />One Goal.</h2><strong>Team Mauritius <span className="mauritius-flag" role="img" aria-label="Mauritius flag" /></strong><small>From preparation in Mauritius to competition in La Réunion — together.</small></div>
+    </section>
+  </main>;
+}
 export function EditorialRoadmap() {
   const stories = ["06 SEP · Meet Team Mauritius", "13 SEP · Building The Team", "24 SEP · Competition Mode", "27 SEP · Ready For La Réunion", "Departure", "Arrival in La Réunion", "Official Practice", "Opening Ceremony", "Competition Day 1", "Competition Day 2", "Semi-Finals", "Finals"];
   return <section className="section editorial-roadmap"><div><p className="eyebrow">CHRONOLOGICAL STORY FEED</p><h2>Road to La Réunion</h2></div><div className="story-feed">{stories.map((story, index) => <div key={story}><b>{String(index + 1).padStart(2, "0")}</b><span>{story}</span><small>{index < 4 ? "PLANNED" : "UPCOMING"}</small></div>)}</div></section>;
@@ -225,7 +310,8 @@ export function AssessSessionJournal({ session }: { session: TrainingSession }) 
 }
 
 function DotWaveBackground({ intensity = 1 }: { intensity?: number }) {
-  return <div className="dot-wave" style={{ opacity: intensity }} aria-hidden="true" />;
+  const variant = intensity >= .65 ? "hero" : intensity <= .25 ? "subtle" : "editorial";
+  return <CampaignBackground variant={variant} intensity={intensity} />;
 }
 
 type MplAnswer = { speaker: string; text: string };
@@ -534,7 +620,7 @@ export function CoachGoldMissionArticle({ item, next }: { item: NewsItem; next: 
         <h3 className="gold-chapter-subquestion">{injury.question}</h3>
         {injury.answer.map((paragraph, index) => <p key={index}>{paragraph}</p>)}
       </div>
-      <div className="gold-chapter-media"><img src="/images/players/adam-auckland.jpg" alt="Adam Auckland, Head Coach" /></div>
+      <div className="gold-chapter-media"><img src="/images/players/official-2026/adam-auckland.jpg" alt="Adam Auckland, Head Coach" /></div>
     </section></Reveal>}
 
     {assess && tactics && <Reveal><section className="section gold-chapter gold-chapter-media-left">
@@ -550,7 +636,7 @@ export function CoachGoldMissionArticle({ item, next }: { item: NewsItem; next: 
     </section></Reveal>}
 
     {pairing && <Reveal><section className="gold-statement">
-      <DotField className="gold-statement-texture" density={90} dotSizeMin={1} dotSizeMax={2.5} opacity={0.1} color="#070708" />
+      <CampaignBackground variant="subtle" intensity={0.1} className="gold-statement-texture" />
       <div className="gold-statement-head">
         <span className="gold-chapter-number">03</span>
         <p className="eyebrow light">PREPARATION &amp; PAIRS</p>
@@ -598,7 +684,7 @@ export function CoachGoldMissionArticle({ item, next }: { item: NewsItem; next: 
     </section>}
 
     <Reveal><section className="gold-coach-profile">
-      <DotField className="gold-coach-profile-texture" density={70} dotSizeMin={1} dotSizeMax={2} opacity={0.1} color="#ef3d32" />
+      <CampaignBackground variant="subtle" intensity={0.1} className="gold-coach-profile-texture" />
       <div className="gold-coach-profile-media">
         <img src="/images/players/adam-auckland-hit.jpg" alt="Adam Auckland, Head Coach, Team Mauritius" />
         <span className="gold-coach-profile-vertical">TEAM MAURITIUS</span>

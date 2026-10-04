@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
 import { BrowserRouter, Link, NavLink, Route, Routes, useLocation, useParams } from "react-router-dom";
-import { Menu, X, ArrowUpRight, ChevronRight, Clock3, MapPin, Play, Radio, Settings2, Plus, Minus, RotateCcw, Check, Users, Camera, Video, Gauge, LockKeyhole, ArrowLeftRight, Hand, TrendingUp, ShieldCheck, AtSign, Target, Shield, Zap, ArrowUpCircle, Wind, Eye, RotateCw, Brain, MessageCircle, Trash2 } from "lucide-react";
+import { Menu, X, ArrowUpRight, ChevronRight, Clock3, MapPin, Settings2, Plus, Minus, RotateCcw, Check, Users, Camera, Video, Gauge, LockKeyhole, ArrowLeftRight, Hand, TrendingUp, ShieldCheck, AtSign, Target, Shield, Zap, ArrowUpCircle, Wind, Eye, RotateCw, Brain, MessageCircle, Trash2, Trophy } from "lucide-react";
 import { event, matches as seedMatches, navItems, newsItems as seedNewsItems, nations, players as seedPlayers, SEED_VERSION, trainingSessions as seedTrainingSessions, type Match, type Player, type TrainingSession, type NewsItem, type CoachData } from "./lib/data";
-import { AssessSessionJournal, BehindTheTeamPage, CoachGoldMissionArticle, CoachPage, EditorialRoadmap, HomeEditorialGrid, MplStoryPage, ModePriorityPanel, QuickNavigation, Reveal, TrainingStoryBlocks } from "./components/platform-sections";
+import { AssessSessionJournal, BehindTheTeamPage, CoachGoldMissionArticle, CoachPage, EditorialRoadmap, HomeEditorialGrid, MplStoryPage, QuickNavigation, Reveal, TrainingStoryBlocks } from "./components/platform-sections";
 import { PlayerStoryArticle, LAURA_KOENIG_STORY, MAGALY_SCHAFFO_STORY, KATE_FOO_KUNE_STORY, MARINE_GIRAUD_STORY, type PlayerStoryConfig } from "./components/player-story";
 import { mapNewsRow, mapPlayerRow, mapTrainingSessionRow } from "./lib/api-mappers";
 import { isSupabaseConfigured, supabase, SUPABASE_URL } from "./lib/supabase-client";
-import { VisualEngineShowcase } from "./components/brand";
+import { CampaignBackground, PlayerEnergyWave, VisualEngineShowcase, type DotWaveVariant } from "./components/brand";
+import { CompetitionHero, CompetitionMatchPage, CompetitionStrip, FinalDaySection, JourneyRecap, LatestResults, LiveCenterPage, NationsStandings, P500Section, ResultsPage, ScheduleMatches } from "./components/competition-sections";
+import { COMPETITION_PHASE, competitionMatches } from "./lib/competition";
 import type { Session } from "@supabase/supabase-js";
 
 // Player Focus stories migrated onto the shared Player Story system (see components/player-story.tsx).
@@ -20,25 +22,30 @@ const PLAYER_STORIES: Record<string, PlayerStoryConfig> = {
 
 const mergeSeedNews = (remoteNews: NewsItem[]) => {
   const remoteSlugs = new Set(remoteNews.map(item => item.slug));
-  return [...remoteNews, ...seedNewsItems.filter(item => !remoteSlugs.has(item.slug))];
+  // Featured seed stories (e.g. Final Day) lead; remote Supabase stories follow, then the remaining seed archive.
+  const seedOnly = seedNewsItems.filter(item => !remoteSlugs.has(item.slug));
+  return [...seedOnly.filter(item => item.featured), ...remoteNews, ...seedOnly.filter(item => !item.featured)];
 };
 
 const STORAGE_KEY = "team-mauritius-local-state";
 type SiteMode = "pre_event" | "live_event" | "post_event";
 type LocalState = { mode: SiteMode; players: Player[]; matches: Match[]; liveUrl: string; trainingSessions: TrainingSession[]; newsItems: NewsItem[]; coach: CoachData | null };
 
-const phaseLabels: Record<SiteMode, string> = { pre_event: "ROAD TO LA RÉUNION", live_event: "ISLAND PADEL CUP · LIVE", post_event: "THE STORY" };
-const phaseMeta: Record<SiteMode, string> = { pre_event: "PHASE 01 / PREPARATION", live_event: "PHASE 02 / COMPETITION", post_event: "PHASE 03 / ARCHIVE" };
+const phaseLabels: Record<SiteMode, string> = { pre_event: "ROAD TO LA RÉUNION", live_event: "ISLAND PADEL CUP · FINAL DAY", post_event: "ISLAND PADEL CUP · COMPLETE" };
+// The competition phase in src/lib/competition.ts drives the site mode; a stale "pre_event" (localStorage or Supabase) never wins once the cup has started.
+const COMPETITION_MODE: SiteMode = COMPETITION_PHASE === "FINAL_DAY" ? "live_event" : "post_event";
+const modeOrder: SiteMode[] = ["pre_event", "live_event", "post_event"];
+const resolveMode = (mode?: SiteMode): SiteMode => mode && modeOrder.indexOf(mode) > modeOrder.indexOf(COMPETITION_MODE) ? mode : COMPETITION_MODE;
 
 type StoredState = Partial<LocalState> & { seedVersion?: number };
 
 function readState(): LocalState {
-  if (typeof window === "undefined") return { mode: "pre_event", players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null };
+  if (typeof window === "undefined") return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null };
   try {
     const value = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? "null") as StoredState | null;
     const seedIsFresh = value?.seedVersion === SEED_VERSION;
     return {
-      mode: value?.mode ?? "pre_event",
+      mode: resolveMode(value?.mode),
       players: seedIsFresh && value?.players ? value.players : seedPlayers,
       matches: seedIsFresh && value?.matches ? value.matches : seedMatches,
       liveUrl: value?.liveUrl ?? "",
@@ -46,7 +53,7 @@ function readState(): LocalState {
       newsItems: seedIsFresh && value?.newsItems ? mergeSeedNews(value.newsItems) : seedNewsItems,
       coach: null,
     };
-  } catch { return { mode: "pre_event", players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null }; }
+  } catch { return { mode: COMPETITION_MODE, players: seedPlayers, matches: seedMatches, liveUrl: "", trainingSessions: seedTrainingSessions, newsItems: seedNewsItems, coach: null }; }
 }
 
 function saveState(state: LocalState) { if (typeof window !== "undefined") window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...state, seedVersion: SEED_VERSION })); }
@@ -58,7 +65,7 @@ function App() {
     if (!import.meta.env.PROD) return;
     fetch("/api/site-mode").then(response => response.json()).then(payload => {
       const remoteMode = payload?.data?.mode as SiteMode | undefined;
-      if (remoteMode && ["pre_event", "live_event", "post_event"].includes(remoteMode)) setState(current => ({ ...current, mode: remoteMode }));
+      if (remoteMode && ["pre_event", "live_event", "post_event"].includes(remoteMode)) setState(current => ({ ...current, mode: resolveMode(remoteMode) }));
     }).catch(() => undefined);
 
     fetch("/api/players").then(response => response.json()).then(payload => {
@@ -103,9 +110,14 @@ function ScrollToTop() {
 }
 
 // Team Mauritius red dot-wave signature: the approved master artwork, opacity-scaled per page.
-function DotWave({ intensity = 1 }: { intensity?: number }) {
-  return <div className="dot-wave" style={{ opacity: intensity }} aria-hidden="true" />;
+function DotWave({ intensity = 1, variant = "hero", className = "" }: { intensity?: number; variant?: DotWaveVariant; className?: string }) {
+  const campaignVariant = variant === "subtle" ? "subtle" : intensity <= .3 ? "editorial" : "hero";
+  return <CampaignBackground variant={campaignVariant} intensity={intensity} className={className} />;
 }
+
+const primaryNavItems = navItems.flatMap(item => item.to === "/training"
+  ? [{ label: "Behind the Team", to: "/behind-the-team" }, item]
+  : [item]);
 
 type ShellProps = { state: LocalState; setState: React.Dispatch<React.SetStateAction<LocalState>> };
 function AppShell({ state, setState }: ShellProps) {
@@ -121,10 +133,10 @@ function AppShell({ state, setState }: ShellProps) {
       <img className="header-federations" src="/images/msra-mpl-logo.png" alt="Mauritius Squash Rackets Association × Mauritius Padel League" />
       <div className="header-phase"><span className="pulse-dot" />{phaseLabels[state.mode]}</div>
       <button className="icon-button menu-trigger" aria-label={mobileOpen ? "Close menu" : "Open menu"} aria-expanded={mobileOpen} aria-controls="main-navigation" onClick={() => setMobileOpen(!mobileOpen)}>{mobileOpen ? <X /> : <Menu />}</button>
-      <nav id="main-navigation" className={`main-nav ${mobileOpen ? "is-open" : ""}`}>{navItems.map(item => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }: { isActive: boolean }) => isActive ? "active" : ""}>{item.label}</NavLink>)}</nav>
+      <nav id="main-navigation" className={`main-nav ${mobileOpen ? "is-open" : ""}`}>{primaryNavItems.map(item => <NavLink key={item.to} to={item.to} onClick={() => setMobileOpen(false)} className={({ isActive }: { isActive: boolean }) => isActive ? "active" : ""}>{item.label}</NavLink>)}</nav>
     </header>
     <div className="flag-line"><i /><i /><i /><i /></div>
-    {state.mode === "live_event" && <Link className="sticky-live-bar" to="/live"><span className="live-dot" /><b>LIVE</b><span>{state.matches.find(match => match.status === "LIVE")?.court ?? "Island Padel Cup"}</span><strong>Open Live Center</strong><ChevronRight size={16} /></Link>}
+    {state.mode === "live_event" && <Link className="sticky-live-bar" to="/live"><span className="live-dot" /><b>LIVE</b><span>{competitionMatches.find(match => match.status === "LIVE")?.stage ?? "Island Padel Cup · Final Day"}</span><strong>Follow the action</strong><ChevronRight size={16} /></Link>}
     <main><Routes>
       <Route path="/" element={<Home state={state} />} />
       <Route path="/team" element={<Team players={state.players} />} />
@@ -138,10 +150,10 @@ function AppShell({ state, setState }: ShellProps) {
       <Route path="/news" element={<News newsItems={state.newsItems} />} />
       <Route path="/news/:slug" element={<NewsDetail newsItems={state.newsItems} />} />
       <Route path="/island-padel-cup" element={<EventHub state={state} />} />
-      <Route path="/schedule" element={<Schedule state={state} />} />
+      <Route path="/schedule" element={<Schedule />} />
       <Route path="/live" element={<Live state={state} />} />
-      <Route path="/matches/:matchId" element={<MatchDetail state={state} />} />
-      <Route path="/results" element={<Results state={state} />} />
+      <Route path="/matches/:matchId" element={<MatchDetail />} />
+      <Route path="/results" element={<Results />} />
       <Route path="/standings" element={<Standings />} />
       <Route path="/media" element={<Media />} />
       <Route path="/partners" element={<Partners />} />
@@ -152,40 +164,28 @@ function AppShell({ state, setState }: ShellProps) {
   </div>;
 }
 
-function Footer() { return <footer className="site-footer"><div className="footer-brand"><img className="brand-mark small" src="/images/team-mauritius-logo.png" alt="Team Mauritius" /><div><b>TEAM MAURITIUS</b><span>ROAD TO ISLAND PADEL CUP 2026</span></div></div><div className="footer-right"><Link className="footer-story-link" to="/story">Our Story: MPL × Team Mauritius</Link><div className="footer-partners"><small>OFFICIAL PARTNERS</small><img src="/images/sponsor-dove.png" alt="Dove Men+Care" /><img src="/images/sponsor-padel-house.png" alt="Padel House" /></div><img className="footer-federations" src="/images/msra-mpl-logo.png" alt="Mauritius Squash Rackets Association × Mauritius Padel League" /><span>© 2026 TEAM MAURITIUS</span></div></footer>; }
+function Footer() { return <footer className="site-footer"><div className="footer-brand"><img className="brand-mark small" src="/images/team-mauritius-logo.png" alt="Team Mauritius" /><div><b>TEAM MAURITIUS</b><span>ISLAND PADEL CUP 2026 · LA RÉUNION</span></div></div><div className="footer-right"><Link className="footer-story-link" to="/story">Our Story: MPL × Team Mauritius</Link><div className="footer-partners"><small>OFFICIAL PARTNERS</small><img src="/images/sponsor-dove.png" alt="Dove Men+Care" /><img src="/images/sponsor-padel-house.png" alt="Padel House" /></div><img className="footer-federations" src="/images/msra-mpl-logo.png" alt="Mauritius Squash Rackets Association × Mauritius Padel League" /><span>© 2026 TEAM MAURITIUS</span></div></footer>; }
 
-function PageIntro({ eyebrow, title, copy, dotIntensity }: { eyebrow: string; title: string; copy?: string; dotIntensity?: number }) { return <section className="page-intro">{dotIntensity !== undefined && <DotWave intensity={dotIntensity / 100} />}<p className="eyebrow">{eyebrow}</p><h1>{title}</h1>{copy && <p className="intro-copy">{copy}</p>}</section>; }
+function PageIntro({ eyebrow, title, subhead, copy, dotIntensity, image, imageFocus = "center 35%" }: { eyebrow: string; title: string; subhead?: React.ReactNode; copy?: React.ReactNode; dotIntensity?: number; image?: string; imageFocus?: string }) { return <section className={`page-intro${image ? " has-photo" : ""}`}>{image && <img className="page-intro-media" src={image} alt="" style={{ objectPosition: imageFocus }} />}{image && <span className="page-intro-photo-scrim" />}{dotIntensity !== undefined && <DotWave intensity={dotIntensity / 100} variant={image ? "subtle" : "hero"} />}<p className="eyebrow">{eyebrow}</p><h1>{title}</h1>{subhead && <p className="intro-subhead">{subhead}</p>}{copy && <p className="intro-copy">{copy}</p>}</section>; }
 function SectionHead({ eyebrow, title, link, to }: { eyebrow?: string; title: string; link?: string; to?: string }) { return <div className="section-head"><div>{eyebrow && <p className="eyebrow">{eyebrow}</p>}<h2>{title}</h2></div>{link && to && <Link className="text-link" to={to}>{link}<ArrowUpRight size={16} /></Link>}</div>; }
 function ButtonLink({ to, children, secondary = false }: { to: string; children: React.ReactNode; secondary?: boolean }) { return <Link className={`button ${secondary ? "button-secondary" : ""}`} to={to}>{children}<ArrowUpRight size={15} /></Link>; }
 function Tag({ children, tone = "red" }: { children: React.ReactNode; tone?: "red" | "gold" | "green" | "muted" }) { return <span className={`tag tag-${tone}`}>{children}</span>; }
 
 function Home({ state }: { state: LocalState }) {
-  const [now, setNow] = useState(() => Date.now());
-  useEffect(() => { const timer = window.setInterval(() => setNow(Date.now()), 1000); return () => window.clearInterval(timer); }, []);
-  const target = new Date("2026-10-01T08:00:00+04:00").getTime();
-  const diff = Math.max(0, target - now);
-  const days = Math.floor(diff / 86400000), hours = Math.floor((diff / 3600000) % 24), minutes = Math.floor((diff / 60000) % 60), seconds = Math.floor((diff / 1000) % 60);
-  const heroTitle = state.mode === "live_event" ? "ISLAND PADEL CUP" : state.mode === "post_event" ? "THE STORY" : "ROAD TO LA RÉUNION";
-  const heroKicker = state.mode === "live_event" ? "LIVE FROM CLUB DE CHAMP FLEURI" : state.mode === "post_event" ? "TEAM MAURITIUS · 2026 ARCHIVE" : "TEAM MAURITIUS";
-  const candidateIndex = state.trainingSessions.findIndex(session => new Date(session.startsAt).getTime() >= now);
-  const nextSessionIndex = candidateIndex >= 0 ? candidateIndex : state.trainingSessions.length - 1;
-  const nextSession = state.trainingSessions[nextSessionIndex];
-  const sessionDaysToGo = Math.ceil((new Date(nextSession.startsAt).getTime() - now) / 86400000);
   return <>
-    <section className="hero home-hero no-photo"><div className="hero-media"><DotWave intensity={1} /></div><div className="hero-content"><p className="eyebrow light">{heroKicker} <span className="slash">/</span> {phaseMeta[state.mode]}</p><h1>{heroTitle}<span className="red-dot">.</span></h1><p className="hero-sub">Island Padel Cup 2026<br /><span>1–4 October · Club de Champ Fleuri · La Réunion</span></p><div className="hero-actions"><ButtonLink to="/training">Follow the journey</ButtonLink><ButtonLink to="/live" secondary>Live center</ButtonLink></div></div><div className="hero-aside"><span className="vertical-label">MAURITIUS / INDIAN OCEAN</span><span className="hero-index">01<span>/</span>04</span></div></section>
-    <section className="countdown-strip"><div><p className="eyebrow">{state.mode === "pre_event" ? "COUNTDOWN TO FIRST POINT" : "EVENT WINDOW"}</p><strong>{state.mode === "pre_event" ? "01 OCT 2026" : "01—04 OCT 2026"}</strong></div>{state.mode === "pre_event" ? <div className="countdown-numbers"><TimeUnit value={days} label="DAYS" /><TimeUnit value={hours} label="HOURS" /><TimeUnit value={minutes} label="MIN" /><TimeUnit value={seconds} label="SEC" /></div> : <Tag tone="red">{state.mode === "live_event" ? "LIVE NOW" : "ARCHIVE LIVE"}</Tag>}</section>
+    <CompetitionHero />
+    <CompetitionStrip />
+    <FinalDaySection />
+    <LatestResults />
     <MeetTeamMauritius players={state.players} />
-    <ModePriorityPanel mode={state.mode} matches={state.matches} liveUrl={state.liveUrl} />
+    <P500Section />
+    <section className="section newsroom-preview"><SectionHead eyebrow="THE LATEST" title="Latest news" link="Open newsroom" to="/news" /><div className="news-grid">{state.newsItems.map(item => <NewsCard key={item.id} item={item} />)}</div></section>
+    <JourneyRecap sessions={state.trainingSessions} />
     <QuickNavigation />
-    <section className="section section-dark home-intro"><div className="intro-grid"><div><p className="eyebrow">THE MISSION</p><h2>4 sessions.<br /><span>One goal.</span><br />La Réunion.</h2></div><div className="mission-copy"><p>The preparation camp is designed to turn a group of top-ranked players into one competitive national unit — physically ready, tactically aligned and connected as a team.</p><ButtonLink to="/team" secondary>Meet Team Mauritius</ButtonLink></div></div></section>
-    <section className="key-numbers"><div className="key-numbers-grid">{[["14", "Players"], ["07", "Men"], ["07", "Women"], ["01", "Head Coach"], ["04", "Preparation Sessions"], ["01–04 OCT", "La Réunion"]].map(([value, label]) => <div key={label}><strong>{value}</strong><span>{label}</span></div>)}</div></section>
-    {candidateIndex >= 0 ? <section className="section next-session"><SectionHead eyebrow="TEAM MAURITIUS // NEXT SESSION" title="Next on the court" link="View timeline" to="/training" /><div className="next-grid"><div className={`session-feature phase-${nextSession.phase.toLowerCase().replace(" ", "-")}`}><div className="session-art"><img src="/images/players/olivier-couacaud-alt.jpg" alt="Team Mauritius player in action" /><span className="session-number">{String(nextSessionIndex + 1).padStart(2, "0")}</span></div><div className="session-info"><div className="session-meta"><Tag>{nextSession.shortDate}</Tag><span>{nextSession.time}</span><span className="session-countdown">{sessionDaysToGo > 0 ? `${sessionDaysToGo} day${sessionDaysToGo === 1 ? "" : "s"} to go` : "Today"}</span></div><h3>{nextSession.title}</h3><p>{nextSession.summary}</p><ButtonLink to={`/training/${nextSession.id}`} secondary>Session details</ButtonLink></div></div><div className="next-side"><div className="mini-stat"><span className="stat-label">VENUE</span><strong>Caña Club</strong><small>Official preparation camp</small></div><div className="mini-stat"><span className="stat-label">NEXT MILESTONE</span><strong>Final pairings</strong><small>Island Cup simulation · 27 Sep</small></div><div className="mini-stat"><span className="stat-label">COACH</span><strong>Adam Auckland</strong><small>Lead the collective preparation</small></div></div></div></section> : <section className="section next-session"><SectionHead eyebrow="TEAM MAURITIUS" title="Next mission" link="Explore the event" to="/island-padel-cup" /><div className="next-grid"><div className="session-feature phase-final-camp"><div className="session-art"><img src="/images/event-cover.png" alt="Island Padel Cup 2026 event visual" /><span className="session-number">01</span></div><div className="session-info"><div className="session-meta"><Tag>1–4 OCT</Tag><span>Club de Champ Fleuri</span></div><h3>La Réunion</h3><p>Preparation is complete. Team Mauritius travels to La Réunion for the Island Padel Cup 2026.</p><ButtonLink to="/island-padel-cup" secondary>Island Padel Cup</ButtonLink></div></div><div className="next-side"><div className="mini-stat"><span className="stat-label">VENUE</span><strong>Club de Champ Fleuri</strong><small>La Réunion</small></div><div className="mini-stat"><span className="stat-label">NATIONS</span><strong>Mauritius · La Réunion · Madagascar</strong><small>Nations cup format</small></div><div className="mini-stat"><span className="stat-label">COACH</span><strong>Adam Auckland</strong><small>Lead the collective preparation</small></div></div></div></section>}
-    <section className="section newsroom-preview"><SectionHead eyebrow="THE LATEST" title="Inside the journey" link="Open newsroom" to="/news" /><div className="news-grid">{state.newsItems.map(item => <NewsCard key={item.id} item={item} />)}</div></section>
     <HomeEditorialGrid featuredPlayer={state.players.find(player => player.gender !== "Coach")} />
-    <section className="section dark-band"><div className="dark-band-inner"><div><p className="eyebrow light">ISLAND PADEL CUP 2026</p><h2>Three nations.<br />One island.</h2></div><div><p>Mauritius · La Réunion · Madagascar</p><ButtonLink to="/island-padel-cup">Explore the event</ButtonLink></div></div></section>
+    <section className="section event-hero-card programme-teaser"><div className="event-poster"><img src="/images/island-padel-cup-programme-2026.jpg" alt="Island Padel Cup 2026 official programme poster — La Réunion, 1–4 October 2026" /></div><div className="event-details"><p className="eyebrow">OFFICIAL PROGRAMME</p><h2>Le programme.<br />2026 La Réunion.</h2><p><MapPin size={16} /> {event.venue} · {event.city} · {event.place}</p><div className="nation-row">{nations.map((nation, index) => <span key={nation}><b>0{index + 1}</b>{nation}</span>)}</div><ButtonLink to="/schedule">View full schedule</ButtonLink></div></section>
   </>;
 }
-function TimeUnit({ value, label }: { value: number; label: string }) { return <div className="time-unit"><strong>{String(value).padStart(2, "0")}</strong><span>{label}</span></div>; }
 
 function MeetTeamMauritius({ players }: { players: Player[] }) {
   const men = players.filter(p => p.gender === "Men");
@@ -205,7 +205,8 @@ function Team({ players }: { players: Player[] }) {
   const men = players.filter(p => p.gender === "Men"), women = players.filter(p => p.gender === "Women"), coach = players.find(p => p.gender === "Coach");
   return <>
     <section className="team-campaign-hero">
-      <DotWave intensity={0.42} />
+      <img className="team-campaign-photo" src="/images/Team Mauritius 2.jpeg" alt="Official full Team Mauritius squad at Caña Club" />
+      <CampaignBackground variant="team" intensity={0.24} />
       <div className="team-campaign-copy">
         <p className="eyebrow light">SELECTED SQUAD / ROAD TO LA RÉUNION 2026</p>
         <h1>Team<br /><span>Mauritius.</span></h1>
@@ -233,7 +234,7 @@ function PlayerCard({ player }: { player: Player }) {
   const image = player.image ?? "/images/hero-team.jpg";
   const role = player.role ?? player.strengths?.[0] ?? "Selected player";
   return <Link className="player-card campaign-player-card" to={`/team/${player.id}`}>
-    <div className="player-image"><img loading="lazy" src={image} alt={`${player.name} — Team Mauritius`} style={player.heroFocus ? { objectPosition: player.heroFocus } : undefined} /><span className="player-overlay" /></div>
+    <div className="player-image"><img loading="lazy" src={image} alt={`${player.name} — Team Mauritius`} /><span className="player-overlay" /><PlayerEnergyWave variant="card" className="player-card-energy" /></div>
     <div className="player-card-info">
       <span className="player-gender">PLAYER FOCUS / {player.gender.toUpperCase()}</span>
       <h3>{player.name}</h3>
@@ -254,7 +255,7 @@ function PlayerDetail({ players, trainingSessions }: { players: Player[]; traini
   // Never repeat the hero portrait here — only distinct action/lifestyle shots.
   const mediaPhotos = [player.imageAlt, ...(player.media ?? [])].filter((src): src is string => Boolean(src));
   return <>
-    <section className="athlete-hero"><DotWave intensity={0.4} /><div className="athlete-hero-grid"><div className="athlete-hero-copy"><p className="eyebrow">TEAM MAURITIUS · {player.gender.toUpperCase()}</p><h1>{player.name}</h1>{player.quote && player.quote !== "Quote to be published." && <blockquote className="athlete-quote">“{player.quote}”</blockquote>}<div className="athlete-facts-row"><AthleteFact icon={<MapPin size={16} />} label="CLUB" value={player.club} /><AthleteFact icon={<ArrowLeftRight size={16} />} label="PLAYING SIDE" value={player.playingSide} /><AthleteFact icon={<Hand size={16} />} label="DOMINANT HAND" value={player.dominantHand} /></div><div className="athlete-facts-row"><AthleteFact icon={<TrendingUp size={16} />} label="CURRENT MPL RANKING" value={player.ranking} /><AthleteFact icon={<ShieldCheck size={16} />} label="TEAM MAURITIUS" value="Selected player" />{player.social && player.social !== "—" && <AthleteFact icon={<AtSign size={16} />} label="SOCIAL MEDIA" value={player.social} />}</div></div><div className="athlete-hero-media"><img src={image} alt={`${player.name} — Team Mauritius`} style={player.heroFocus ? { objectPosition: player.heroFocus } : undefined} /></div></div></section>
+    <section className="athlete-hero"><PlayerEnergyWave variant="profile" /><div className="athlete-hero-grid"><div className="athlete-hero-copy"><p className="eyebrow">TEAM MAURITIUS · {player.gender.toUpperCase()}</p><h1>{player.name}</h1>{player.quote && player.quote !== "Quote to be published." && <blockquote className="athlete-quote">“{player.quote}”</blockquote>}<div className="athlete-facts-row"><AthleteFact icon={<MapPin size={16} />} label="CLUB" value={player.club} /><AthleteFact icon={<ArrowLeftRight size={16} />} label="PLAYING SIDE" value={player.playingSide} /><AthleteFact icon={<Hand size={16} />} label="DOMINANT HAND" value={player.dominantHand} /></div><div className="athlete-facts-row"><AthleteFact icon={<TrendingUp size={16} />} label="CURRENT MPL RANKING" value={player.ranking} /><AthleteFact icon={<ShieldCheck size={16} />} label="TEAM MAURITIUS" value="Selected player" />{player.social && player.social !== "—" && <AthleteFact icon={<AtSign size={16} />} label="SOCIAL MEDIA" value={player.social} />}</div></div><div className="athlete-hero-media"><img src={image} alt={`${player.name} — Team Mauritius`} style={player.heroFocus ? { objectPosition: player.heroFocus } : undefined} /></div></div></section>
     <section className="section athlete-bio"><p>{player.biography}</p></section>
     <section className="section athlete-grid">
       <div className="athlete-col">
@@ -336,13 +337,13 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
   return <>
     <section className="training-v5-hero">
       <img className="training-v5-hero-photo" src={`${session02Path}/session-02-hero.jpg`} alt="Team Mauritius Session 02 training at Caña Club" />
-      <DotWave intensity={0.44} />
+      <DotWave intensity={0.24} />
       <div className="training-v5-script">Better Players.<br />A Stronger Mauritius.</div>
       <div className="training-v5-hero-copy">
-        <p className="eyebrow light">SESSION 02 / ROAD TO LA RÉUNION 2026</p>
-        <h1>Build</h1>
-        <p className="training-v5-line">From individual talent to winning pairs.</p>
-        <p className="training-v5-meta"><MapPin size={16} /> Caña Club — Sunday 13 September 2026 <span /> <Clock3 size={16} /> 07:00 — 09:00</p>
+        <p className="eyebrow light">THE JOURNEY / ROAD TO LA RÉUNION 2026 · PREPARATION COMPLETE</p>
+        <h1>The Journey</h1>
+        <p className="training-v5-line">Four sessions at Caña Club. One national team for La Réunion.</p>
+        <p className="training-v5-meta"><MapPin size={16} /> Caña Club — 6 to 27 September 2026 <span /> <Trophy size={16} /> Island Padel Cup · 1–4 October</p>
       </div>
       <div className="training-v5-scroll"><span /> Scroll</div>
     </section>
@@ -351,7 +352,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       <div className="training-v5-progress-line" aria-hidden="true" />
       {progressSessions.map((session, index) => {
         const isActive = session.id === buildSession.id;
-        const isComplete = index === 0;
+        const isComplete = session.status === "COMPLETED";
         return <Link className={`training-v5-progress-step${isActive ? " is-active" : ""}${isComplete ? " is-complete" : ""}`} to={`/training/${session.id}`} key={session.id}>
           <b>{String(index + 1).padStart(2, "0")}</b>
           <span>Session {String(index + 1).padStart(2, "0")} — {session.phase === "FINAL CAMP" ? "READY" : session.phase}{isComplete ? " ✓" : ""}</span>
@@ -359,8 +360,10 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       })}
     </section>
 
+    <JourneyRecap sessions={trainingSessions} />
+
     <section className="section training-v5-objectives">
-      <SectionHead eyebrow="TODAY'S OBJECTIVES" title="Build the pairs" />
+      <SectionHead eyebrow="ARCHIVE · SESSION 02 · 13 SEPTEMBER" title="Build the pairs" />
       <div className="training-v5-card-grid">
         {objectives.map((item, index) => <Reveal className="training-v5-card" delay={index * 70} key={item.title}>{item.icon}<h3>{item.title}</h3><p>{item.copy}</p></Reveal>)}
       </div>
@@ -382,7 +385,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       <DotWave intensity={0.18} />
       <div className="training-v5-section-lead">
         <p className="eyebrow light">PAIR LAB</p>
-        <h2>What Team Mauritius is testing today.</h2>
+        <h2>What Team Mauritius tested in Session 02.</h2>
       </div>
       <div className="training-v5-pair-media">
         {pairLabImages.map((item, index) => <figure key={item.title}>
@@ -396,7 +399,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
     </section>
 
     <section className="section training-v5-gallery">
-      <SectionHead eyebrow="SESSION 02 · BUILD" title="Today at Caña Club" />
+      <SectionHead eyebrow="SESSION 02 · BUILD" title="13 September at Caña Club" />
       <div className="training-v5-gallery-grid">
         {gallery.map(item => <figure className={`training-v5-photo ${item.className}`} key={item.title}>
           <img loading="lazy" src={item.src} alt={item.title} style={{ objectPosition: item.position }} />
@@ -423,7 +426,7 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
         <h2>Adam Auckland</h2>
         <span>Head Coach · Team Mauritius</span>
         <p className="eyebrow detail-eyebrow">SESSION NOTE</p>
-        <p>Today’s focus is on understanding which combinations make Team Mauritius stronger as a collective — not simply identifying the strongest individual players.</p>
+        <p>The Session 02 focus was on understanding which combinations make Team Mauritius stronger as a collective — not simply identifying the strongest individual players.</p>
       </div>
     </section>
 
@@ -454,10 +457,10 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
       <img loading="lazy" src={`${session02Path}/session-02-action-01.jpg`} alt="Team Mauritius competition preparation" />
       <DotWave intensity={0.22} />
       <div>
-        <p className="eyebrow light">NEXT UP</p>
-        <h2>Session 03 — Compete</h2>
-        <p>24 September 2026 · 12:30–14:30<br />Match simulation. Competition intensity. Pressure situations.</p>
-        <span className="training-v5-disabled-button">Next confirmed training block</span>
+        <p className="eyebrow light">PREPARATION COMPLETE · NOW COMPETING</p>
+        <h2>Island Padel Cup — Final Day</h2>
+        <p>Sunday 4 October 2026 · Club de Champ Fleuri, Saint-Denis<br />Men's final: Mauritius vs La Réunion.</p>
+        <Link className="button" to="/live">Follow the action<ArrowUpRight size={15} /></Link>
       </div>
     </section>
 
@@ -469,6 +472,18 @@ function Training({ trainingSessions }: { trainingSessions: TrainingSession[] })
   </>;
 }
 
+function SessionPublishedMedia({ session }: { session: TrainingSession }) {
+  const sessionRoster = session.id === "24-sep-compete" ? seedPlayers : [];
+  const photoCount = (session.gallery?.length ?? 0) + sessionRoster.length;
+  if (!session.gallery?.length && !sessionRoster.length && !session.videoClips?.length && !session.videoUrl) return null;
+  return <div className="session-published-media">
+    <div className="session-published-head"><p className="eyebrow">OFFICIAL MEDIA</p><h2>Competition Mode</h2><span>{photoCount} photos · {session.videoClips?.length ?? 0} videos</span></div>
+    {session.gallery?.length ? <div className="session-detail-media">{session.gallery.map((src, index) => { const className = index === 0 ? "session-gallery-featured" : "session-gallery-landscape"; return <figure className={className} key={src}><img loading="lazy" src={src} alt={`Team Mauritius Competition Mode session ${index + 1}`} /></figure>; })}</div> : null}
+    {sessionRoster.length ? <section className="session-roster-gallery"><div className="session-roster-heading"><div><p className="eyebrow">TEAM MAURITIUS · OFFICIAL PORTRAITS</p><h3>14 Players.<br />1 Head Coach.</h3></div><p>Every selected player from the men’s and women’s squads, together with Head Coach Adam Auckland.</p></div><div className="session-roster-grid">{sessionRoster.map(person => <Link className={`session-roster-card is-${person.gender.toLowerCase()}`} to={person.gender === "Coach" ? "/coach/adam-auckland" : `/team/${person.id}`} key={person.id}><div><img loading="lazy" src={person.image} alt={`${person.name} — Team Mauritius`} /></div><span>{person.gender === "Coach" ? "Head Coach" : person.gender === "Men" ? "Men’s Squad" : "Women’s Squad"}</span><strong>{person.name}</strong><small>Team Mauritius</small></Link>)}</div></section> : null}
+    {session.videoClips?.length ? <div className="session-video-grid">{session.videoClips.map((src, index) => <video aria-label={`Team Mauritius session video ${index + 1}`} poster={session.id === "24-sep-compete" ? (index === 0 ? "/images/players/official-2026/ryan-wong.jpg" : "/images/players/official-2026/magaly-schaffo.jpg") : session.heroImage} key={src} src={src} controls playsInline preload="metadata" />)}</div> : null}
+    {session.videoUrl && <a className="button button-secondary" href={session.videoUrl} target="_blank" rel="noreferrer">Watch highlights <ArrowUpRight size={15} /></a>}
+  </div>;
+}
 function TrainingDetail({ trainingSessions }: { trainingSessions: TrainingSession[] }) {
   const { sessionId } = useParams();
   const session = trainingSessions.find(s => s.id === sessionId) ?? trainingSessions[0];
@@ -476,28 +491,30 @@ function TrainingDetail({ trainingSessions }: { trainingSessions: TrainingSessio
   const nextSession = trainingSessions[sessionIndex + 1];
   if (session.id === "06-sep-assess") {
     return <>
-      <PageIntro eyebrow={`${session.shortDate} / ${session.location}`} title={session.title} copy={session.summary} dotIntensity={85} />
+      <PageIntro eyebrow={`${session.shortDate} / ${session.location}`} title={session.title} copy={session.summary} dotIntensity={55} image={session.heroImage} />
       <AssessSessionJournal session={session} />
     </>;
   }
   return <>
-    <PageIntro eyebrow={`${session.shortDate} / ${session.location}`} title={session.title} copy={session.summary} dotIntensity={85} />
+    <PageIntro eyebrow={`${session.shortDate} / ${session.location}`} title={session.title} copy={session.summary} dotIntensity={52} image={session.heroImage} imageFocus={session.id === "24-sep-compete" ? "center 46%" : "center 35%"} />
     <section className={`section session-detail phase-${session.phase.toLowerCase().replace(" ", "-")}`}>
       <div className="detail-top"><div><Tag>{session.phase}</Tag><h2>{session.date}</h2><p><Clock3 size={16} /> {session.time} <span>•</span> <MapPin size={16} /> {session.location}</p></div><div className="detail-status"><span>SESSION FORMAT</span><strong>{session.brunch ? "SUNDAY · BRUNCH AFTER" : "THURSDAY · COMPETITION BLOCK"}</strong></div></div>
       <div className="detail-grid"><div><p className="eyebrow">OBJECTIVES</p><ul className="clean-list">{session.objectives.map(item => <li key={item}>{item}</li>)}</ul>{session.brunch && <div className="session-amenity"><span>TEAM BRUNCH</span><strong>After the Sunday session · Caña Club</strong></div>}
-        {!session.coachNote && !session.playerQuote && !session.keyTakeaways?.length && !session.gallery?.length && !session.videoUrl && !session.videoClips?.length
+        {!session.report && !session.coachNote && !session.playerQuote && !session.keyTakeaways?.length && !session.gallery?.length && !session.videoUrl && !session.videoClips?.length
           ? <><p className="eyebrow detail-eyebrow">TRAINING REPORT</p><EmptyState text="Report, images, videos, quotes and key moments can be published here after the session." /></>
           : <>
+            <p className="eyebrow detail-eyebrow">TRAINING REPORT</p>
+            {session.report ? <p className="detail-note session-report" style={session.id === "24-sep-compete" ? { whiteSpace: "pre-line" } : undefined}>{session.report}</p> : <EmptyState text="The session report will be published after review." />}
             <p className="eyebrow detail-eyebrow">COACH'S NOTE</p>
             {session.coachNote ? <p className="detail-note">{session.coachNote}</p> : <EmptyState text="Adam's note will be published after the session." />}
-            <p className="eyebrow detail-eyebrow">PLAYER QUOTE</p>
+            <p className="eyebrow detail-eyebrow">{session.id === "24-sep-compete" ? "TEAM VOICE" : "PLAYER QUOTE"}</p>
             {session.playerQuote ? <blockquote className="detail-quote">“{session.playerQuote.text}”<cite>— {session.playerQuote.author}</cite></blockquote> : <EmptyState text="A player quote will be published after the session." />}
             <p className="eyebrow detail-eyebrow">KEY TAKEAWAYS</p>
             {session.keyTakeaways?.length ? <ul className="clean-list">{session.keyTakeaways.map(item => <li key={item}>{item}</li>)}</ul> : <EmptyState text="Key takeaways will be published after the session." />}
-            {(session.gallery?.length || session.videoUrl || session.videoClips?.length) && <><p className="eyebrow detail-eyebrow">PHOTO GALLERY / VIDEO</p><div className="detail-media">{session.gallery?.map(src => <img key={src} src={src} alt="Team Mauritius training" />)}{session.videoClips?.map(src => <video key={src} src={src} controls playsInline preload="metadata" />)}{session.videoUrl && <a className="button button-secondary" href={session.videoUrl} target="_blank" rel="noreferrer">Watch highlights <ArrowUpRight size={15} /></a>}</div></>}
           </>}
-      </div><div className="detail-image"><img src={session.heroImage ?? seedPlayers.find(p => p.name === session.featuredPlayer)?.image ?? "/images/players/laura-koenig-alt.jpg"} alt="Team Mauritius player in action" /><span>TEAM MAURITIUS · 2026</span></div></div>
-      <div className="next-session-box"><div><small>{nextSession ? "NEXT SESSION" : "NEXT MILESTONE"}</small><strong>{nextSession ? `${nextSession.shortDate} · ${nextSession.title}` : "01 OCT · ISLAND PADEL CUP"}</strong></div><ChevronRight /></div>
+      </div><div className="detail-image"><img src={session.heroImage ?? seedPlayers.find(p => p.name === session.featuredPlayer)?.image ?? "/images/players/laura-koenig-alt.jpg"} alt="Team Mauritius training session" style={session.id === "24-sep-compete" ? { objectPosition: "center center" } : undefined} /><span>TEAM MAURITIUS · 2026</span></div></div>
+      <SessionPublishedMedia session={session} />
+      <div className="next-session-box"><div><small>{nextSession ? "NEXT SESSION" : "THEN CAME THE COMPETITION"}</small><strong>{nextSession ? `${nextSession.shortDate} · ${nextSession.title}` : "04 OCT · ISLAND PADEL CUP FINAL DAY"}</strong></div><ChevronRight /></div>
     </section>
     <TrainingStoryBlocks session={session} />
   </>;
@@ -509,9 +526,9 @@ function News({ newsItems }: { newsItems: NewsItem[] }) {
   const visibleStories = activeCategory === "All stories" ? newsItems : newsItems.filter(item => item.category === activeCategory);
   const lead = visibleStories.find(item => item.featured) ?? visibleStories[0];
   const rest = visibleStories.filter(item => item.id !== lead?.id);
-  return <><section className="newsroom-hero"><DotWave intensity={0.45} /><div><p className="eyebrow light">EDITORIAL / TEAM MAURITIUS</p><h1>Newsroom</h1><p>Player focus, coach focus, training camp and the Road to La Réunion told as one national-team campaign.</p></div></section><section className="section news-page newsroom-premium"><div className="category-row" aria-label="Filter stories">{categories.map(category => <button className={`category-button ${activeCategory === category ? "is-active" : ""}`} aria-pressed={activeCategory === category} onClick={() => setActiveCategory(category)} key={category}>{category}</button>)}</div>{lead ? <div className="newsroom-layout"><NewsCard item={lead} lead /><div className="news-grid large">{rest.map(item => <NewsCard key={item.id} item={item} />)}</div></div> : <EmptyState text="Stories in this category will be published throughout the camp." />}</section><EditorialRoadmap /></>;
+  return <><section className="newsroom-hero"><CampaignBackground variant="editorial" intensity={0.45} /><div><p className="eyebrow light">EDITORIAL / TEAM MAURITIUS</p><h1>Newsroom</h1><p>Player focus, coach focus, training camp and the Road to La Réunion told as one national-team campaign.</p></div></section><section className="section news-page newsroom-premium"><div className="category-row" aria-label="Filter stories">{categories.map(category => <button className={`category-button ${activeCategory === category ? "is-active" : ""}`} aria-pressed={activeCategory === category} onClick={() => setActiveCategory(category)} key={category}>{category}</button>)}</div>{lead ? <div className="newsroom-layout"><NewsCard item={lead} lead /><div className="news-grid large">{rest.map(item => <NewsCard key={item.id} item={item} />)}</div></div> : <EmptyState text="Stories in this category will be published throughout the camp." />}</section><EditorialRoadmap /></>;
 }
-function NewsCard({ item, lead = false }: { item: NewsItem; lead?: boolean }) { return <Link className={`news-card campaign-news-card ${item.featured || lead ? "featured" : ""}${lead ? " newsroom-lead-card" : ""}`} to={`/news/${item.slug}`}><div className="news-image"><img loading="lazy" src={item.image} alt={item.title} style={item.imageFocus ? { objectPosition: item.imageFocus } : undefined} /><span className="news-overlay" /><span className="news-cover-label">{item.category}</span></div><div className="news-card-copy"><div className="news-meta"><span>{item.category}</span><span>{item.date}</span></div><h3>{item.title}</h3><p>{item.excerpt}</p><span className="read-more">Read story <ArrowUpRight size={15} /></span></div></Link>; }
+function NewsCard({ item, lead = false }: { item: NewsItem; lead?: boolean }) { return <Link className={`news-card campaign-news-card ${item.featured || lead ? "featured" : ""}${lead ? " newsroom-lead-card" : ""}`} to={`/news/${item.slug}`}><div className="news-image"><img loading="lazy" src={item.image} alt={item.title} style={item.imageFocus ? { objectPosition: item.imageFocus } : undefined} /><span className="news-overlay" /><DotWave variant="subtle" intensity={0.22} className="news-card-energy" /><span className="news-cover-label">{item.category}</span></div><div className="news-card-copy"><div className="news-meta"><span>{item.category}</span><span>{item.date}</span></div><h3>{item.title}</h3><p>{item.excerpt}</p><span className="read-more">Read story <ArrowUpRight size={15} /></span></div></Link>; }
 function NewsDetail({ newsItems }: { newsItems: NewsItem[] }) {
   const { slug } = useParams();
   const item = newsItems.find(newsItem => newsItem.slug === slug) ?? newsItems[0];
@@ -551,42 +568,59 @@ function EventHub({ state }: { state: LocalState }) {
     { label: "Live Scores", to: "/live" }, { label: "Results", to: "/results" }, { label: "Standings", to: "/standings" }, { label: "Draw" },
     { label: "Live Stream", to: "/live" }, { label: "Photos", to: "/media" }, { label: "Videos", to: "/media" }, { label: "News", to: "/news" },
   ];
-  return <><PageIntro eyebrow="NATIONS CUP / 2026" title="Island Padel Cup" copy="The Indian Ocean’s #1 padel event. A nations cup format bringing Mauritius, La Réunion and Madagascar together." dotIntensity={70} /><section className="section event-hero-card"><div className="event-poster"><img src="/images/event-cover.png" alt="Island Padel Cup 2026 event visual" /></div><div className="event-details"><Tag tone="gold">{phaseLabels[state.mode]}</Tag><h2>{event.date.split(" ")[0]}<br />{event.date.split(" ").slice(-1)[0]}</h2><p><MapPin size={16} /> {event.venue} · {event.place}</p><div className="nation-row">{nations.map((nation, index) => <span key={nation}><b>0{index + 1}</b>{nation}</span>)}</div><ButtonLink to="/live">Open live center</ButtonLink></div></section><section className="section event-sections"><SectionHead eyebrow="THE COMPETITION" title="Follow the cup" /><div className="event-nav-grid">{sections.map((item, index) => item.to ? <Link to={item.to} key={item.label}><span>{String(index + 1).padStart(2, "0")}</span>{item.label}<ChevronRight size={16} /></Link> : <div className="coming-soon" key={item.label}><span>{String(index + 1).padStart(2, "0")}</span>{item.label}<small>COMING SOON</small></div>)}</div></section><section className="section format-section"><div><p className="eyebrow">TOURNAMENT CONCEPT</p><h2>Nations Cup<br /><span>Round Robin</span><br />Semi-finals / Finals</h2></div><div className="format-list"><span>01 / Open Tournament</span><span>02 / Closing Ceremony</span><span>03 / Official Team Rosters</span></div></section></>;
+  return <><PageIntro eyebrow="NATIONS CUP / 2026" title="Island Padel Cup" copy="The Indian Ocean’s #1 padel event. A nations cup format bringing Mauritius, La Réunion and Madagascar together." dotIntensity={90} /><section className="section event-hero-card"><div className="event-poster"><img src="/images/event-cover.png" alt="Island Padel Cup 2026 event visual" /></div><div className="event-details"><Tag tone="gold">{phaseLabels[state.mode]}</Tag><h2>{event.date.split(" ")[0]}<br />{event.date.split(" ").slice(-1)[0]}</h2><p><MapPin size={16} /> {event.venue} · {event.place}</p><div className="nation-row">{nations.map((nation, index) => <span key={nation}><b>0{index + 1}</b>{nation}</span>)}</div><ButtonLink to="/live">Open live center</ButtonLink></div></section><section className="section event-sections"><SectionHead eyebrow="THE COMPETITION" title="Follow the cup" /><div className="event-nav-grid">{sections.map((item, index) => item.to ? <Link to={item.to} key={item.label}><span>{String(index + 1).padStart(2, "0")}</span>{item.label}<ChevronRight size={16} /></Link> : <div className="coming-soon" key={item.label}><span>{String(index + 1).padStart(2, "0")}</span>{item.label}<small>COMING SOON</small></div>)}</div></section><section className="section format-section"><div><p className="eyebrow">TOURNAMENT CONCEPT</p><h2>Nations Cup<br /><span>Round Robin</span><br />Semi-finals / Finals</h2></div><div className="format-list"><span>01 / Open Tournament</span><span>02 / Closing Ceremony</span><span>03 / Official Team Rosters</span></div></section></>;
 }
 
-function Schedule({ state }: { state: LocalState }) {
-  const dates: Match["date"][] = ["01 OCT", "02 OCT", "03 OCT", "04 OCT"];
-  const [activeDate, setActiveDate] = useState<Match["date"]>(dates[0]);
-  const visibleMatches = state.matches.filter(match => match.date === activeDate);
-  return <><PageIntro eyebrow="ISLAND PADEL CUP / 01—04 OCT" title="Schedule" copy="Competition times and court assignments are admin-editable and will be published as the draw is confirmed." dotIntensity={70} /><section className="section schedule-section"><div className="schedule-tabs" aria-label="Competition dates">{dates.map(date => <button className={activeDate === date ? "is-active" : ""} aria-pressed={activeDate === date} onClick={() => setActiveDate(date)} key={date}>{date}</button>)}</div>{visibleMatches.map(match => <MatchRow match={match} key={match.id} />)}<EmptyState text={visibleMatches.length ? "Additional matches will appear here once the official draw is published." : `The ${activeDate} schedule will appear here once the official draw is published.`} /></section></>;
+type PoolFixture = { day: string; dayNum: string; nationA?: string; codeA?: string; nationB?: string; codeB?: string; category?: string; final?: boolean };
+const POOL_SCHEDULE: PoolFixture[] = [
+  { day: "THURSDAY", dayNum: "01", nationA: "LA RÉUNION", codeA: "REU", nationB: "MADAGASCAR", codeB: "MAD", category: "H / F" },
+  { day: "FRIDAY", dayNum: "02", nationA: "MADAGASCAR", codeA: "MAD", nationB: "MAURITIUS", codeB: "MRI", category: "H / F" },
+  { day: "SATURDAY", dayNum: "03", nationA: "LA RÉUNION", codeA: "REU", nationB: "MAURITIUS", codeB: "MRI", category: "H / F" },
+  { day: "SUNDAY", dayNum: "04", final: true },
+];
+function NationBadge({ code }: { code: string }) { return <span className="nation-badge" aria-hidden="true">{code}</span>; }
+function PoolScheduleRow({ fixture }: { fixture: PoolFixture }) {
+  return <div className={`pool-row${fixture.final ? " is-final" : ""}`}>
+    <div className="pool-row-date"><span className="pool-row-day">{fixture.day}</span><strong className="pool-row-num">{fixture.dayNum}</strong><span className="pool-row-year">OCT 2026</span></div>
+    {fixture.final
+      ? <div className="pool-row-final-mark"><Trophy size={22} /><span>FINAL</span></div>
+      : <div className="pool-row-fixture"><div className="pool-row-nation"><NationBadge code={fixture.codeA!} /><strong>{fixture.nationA}</strong></div><div className="pool-row-vs"><i /><em>VS</em><i /></div><div className="pool-row-nation"><NationBadge code={fixture.codeB!} /><strong>{fixture.nationB}</strong></div></div>}
+    <Tag tone={fixture.final ? "red" : "muted"}>{fixture.final ? "FINAL" : fixture.category}</Tag>
+  </div>;
 }
-function MatchRow({ match }: { match: Match }) { return <Link className="match-row" to={`/matches/${match.id}`}><div className="match-time"><span>{match.scheduled}</span><small>{match.court}</small></div><div className="match-teams"><strong>{match.nationA}</strong><span>{match.pairA}</span><em>vs</em><strong>{match.nationB}</strong><span>{match.pairB}</span></div><Tag tone={match.status === "LIVE" ? "red" : "muted"}>{match.status}</Tag><ChevronRight size={18} /></Link>; }
-
-function Live({ state }: { state: LocalState }) {
-  const current = state.matches.filter(match => match.status === "LIVE");
-  const upcoming = state.matches.filter(match => match.status === "UPCOMING" || match.status === "DELAYED");
-  const finished = state.matches.filter(match => match.status === "FINISHED");
-  const leadMatch = current[0];
-  return <><section className="live-banner"><DotWave intensity={0.15} /><div><p className="eyebrow light"><span className="live-dot" /> LIVE CENTER / ISLAND PADEL CUP 2026</p><h1>{leadMatch ? "Live now" : "Ready when they are."}</h1><p>{leadMatch ? `${leadMatch.court} · ${leadMatch.nationA} vs ${leadMatch.nationB}` : "The broadcast interface for courts, schedules, scores and official results."}</p></div><div className="broadcast-actions">{state.liveUrl ? <a className="button" href={state.liveUrl} target="_blank" rel="noreferrer"><Play size={15} /> Watch live</a> : <span className="button button-secondary disabled"><Radio size={15} /> Stream URL pending</span>}<span className="live-clock"><span className="live-dot" /> {state.mode === "live_event" ? "LIVE DATA" : "PRE-EVENT MODE"}</span></div></section><section className="section live-section"><div className="live-layout"><div className="match-groups"><MatchGroup title="Current live matches" matches={current} empty="No official match is live." /><MatchGroup title="Upcoming matches" matches={upcoming} empty="The official schedule is pending." /><MatchGroup title="Finished matches" matches={finished} empty="Official results will appear here." /></div><aside className="standings-card"><SectionHead eyebrow="NATIONS CUP" title="Standings" /><StandingRow rank="01" nation="Mauritius" points="—" /><StandingRow rank="02" nation="La Réunion" points="—" /><StandingRow rank="03" nation="Madagascar" points="—" /><ButtonLink to="/standings" secondary>Full standings</ButtonLink></aside></div><div className="ticker"><span className="ticker-label">LIVE TICKER</span><span>Official match data will feed the public API and future OBS overlays.</span></div></section><section className="section live-note"><div><Gauge size={28} /><h2>Built for the<br />broadcast team.</h2></div><p>Current matches, upcoming fixtures, results, court status and structured public endpoints form the broadcast-ready layer.</p><Link to="/schedule" className="text-link">Open schedule <ArrowUpRight size={16} /></Link></section></>;
+function PoolScheduleBlock() { return <div className="pool-schedule"><p className="eyebrow pool-schedule-label">ISLAND PADEL CUP 2026 · NATIONS DRAW</p><div className="pool-rows">{POOL_SCHEDULE.map(fixture => <PoolScheduleRow fixture={fixture} key={fixture.day} />)}</div></div>; }
+function Schedule() {
+  return <>
+    <PageIntro eyebrow="ISLAND PADEL CUP 2026 · 01–04 OCT · LA RÉUNION" title="Schedule" subhead="The road to the final" copy="4 days of competition. 3 nations. One Island Padel Cup." dotIntensity={95} />
+    <section className="section schedule-section">
+      <PoolScheduleBlock />
+      <SectionHead eyebrow="DAY BY DAY" title="Fixtures & results" />
+      <ScheduleMatches />
+    </section>
+  </>;
 }
-function MatchGroup({ title, matches, empty }: { title: string; matches: Match[]; empty: string }) { return <section className="match-group"><p className="eyebrow">{title}</p>{matches.length ? matches.map(match => <LiveMatchCard key={match.id} match={match} />) : <EmptyState text={empty} />}</section>; }
-function LiveMatchCard({ match }: { match: Match }) { return <Link className={`live-match-card ${match.status === "LIVE" ? "is-live" : ""}`} to={`/matches/${match.id}`}><div className="live-match-top"><span>{match.court}</span><Tag tone={match.status === "LIVE" ? "red" : "muted"}>{match.status}</Tag></div><div className="scoreboard"><div><small>{match.nationA}</small><strong>{match.setsA.length ? match.setsA.join(" · ") : "—"}</strong><span>{match.pairA}</span></div><em>vs</em><div><small>{match.nationB}</small><strong>{match.setsB.length ? match.setsB.join(" · ") : "—"}</strong><span>{match.pairB}</span></div></div><div className="score-footer"><span>Game score</span><b>{match.gameA} — {match.gameB}</b></div></Link>; }
-function StandingRow({ rank, nation, points }: { rank: string; nation: string; points: string }) { return <div className="standing-row"><b>{rank}</b><span>{nation}</span><strong>{points}</strong></div>; }
 
-function MatchDetail({ state }: { state: LocalState }) { const { matchId } = useParams(); const match = state.matches.find(m => m.id === matchId) ?? state.matches[0]; return <><PageIntro eyebrow={`${match.court} / MATCH CENTER`} title={`${match.nationA} vs ${match.nationB}`} copy="A dedicated match page for score, pair photos, match report, highlights and replay." /><section className="section match-detail"><div className="match-detail-head"><Tag tone={match.status === "LIVE" ? "red" : "muted"}>{match.status}</Tag><span>{match.scheduled}</span></div><div className="big-score"><div><small>{match.nationA}</small><strong>{match.setsA.length ? match.setsA.join(" · ") : "—"}</strong><span>{match.pairA}</span></div><div className="vs-mark">VS</div><div><small>{match.nationB}</small><strong>{match.setsB.length ? match.setsB.join(" · ") : "—"}</strong><span>{match.pairB}</span></div></div><div className="set-table"><span>SET</span><span>{match.nationA}</span><span>{match.nationB}</span>{[0, 1, 2].map(set => <div className="set-line" key={set}><b>{set + 1}</b><span>{match.setsA[set] ?? "—"}</span><span>{match.setsB[set] ?? "—"}</span></div>)}</div><div className="match-report"><p className="eyebrow">MATCH REPORT</p><EmptyState text="Match report, highlights, replay and gallery will be published here." /></div></section></>; }
-function Results({ state }: { state: LocalState }) { return <><PageIntro eyebrow="ISLAND PADEL CUP / ARCHIVE" title="Results" copy="Every final score, match report and shareable result card in one place." dotIntensity={70} /><section className="section results-section">{state.matches.filter(m => m.status === "FINISHED").map(match => <MatchRow match={match} key={match.id} />)}<EmptyState text="Results will appear here once matches are completed." /></section></>; }
-function Standings() { return <><PageIntro eyebrow="NATIONS CUP / LIVE TABLE" title="Standings" copy="Admin-editable standings for the Mauritius, La Réunion and Madagascar nations cup." dotIntensity={70} /><section className="section standings-page"><div className="standings-table-head"><span>RANK</span><span>NATION</span><span>PLAYED</span><span>WON</span><span>POINTS</span></div>{nations.map((nation, index) => <div className="standings-table-row" key={nation}><b>0{index + 1}</b><strong>{nation}</strong><span>—</span><span>—</span><em>—</em></div>)}</section></>; }
+function Live({ state }: { state: LocalState }) { return <LiveCenterPage liveUrl={state.liveUrl} />; }
+
+function MatchDetail() { const { matchId } = useParams(); return <CompetitionMatchPage match={competitionMatches.find(m => m.id === matchId)} />; }
+function Results() { return <ResultsPage />; }
+function Standings() { return <><PageIntro eyebrow="NATIONS CUP / ISLAND PADEL CUP 2026" title="Standings" copy="Official standings are published once confirmed by the organisers." dotIntensity={20} /><section className="section standings-page"><NationsStandings /></section></>; }
 function Media() {
   const [activeMedia, setActiveMedia] = useState("Photos");
   const mediaItems = [
-    { image: "/images/players/amaury-de-beer-alt.jpg", title: "Selected squad / men", type: "Photo gallery", group: "Photos" },
-    { image: "/images/players/marine-giraud-alt.jpg", title: "Selected squad / women", type: "Photo gallery", group: "Photos" },
+    { image: "/images/sessions/session-03-compete/hero-team.jpg", title: "Competition Mode / Team Mauritius", type: "Photo gallery", group: "Photos" },
+    { image: "/images/sessions/session-03-compete/official-team.jpg", title: "Official team photo / 24 September", type: "Photo gallery", group: "Photos" },
+    { image: "/images/sessions/session-03-compete/women-team.jpg", title: "Competition Mode / women", type: "Photo gallery", group: "Photos" },
+    { image: "/images/sessions/session-03-compete/men-team.jpg", title: "Competition Mode / men", type: "Photo gallery", group: "Photos" },
+    { image: "/images/players/official-2026/ryan-wong.jpg", video: "/videos/sessions/session-03-compete/men-team.mp4?v=2", title: "Competition Mode / men", type: "Video highlight", group: "Videos" },
+    { image: "/images/players/official-2026/magaly-schaffo.jpg", video: "/videos/sessions/session-03-compete/women-team.mp4?v=2", title: "Competition Mode / women", type: "Video highlight", group: "Videos" },
+    { image: "/images/sessions/first-day-mathieu-nicolas.jpg", title: "L’Express / Pairs under pressure", type: "Press article · 19 Sep 2026", group: "Press articles", to: "/news/lexpress-pairs-under-pressure" },
   ];
   const groups = ["Photos", "Videos", "Press articles", "Press releases", "Downloads"];
   const visibleMedia = mediaItems.filter(item => item.group === activeMedia);
-  return <><PageIntro eyebrow="MEDIA CENTER / TEAM MAURITIUS" title="Media" copy="The visual archive of preparation, competition and the story that follows." /><section className="section media-section"><div className="media-nav" aria-label="Filter media">{groups.map(group => <button className={activeMedia === group ? "is-active" : ""} aria-pressed={activeMedia === group} onClick={() => setActiveMedia(group)} key={group}>{group}</button>)}</div>{visibleMedia.length ? <div className="media-grid">{visibleMedia.map(item => <MediaTile image={item.image} title={item.title} type={item.type} key={item.title} />)}</div> : <EmptyState text={`${activeMedia} will be published throughout the camp.`} />}</section></>;
+  return <><PageIntro eyebrow="MEDIA CENTER / TEAM MAURITIUS" title="Media" copy="The visual archive of preparation, competition and the story that follows." /><section className="section media-section"><div className="media-nav" aria-label="Filter media">{groups.map(group => <button className={activeMedia === group ? "is-active" : ""} aria-pressed={activeMedia === group} onClick={() => setActiveMedia(group)} key={group}>{group}</button>)}</div>{visibleMedia.length ? <div className="media-grid">{visibleMedia.map(item => <MediaTile image={item.image} video={item.video} title={item.title} type={item.type} to={item.to} key={`${item.group}-${item.title}`} />)}</div> : <EmptyState text={`${activeMedia} will be published throughout the camp.`} />}</section></>;
 }
-function MediaTile({ image, title, type }: { image: string; title: string; type: string }) { return <div className="media-tile"><div><img src={image} alt={title} /><span className="media-icon">{type.includes("Video") ? <Video size={16} /> : <Camera size={16} />}</span></div><small>{type}</small><h3>{title}</h3></div>; }
+function MediaTile({ image, video, title, type, to }: { image: string; video?: string; title: string; type: string; to?: string }) { const content = <><div>{video ? <video src={video} poster={image} controls playsInline preload="metadata" aria-label={title} /> : <img loading="lazy" src={image} alt={title} />}<span className="media-icon">{type.includes("Video") ? <Video size={16} /> : <Camera size={16} />}</span></div><small>{type}</small><h3>{title}</h3></>; return to ? <Link className={`media-tile ${video ? "is-video" : ""}`} to={to}>{content}</Link> : <div className={`media-tile ${video ? "is-video" : ""}`}>{content}</div>; }
 const partnerTiers: { tier: string; name: string | null; logo: string | null }[] = [
   { tier: "Main Partner", name: "Dove Men+Care", logo: "/images/sponsor-dove.png" },
   { tier: "Gold", name: "Padel House", logo: "/images/sponsor-padel-house.png" },

@@ -17,19 +17,19 @@ function escapeHtml(value) {
 
 function campaignMarkup() {
   const stories = [
-    ["Meet Team Mauritius", "The selected squad comes together at Caña Club."],
-    ["Building the team", "Pair chemistry, communication and tactical patterns."],
-    ["Competition mode", "Match simulation and pressure situations."],
+    ["Final Day: Mauritius play for the men's title", "Men's final: Mauritius vs La Réunion. Women's final: Madagascar vs La Réunion."],
+    ["P500 Saint-Denis: Mauritians in action", "Danjoux / Koenig win 9-0. Desvaux de Marigny / Park win 9-2."],
+    ["Road to La Réunion", "Assess, Build, Compete and the Final Camp — preparation complete."],
   ];
   return `
     <section class="prerender-home">
-      <p>TEAM MAURITIUS / ROAD TO LA RÉUNION 2026</p>
-      <h1>Road to La Réunion.</h1>
-      <p>Official digital hub for Team Mauritius on the road to the Island Padel Cup 2026 at Club de Champ Fleuri, La Réunion.</p>
+      <p>ISLAND PADEL CUP 2026 / FINAL DAY</p>
+      <h1>Final Day.</h1>
+      <p>Team Mauritius at the Island Padel Cup 2026 — Club de Champ Fleuri, Saint-Denis, La Réunion, 1–4 October 2026.</p>
       <nav aria-label="Primary prerender links">
-        <a href="/team">Meet the team</a>
-        <a href="/training">Follow the journey</a>
-        <a href="/live">Live center</a>
+        <a href="/live">Follow the action</a>
+        <a href="/team">Team Mauritius</a>
+        <a href="/training">The journey</a>
       </nav>
       <div>
         ${stories.map(([title, copy]) => `<article><h2>${escapeHtml(title)}</h2><p>${escapeHtml(copy)}</p></article>`).join("")}
