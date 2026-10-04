@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 41;
+export const SEED_VERSION = 42;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -604,7 +604,7 @@ export const newsItems: NewsItem[] = [
     featured: true,
     author: "Team Mauritius",
     tags: ["Island Padel Cup", "Final Day", "Men's Final", "Saint-Denis"],
-    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion. Both finals start at 18:00 (GMT+4).\n\nThe Mauritius men reached the final unbeaten. On Day 2 they beat Madagascar 2-1, with wins for Olivier Couacaud / Jake Lam Hau Ching (6-4 6-3) and Amaury de Beer / Mathieu Vallet (6-0 7-6). On Day 3 they swept La Réunion 3-0: Ryan Wong / Mathieu Vallet (6-4 6-2), Nicolas Legros / Olivier Couacaud (7-5 7-6) and Amaury de Beer / Jake Lam Hau Ching (6-4 6-4).\n\nThe Mauritius women won one match in the pool — Laura Koenig / Kate Foo Kune beat Madagascar 6-4 6-2 — but lost the ties 1-2 against Madagascar and 0-3 against La Réunion. The women's final is Madagascar vs La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. Follow the finals and every confirmed result in the Live Center.",
+    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion. Both finals start at 18:00 (GMT+4).\n\nThe Mauritius men reached the final unbeaten. On Day 2 they beat Madagascar 2-1, with wins for Olivier COUACAUD / Jake LAM HAU CHING (6-4 6-3) and Amaury DE BEER / Mathieu VALLET (6-0 7-6). On Day 3 they swept La Réunion 3-0: Ryan WONG / Mathieu VALLET (6-4 6-2), Nicolas LEGROS / Olivier COUACAUD (7-5 7-6) and Amaury DE BEER / Jake LAM HAU CHING (6-4 6-4).\n\nThe Mauritius women won one match in the pool — Laura KOENIG / Kate FOO KUNE beat Madagascar 6-4 6-2 — but lost the ties 1-2 against Madagascar and 0-3 against La Réunion. The women's final is Madagascar vs La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. Follow the finals and every confirmed result in the Live Center.",
   },
   {
     id: "news-p500-saint-denis",
@@ -612,12 +612,12 @@ export const newsItems: NewsItem[] = [
     category: "Results",
     date: "04 October 2026",
     title: "P500 Saint-Denis: Mauritians in action",
-    excerpt: "Alice Danjoux / Laura Koenig win 9-0 and Céline Desvaux de Marigny / Cécile Park win 9-2 at the P500 Saint-Denis.",
+    excerpt: "Alice DANJOUX / Laura KOENIG win 9-0 and Céline DESVAUX DE MARIGNY / Cécile PARK win 9-2 at the P500 Saint-Denis.",
     image: "/images/players/official-2026/laura-koenig-alt.jpg",
     imageFocus: "center 35%",
     author: "Team Mauritius",
     tags: ["P500 Saint-Denis", "Alice Danjoux", "Laura Koenig", "Céline Desvaux de Marigny", "Cécile Park"],
-    body: "Alongside the Island Padel Cup, a P500 tournament is being played in Saint-Denis on Sunday 4 October, with several Mauritian pairs entered. This event is separate from the Island Padel Cup nations standings.\n\nAlice Danjoux / Laura Koenig won 9-0 against Fanny Grondin / Joëlle Thien Kin Sien.\n\nCéline Desvaux de Marigny / Cécile Park won 9-2 against Allison Costa / Vanessa Cabon.\n\nMagaly Schaffo / Marinne Giraud are also entered, seeded TS8. Their result will be published once confirmed.",
+    body: "Alongside the Island Padel Cup, a P500 tournament is being played in Saint-Denis on Sunday 4 October, with several Mauritian pairs entered. This event is separate from the Island Padel Cup nations standings.\n\nAlice DANJOUX / Laura KOENIG won 9-0 against Fanny GRONDIN / Joëlle THIEN KIN SIEN.\n\nCéline DESVAUX DE MARIGNY / Cécile PARK won 9-2 against Allison COSTA / Vanessa CABON.\n\nMagaly SCHAFFO / Marinne GIRAUD are also entered, seeded TS8. Their result will be published once confirmed.",
   },
   {
     id: "news-laura-koenig-focus",

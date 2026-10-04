@@ -211,6 +211,7 @@ export function CompetitionMatchPage({ match }: { match?: CompetitionMatch }) {
       <div className="match-detail-head"><Badge {...badge} /><span>{dayDates[match.day]}{match.time ? ` · ${match.time}` : ""}{match.court ? ` · ${match.court}` : ""}</span></div>
       <div className="cm-card is-large"><div className="cm-body"><NationLine nation={match.country1} name={match.team1} winner={match.winner === 1} /><div className="cm-score">{match.score ?? <span>—</span>}</div><NationLine nation={match.country2} name={match.team2} winner={match.winner === 2} /></div></div>
       {match.image && <figure className="official-card"><img src={match.image} alt={`Official Island Padel Cup visual: ${match.team1} vs ${match.team2}`} /><figcaption>{match.status === "FINISHED" ? "Official result card" : "Official match visual"}</figcaption></figure>}
+      {match.note && <div className="match-note"><p className="eyebrow">EDITOR NOTE</p><p>{match.note}</p></div>}
       <div className="match-report"><p className="eyebrow">MATCH REPORT</p><div className="empty-state">{match.status === "FINISHED" ? "Confirmed result." : AWAITING_RESULT}</div></div>
       <Link className="button button-secondary" to="/live">Back to Live Center<ArrowUpRight size={15} /></Link>
     </section>

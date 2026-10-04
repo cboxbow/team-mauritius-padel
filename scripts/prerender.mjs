@@ -18,7 +18,7 @@ function escapeHtml(value) {
 function campaignMarkup() {
   const stories = [
     ["Final Day: Mauritius play for the men's title", "Men's final: Mauritius vs La Réunion. Women's final: Madagascar vs La Réunion."],
-    ["P500 Saint-Denis: Mauritians in action", "Danjoux / Koenig win 9-0. Desvaux de Marigny / Park win 9-2."],
+    ["P500 Saint-Denis: Mauritians in action", "Alice DANJOUX / Laura KOENIG win 9-0. Céline DESVAUX DE MARIGNY / Cécile PARK win 9-2."],
     ["Road to La Réunion", "Assess, Build, Compete and the Final Camp — preparation complete."],
   ];
   return `

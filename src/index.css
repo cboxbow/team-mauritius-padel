@@ -2404,3 +2404,5 @@ h3 { font-size: clamp(1.8rem, 3vw, 3rem); line-height: .92; font-weight: 800; }
   .tie-card-score strong { font-size: 17px; }
   .tg-grid { grid-auto-rows: 140px; gap: 6px; }
 }
+.match-note { margin: 0 0 24px; padding: 16px 18px; border-left: 3px solid var(--gold); background: rgba(214,179,106,.08); }
+.match-note p:not(.eyebrow) { margin: 0; color: rgba(244,244,240,.8); line-height: 1.55; }
