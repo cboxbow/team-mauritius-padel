@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 42;
+export const SEED_VERSION = 44;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -219,7 +219,7 @@ const mplStats: Record<string, MplStats> = {
     { date: "12 Dec 2025", category: "M500", venue: "I Padel by RM Hennessy", partner: "Magaly Schaffo", place: 1, pts: 500 },
   ] },
   "Laura Koenig": { rank: 3, rankingPts: 4525, careerPts: 16733, careerTournaments: 36, wins: 21, podiums: 30, club: "Caña Club", recent: [
-    { date: "15 Aug 2026", category: "M1000", venue: "Caña Beau Plan", partner: "Anna Blue Houareau", place: 1, pts: 1000 },
+    { date: "15 Aug 2026", category: "M1000", venue: "Caña Beau Plan", partner: "Anna-Blue HOUAREAU", place: 1, pts: 1000 },
     { date: "20 Jun 2026", category: "M500", venue: "I Padel by RM Hennessy", partner: "Alice Danjoux", place: 2, pts: 325 },
     { date: "06 Jun 2026", category: "M1000", venue: "RM Club Grand Baie", partner: "Alice Danjoux", place: 3, pts: 600 },
     { date: "09 May 2026", category: "M500", venue: "Urban Sport Black River", partner: "Alice Danjoux", place: 1, pts: 500 },
