@@ -1,5 +1,5 @@
 // Bump whenever seed players/matches change so cached browser state (see App.tsx readState) refreshes instead of hiding the update behind stale localStorage.
-export const SEED_VERSION = 40;
+export const SEED_VERSION = 41;
 
 export type PlayerGender = "Men" | "Women" | "Coach";
 
@@ -598,13 +598,13 @@ export const newsItems: NewsItem[] = [
     category: "Island Padel Cup",
     date: "04 October 2026",
     title: "Final Day: Mauritius play for the men's title",
-    excerpt: "Team Mauritius reach the men's final of the Island Padel Cup 2026 against La Réunion. The women's final is Madagascar vs La Réunion.",
-    image: "/images/sessions/session-03-compete/men-team.jpg",
-    imageFocus: "center 40%",
+    excerpt: "Unbeaten in the pool — 2-1 against Madagascar, 3-0 against La Réunion — Team Mauritius play La Réunion for the men's title at 18:00.",
+    image: "/images/island-padel-cup-2026/gallery/day3-07.jpg",
+    imageFocus: "center 35%",
     featured: true,
     author: "Team Mauritius",
     tags: ["Island Padel Cup", "Final Day", "Men's Final", "Saint-Denis"],
-    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. In the women's final, Madagascar meet La Réunion.\n\nThe Island Padel Cup is played as a nations cup: three islands, one trophy, and every point counting for the flag.\n\nFollow the finals and every confirmed Team Mauritius result in the Live Center. Scores are published only once they are officially confirmed.",
+    body: "Sunday 4 October is Final Day at the Island Padel Cup 2026, Club de Champ Fleuri, Saint-Denis — La Réunion. Both finals start at 18:00 (GMT+4).\n\nThe Mauritius men reached the final unbeaten. On Day 2 they beat Madagascar 2-1, with wins for Olivier Couacaud / Jake Lam Hau Ching (6-4 6-3) and Amaury de Beer / Mathieu Vallet (6-0 7-6). On Day 3 they swept La Réunion 3-0: Ryan Wong / Mathieu Vallet (6-4 6-2), Nicolas Legros / Olivier Couacaud (7-5 7-6) and Amaury de Beer / Jake Lam Hau Ching (6-4 6-4).\n\nThe Mauritius women won one match in the pool — Laura Koenig / Kate Foo Kune beat Madagascar 6-4 6-2 — but lost the ties 1-2 against Madagascar and 0-3 against La Réunion. The women's final is Madagascar vs La Réunion.\n\nIn the men's final, Team Mauritius face La Réunion for the title. Follow the finals and every confirmed result in the Live Center.",
   },
   {
     id: "news-p500-saint-denis",

@@ -7,7 +7,7 @@ import { PlayerStoryArticle, LAURA_KOENIG_STORY, MAGALY_SCHAFFO_STORY, KATE_FOO_
 import { mapNewsRow, mapPlayerRow, mapTrainingSessionRow } from "./lib/api-mappers";
 import { isSupabaseConfigured, supabase, SUPABASE_URL } from "./lib/supabase-client";
 import { CampaignBackground, PlayerEnergyWave, VisualEngineShowcase, type DotWaveVariant } from "./components/brand";
-import { CompetitionHero, CompetitionMatchPage, CompetitionStrip, FinalDaySection, JourneyRecap, LatestResults, LiveCenterPage, NationsStandings, P500Section, ResultsPage, ScheduleMatches } from "./components/competition-sections";
+import { CompetitionHero, CompetitionMatchPage, CompetitionStrip, FinalDaySection, JourneyRecap, LatestResults, LiveCenterPage, NationsStandings, P500Section, ResultsPage, ScheduleMatches, TournamentGallery } from "./components/competition-sections";
 import { COMPETITION_PHASE, competitionMatches } from "./lib/competition";
 import type { Session } from "@supabase/supabase-js";
 
@@ -177,6 +177,7 @@ function Home({ state }: { state: LocalState }) {
     <CompetitionStrip />
     <FinalDaySection />
     <LatestResults />
+    <TournamentGallery />
     <MeetTeamMauritius players={state.players} />
     <P500Section />
     <section className="section newsroom-preview"><SectionHead eyebrow="THE LATEST" title="Latest news" link="Open newsroom" to="/news" /><div className="news-grid">{state.newsItems.map(item => <NewsCard key={item.id} item={item} />)}</div></section>

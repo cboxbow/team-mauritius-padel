@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight, CheckCircle2, MapPin, Play, Radio, Trophy } from "lucide-react";
 import {
   AWAITING_RESULT, COMPETITION_PHASE, competitionEvent, competitionPhaseCopy, dayDates, dayLabels, finals, ipcMatches, matchBadge,
-  mauritiusIpcMatches, nationCodes, p500Matches, type CompetitionDay, type CompetitionMatch, type Nation,
+  nationCodes, nationsTies, p500Matches, poolStandings, tournamentGallery, type CompetitionDay, type CompetitionMatch, type Nation, type NationsTie,
 } from "../lib/competition";
 import type { TrainingSession } from "../lib/data";
 import { CampaignBackground } from "./brand";
@@ -80,16 +80,17 @@ export function FinalDaySection({ compact = false }: { compact?: boolean }) {
     <div className="final-day-head">
       <p className="eyebrow">ISLAND PADEL CUP 2026 · SUNDAY 04 OCTOBER</p>
       <h2>Final Day<span className="red-dot">.</span></h2>
-      <p>Mauritius play La Réunion for the men's title. Madagascar meet La Réunion in the women's final.</p>
+      <p>Unbeaten in the pool, Mauritius play La Réunion for the men's title. Madagascar meet La Réunion in the women's final. Both finals at 18:00.</p>
     </div>
     <div className="final-grid">{[men, women].filter((m): m is CompetitionMatch => Boolean(m)).map(match => <FinalCard match={match} key={match.id} />)}</div>
-    <p className="final-day-note">Match times are published once officially confirmed by the organisers.</p>
+    <p className="final-day-note">Both finals start at 18:00 (GMT+4) · Club de Champ Fleuri, Saint-Denis.</p>
   </section>;
 }
 
 export function ResultCard({ match }: { match: CompetitionMatch }) {
   const badge = matchBadge(match);
-  return <Link to={`/matches/${match.id}`} className={`cm-card${match.status === "LIVE" ? " is-live" : ""}`}>
+  return <Link to={`/matches/${match.id}`} className={`cm-card${match.status === "LIVE" ? " is-live" : ""}${match.image && match.stage === "Pool" ? " has-thumb" : ""}`}>
+    {match.image && match.stage === "Pool" && <img className="cm-thumb" src={match.image} alt={`Official result card: ${match.team1} vs ${match.team2}`} loading="lazy" />}
     <div className="cm-top"><span>{match.competition === "P500 Saint-Denis" ? "P500 SAINT-DENIS" : dayLabels[match.day].toUpperCase()} · {match.category === "Men" ? "MEN" : "WOMEN"} · {match.stage.toUpperCase()}</span><Badge {...badge} /></div>
     <div className="cm-body">
       <NationLine nation={match.country1} name={match.team1} winner={match.winner === 1} />
@@ -100,11 +101,35 @@ export function ResultCard({ match }: { match: CompetitionMatch }) {
   </Link>;
 }
 
+function TieCard({ tie }: { tie: NationsTie }) {
+  const mauritiusSide = tie.nation1 === "Mauritius" ? 1 : tie.nation2 === "Mauritius" ? 2 : undefined;
+  const winnerNation = tie.winner === 1 ? tie.nation1 : tie.winner === 2 ? tie.nation2 : undefined;
+  const label = !winnerNation ? "RESULT PENDING" : mauritiusSide ? (tie.winner === mauritiusSide ? "WIN" : "LOSS") : `${nationCodes[winnerNation]} WIN`;
+  const tone = label === "WIN" ? "green" : label.endsWith(" WIN") ? "gold" : "muted";
+  return <div className={`tie-card${label === "WIN" ? " is-win" : ""}`}>
+    {tie.image && <img className="tie-card-photo" src={tie.image} alt="" loading="lazy" />}
+    <div className="tie-card-top"><span>{dayLabels[tie.day].toUpperCase()} · {tie.category === "Men" ? "MEN" : "WOMEN"}</span><Badge label={label} tone={tone} /></div>
+    <div className="tie-card-score">
+      <div><Flag nation={tie.nation1} className="tie-flag" /><strong>{tie.nation1}</strong></div>
+      <b>{tie.wins1}<i>–</i>{tie.wins2}</b>
+      <div><Flag nation={tie.nation2} className="tie-flag" /><strong>{tie.nation2}</strong></div>
+    </div>
+    <small>{dayDates[tie.day]} · Nations tie, best of 3 matches</small>
+  </div>;
+}
+
 export function LatestResults() {
-  const confirmed = [...mauritiusIpcMatches, ...p500Matches].filter(m => m.status === "FINISHED" || m.status === "LIVE");
+  const mauritiusTies = nationsTies.filter(t => t.nation1 === "Mauritius" || t.nation2 === "Mauritius").slice().reverse();
   return <section className="section latest-results">
-    <div className="section-head"><div><p className="eyebrow">LIVE / LATEST RESULTS</p><h2>Latest results</h2></div><Link className="text-link" to="/live">Open Live Center<ArrowUpRight size={16} /></Link></div>
-    {confirmed.length ? <div className="cm-grid">{confirmed.map(match => <ResultCard match={match} key={match.id} />)}</div> : <div className="empty-state">{AWAITING_RESULT}</div>}
+    <div className="section-head"><div><p className="eyebrow">ISLAND PADEL CUP 2026 · POOL RESULTS</p><h2>Latest results</h2></div><Link className="text-link" to="/live">All match scores<ArrowUpRight size={16} /></Link></div>
+    <div className="tie-grid">{mauritiusTies.map(tie => <TieCard tie={tie} key={tie.id} />)}</div>
+  </section>;
+}
+
+export function TournamentGallery() {
+  return <section className="section tournament-gallery">
+    <div className="section-head"><div><p className="eyebrow">CLUB DE CHAMP FLEURI · SAINT-DENIS</p><h2>On court in La Réunion</h2></div></div>
+    <div className="tg-grid">{tournamentGallery.map((photo, index) => <figure className={`tg-item${index === 0 ? " is-wide" : ""}`} key={photo.src}><img src={photo.src} alt={photo.caption} loading="lazy" /><figcaption>{photo.caption}</figcaption></figure>)}</div>
   </section>;
 }
 
@@ -119,23 +144,32 @@ export function P500Section({ standalone = false }: { standalone?: boolean }) {
 export function MauritiusResultsByDay() {
   const days: CompetitionDay[] = [1, 2, 3, 4];
   return <section className="section mri-results">
-    <div className="section-head"><div><p className="eyebrow">ISLAND PADEL CUP 2026</p><h2>Team Mauritius — results</h2></div></div>
+    <div className="section-head"><div><p className="eyebrow">ISLAND PADEL CUP 2026</p><h2>Results — day by day</h2></div></div>
     {days.map(day => {
       const dayMatches = ipcMatches.filter(m => m.day === day);
+      const dayTies = nationsTies.filter(t => t.day === day);
       return <div className="mri-day" key={day}>
         <div className="mri-day-head"><strong>{dayLabels[day]}</strong><span>{dayDates[day]}</span>{!dayMatches.some(m => m.country1 === "Mauritius" || m.country2 === "Mauritius") && <small>Team Mauritius not scheduled</small>}</div>
-        <div className="cm-grid">{dayMatches.map(match => <ResultCard match={match} key={match.id} />)}</div>
+        {dayTies.length ? dayTies.map(tie => <div className="mri-tie" key={tie.id}>
+          <TieCard tie={tie} />
+          <div className="cm-grid">{dayMatches.filter(m => m.tie === tie.id).map(match => <ResultCard match={match} key={match.id} />)}</div>
+        </div>) : <div className="cm-grid">{dayMatches.map(match => <ResultCard match={match} key={match.id} />)}</div>}
       </div>;
     })}
   </section>;
 }
 
 export function NationsStandings() {
-  const nations: Nation[] = ["Mauritius", "La Réunion", "Madagascar"];
   return <aside className="standings-card">
-    <div className="section-head"><div><p className="eyebrow">NATIONS CUP</p><h2>Standings</h2></div></div>
-    {nations.map(nation => <div className="standing-row" key={nation}><b><Flag nation={nation} className="standing-flag" /></b><span>{nation}</span><strong>—</strong></div>)}
-    <p className="standings-note">{AWAITING_RESULT}</p>
+    <div className="section-head"><div><p className="eyebrow">POOL · NATIONS CUP</p><h2>Standings</h2></div></div>
+    {(["Men", "Women"] as const).map(category => <div className="pool-table" key={category}>
+      <p className="eyebrow">{category === "Men" ? "MEN" : "WOMEN"}</p>
+      <div className="pool-table-head"><span>NATION</span><span>W</span><span>MATCHES</span></div>
+      {poolStandings(category).map((row, index) => <div className={`pool-table-row${index < 2 ? " is-finalist" : ""}`} key={row.nation}>
+        <span><Flag nation={row.nation} className="standing-flag" /> {row.nation}</span><b>{row.won}</b><em>{row.rubbersWon}–{row.rubbersLost}</em>
+      </div>)}
+    </div>)}
+    <p className="standings-note">Top two of each pool contest the final. Computed from official result cards.</p>
   </aside>;
 }
 
@@ -150,6 +184,7 @@ export function LiveCenterPage({ liveUrl }: { liveUrl: string }) {
     </section>
     <FinalDaySection compact />
     <section className="section live-section"><div className="live-layout"><div><MauritiusResultsByDay /></div><NationsStandings /></div></section>
+    <TournamentGallery />
     <div id="p500"><P500Section standalone /></div>
   </>;
 }
@@ -175,7 +210,8 @@ export function CompetitionMatchPage({ match }: { match?: CompetitionMatch }) {
     <section className="section match-detail">
       <div className="match-detail-head"><Badge {...badge} /><span>{dayDates[match.day]}{match.time ? ` · ${match.time}` : ""}{match.court ? ` · ${match.court}` : ""}</span></div>
       <div className="cm-card is-large"><div className="cm-body"><NationLine nation={match.country1} name={match.team1} winner={match.winner === 1} /><div className="cm-score">{match.score ?? <span>—</span>}</div><NationLine nation={match.country2} name={match.team2} winner={match.winner === 2} /></div></div>
-      <div className="match-report"><p className="eyebrow">MATCH REPORT</p><div className="empty-state">{match.status === "FINISHED" ? "Confirmed result. Match report and photos will be added when available." : AWAITING_RESULT}</div></div>
+      {match.image && <figure className="official-card"><img src={match.image} alt={`Official Island Padel Cup visual: ${match.team1} vs ${match.team2}`} /><figcaption>{match.status === "FINISHED" ? "Official result card" : "Official match visual"}</figcaption></figure>}
+      <div className="match-report"><p className="eyebrow">MATCH REPORT</p><div className="empty-state">{match.status === "FINISHED" ? "Confirmed result." : AWAITING_RESULT}</div></div>
       <Link className="button button-secondary" to="/live">Back to Live Center<ArrowUpRight size={15} /></Link>
     </section>
   </>;
